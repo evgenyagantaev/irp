@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;irp_00_01/Inc/void ext_pow_control_task.h&apos; to &apos;ext_pow_control_task.h&apos;" description="Rename resource &apos;void ext_pow_control_task.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Inc/void ext_pow_control_task.h" name="ext_pow_control_task.h" stamp="1471988279471" updateReferences="true"/>
+</session>

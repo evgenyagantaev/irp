@@ -1,0 +1,23 @@
+/*
+ * battery_control_task.c
+ *
+ *  Created on: Aug 24, 2016
+ *      Author: root
+ */
+
+#include "battery_control_task.h"
+#include "time_management_task.h"
+
+static uint32_t frozen_seconds;
+
+void battery_control_task()
+{
+    uint32_t current_seconds = time_manager_get_seconds();
+
+    if(current_seconds >= frozen_seconds)
+    {
+        frozen_seconds = current_seconds;
+        spi_pipe_transmit(0x21);
+
+    }
+}

@@ -1,0 +1,29 @@
+// here is a unit's under test interface
+#include "configure_adas1000.h"
+
+#include "unity.h"
+
+void setUp(void)
+{
+  // This is run before EACH TEST
+}
+
+void tearDown(void)
+{
+}
+
+void test_configure_register(void)
+{
+  // check reset value
+    TEST_ASSERT_EQUAL_UINT32(FRMCTL_RESET, read_control_register(FRMCTL_ADDRESS));
+  // configure
+    TEST_ASSERT_EQUAL_UINT32(FRMCTL_CONFIG, configure_register(FRMCTL_ADDRESS, FRMCTL_CONFIG));
+  // check configured value
+    TEST_ASSERT_EQUAL_UINT32(FRMCTL_CONFIG, read_control_register(FRMCTL_ADDRESS));
+}
+
+
+
+
+
+

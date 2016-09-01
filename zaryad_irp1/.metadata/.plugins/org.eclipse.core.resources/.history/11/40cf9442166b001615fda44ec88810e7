@@ -1,0 +1,13 @@
+/*
+ * message_queue.h
+ *
+ *  Created on: Aug 26, 2016
+ *      Author: root
+ */
+
+#ifndef INC_MESSAGE_QUEUE_H_
+#define INC_MESSAGE_QUEUE_H_
+
+
+
+#endif /* INC_MESSAGE_QUEUE_H_ */
