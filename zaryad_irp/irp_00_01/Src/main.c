@@ -9,6 +9,8 @@
 #include <setjmp.h>
 #include <stdio.h>
 
+#include "main.h"
+
 // here code to test
 //#include "ProductionCode.h"
 

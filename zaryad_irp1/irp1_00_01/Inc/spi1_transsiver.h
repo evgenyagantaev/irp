@@ -8,6 +8,8 @@
 #ifndef INC_SPI1_TRANSSIVER_H_
 #define INC_SPI1_TRANSSIVER_H_
 
+#include "stdint.h"
+
 uint8_t spi1_read_message();
 uint8_t spi1_send_data(uint8_t *data, int length);
 

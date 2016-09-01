@@ -8,6 +8,8 @@
 #ifndef INC_MESSAGE_QUEUE_H_
 #define INC_MESSAGE_QUEUE_H_
 
+#include "stdint.h"
+
 #define MSG_GET_BATT_VOLTAGE 0x21
 #define MSG_GET_BATT_CURRENT 0x22
 #define MSG_GET_BATT_TEMPERATURE 0x23

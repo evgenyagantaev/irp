@@ -6,6 +6,7 @@
  */
 
 #include "spi1_irq_handler.h"
+#include "message_queue.h"
 
 
 void SPI1_IRQHandler(void)
@@ -26,17 +27,21 @@ void SPI1_IRQHandler(void)
 
 		// parse command **********************************************
 
-		if(spi1_in_data == 0x21) // get battery voltage
+		if(spi1_in_data == MSG_GET_BATT_VOLTAGE) // get battery voltage
 		{
-
+			int i = 0;
 		}
-		else if(spi1_in_data == 0x22) // get battery current
+		else if(spi1_in_data == MSG_GET_BATT_CURRENT) // get battery current
 		{
-
+			int i = 0;
 		}
-		else if(spi1_in_data == 0x23) // get battery temperature
+		else if(spi1_in_data == MSG_GET_BATT_TEMPERATURE) // get battery temperature
 		{
-
+			int i = 0;
+		}
+		else
+		{
+			int i = 0;
 		}
 
 		//*************************************************************
