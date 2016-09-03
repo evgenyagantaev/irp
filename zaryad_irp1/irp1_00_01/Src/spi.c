@@ -51,7 +51,7 @@ void MX_SPI1_Init(void)
   hspi1.Init.Mode = SPI_MODE_SLAVE;
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
   hspi1.Init.DataSize = SPI_DATASIZE_16BIT;
-  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi1.Init.CLKPolarity = SPI_POLARITY_HIGH;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_HARD_INPUT;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;

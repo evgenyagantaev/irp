@@ -81,6 +81,8 @@ int main(void)
 	  /* Initialize all configured peripherals */
 	  MX_GPIO_Init();
 	  MX_SPI1_Init();
+	  // enable spi1
+	  SPI1->CR1 |= SPI_CR1_SPE;
 	  //MX_I2C1_Init();
 	  MX_USART1_UART_Init();
 	  MX_TIM2_Init();

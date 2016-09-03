@@ -2,5 +2,7 @@
 RemoteSystemsTempFiles/**/*
 **/*.[od]
 **/*.elf
-**/*.bin
 **/*.map
+**/*.bin
+**/*.list
+

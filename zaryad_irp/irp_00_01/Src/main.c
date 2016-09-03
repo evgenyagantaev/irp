@@ -61,6 +61,8 @@ int main(void)
     MX_LPUART1_UART_Init();
     MX_USART1_UART_Init();
     MX_SPI2_Init();
+    // enable spi1
+    SPI2->CR1 |= SPI_CR1_SPE;
     MX_ADC_Init();
     MX_TIM2_Init();
     MX_TIM21_Init();

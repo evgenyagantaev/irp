@@ -7,6 +7,8 @@ C_SRCS += \
 ../Src/adc.c \
 ../Src/battery.c \
 ../Src/battery_control_task.c \
+../Src/button.c \
+../Src/button_polling_task.c \
 ../Src/ext_pow_control_task.c \
 ../Src/external_power.c \
 ../Src/gpio.c \
@@ -26,6 +28,8 @@ OBJS += \
 ./Src/adc.o \
 ./Src/battery.o \
 ./Src/battery_control_task.o \
+./Src/button.o \
+./Src/button_polling_task.o \
 ./Src/ext_pow_control_task.o \
 ./Src/external_power.o \
 ./Src/gpio.o \
@@ -45,6 +49,8 @@ C_DEPS += \
 ./Src/adc.d \
 ./Src/battery.d \
 ./Src/battery_control_task.d \
+./Src/button.d \
+./Src/button_polling_task.d \
 ./Src/ext_pow_control_task.d \
 ./Src/external_power.d \
 ./Src/gpio.d \
