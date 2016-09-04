@@ -84,7 +84,7 @@ int main(void)
 	  // enable spi1
 	  SPI1->CR1 |= SPI_CR1_SPE;
 	  // enable spi1 rxne interrupt
-	  SPI1->CR2 |= SPI_CR2_RXNEIE;   // enable rxne interrupt
+	  //SPI1->CR2 |= SPI_CR2_RXNEIE;   // enable rxne interrupt
 	  //MX_I2C1_Init();
 	  MX_USART1_UART_Init();
 	  MX_TIM2_Init();
@@ -100,7 +100,7 @@ int main(void)
     while(1)
     {
 
-    	//test_slave_on_bus();
+    	test_slave_on_bus();
     	//in_data = read_status();
 
     	//sprintf((char *)message, "Hello %d\r\n", counter);
@@ -108,9 +108,6 @@ int main(void)
     	//counter++;
     	//HAL_Delay(1000);
 
-    	// wait while a transmission complete
-		while ((SPI1->SR & SPI_SR_RXNE) == RESET );
-		in_data = SPI1->DR;
     }
     //return (UnityEnd());
 }

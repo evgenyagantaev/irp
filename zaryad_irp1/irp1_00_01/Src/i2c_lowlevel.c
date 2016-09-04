@@ -80,7 +80,6 @@ uint8_t i2c_send_byte(uint8_t byte_to_send)
 	uint8_t shift_register = byte_to_send;
 	const uint8_t mask = 0x80;   // 1000 0000
 
-	//i2c_send_START();
 	int i;
 	for(i=0; i<8; i++)
 	{
@@ -106,7 +105,6 @@ uint8_t i2c_send_byte(uint8_t byte_to_send)
 		shift_register <<= 1;
 	}
 	uint8_t ack_nack = i2c_wait_ACK_NACK();
-	//i2c_send_STOP();
 
 	return ack_nack;
 }
@@ -154,7 +152,6 @@ uint8_t i2c_receive_byte(uint8_t *byte_to_save_in, uint8_t ack_nack)
 	uint8_t return_value = 0;
 	GPIO_InitTypeDef GPIO_InitStruct;
 
-	//i2c_send_START();
 	i2c_scl_low();
 	pause_1000_usec();
 	i2c_sda_high();
@@ -228,9 +225,86 @@ uint16_t read_status()
 
 void test_slave_on_bus()
 {
+	uint16_t version;
+	uint16_t configuration;
+	uint16_t vbatt;
+	int16_t current;
+	int16_t temperature;
+
+	uint8_t data_l, data_h;
+	/*
+	i2c_send_START();
+	i2c_send_byte(max17047_address);  	// write command
+	i2c_send_STOP();
+	//*/
+
+	// read version (0x00ac)
+	i2c_send_START();
+	i2c_send_byte(max17047_address);  	// write command
+	i2c_send_byte(0x21); //version register 0x21 contains 0xac
+	i2c_send_STOP();
 	i2c_send_START();
 	i2c_send_byte(max17047_address + 0x01);  	// read command
+	i2c_receive_byte(&data_l, 1); // ack
+	i2c_receive_byte(&data_h, 0); // nack
 	i2c_send_STOP();
+	version = (((uint16_t)data_h)<<8) + (uint16_t)data_l;
+
+	// read configuration
+	i2c_send_START();
+	i2c_send_byte(max17047_address);  	// write command
+	i2c_send_byte(0x1d); //configuration register 0x1d
+	i2c_send_STOP();
+	i2c_send_START();
+	i2c_send_byte(max17047_address + 0x01);  	// read command
+	i2c_receive_byte(&data_l, 1); // ack
+	i2c_receive_byte(&data_h, 0); // nack
+	i2c_send_STOP();
+	configuration = (((uint16_t)data_h)<<8) + (uint16_t)data_l;
+
+	// read vbatt
+	i2c_send_START();
+	i2c_send_byte(max17047_address);  	// write command
+	i2c_send_byte(0x09); //Vcell register
+	i2c_send_STOP();
+	i2c_send_START();
+	i2c_send_byte(max17047_address + 0x01);  	// read command
+	i2c_receive_byte(&data_l, 1); // ack
+	i2c_receive_byte(&data_h, 0); // nack
+	i2c_send_STOP();
+	vbatt = (((uint16_t)data_h)<<8) + (uint16_t)data_l;
+	vbatt >>= 3;
+	double Vcell = ((vbatt * 0.625) * 8.0)/1000.0;
+
+	// read current
+	i2c_send_START();
+	i2c_send_byte(max17047_address);  	// write command
+	i2c_send_byte(0x0a); //current register
+	i2c_send_STOP();
+	i2c_send_START();
+	i2c_send_byte(max17047_address + 0x01);  	// read command
+	i2c_receive_byte(&data_l, 1); // ack
+	i2c_receive_byte(&data_h, 0); // nack
+	i2c_send_STOP();
+	current = (int16_t)((((uint16_t)data_h)<<8) + (uint16_t)data_l);
+	double Current = current;
+
+	// read temperature
+	i2c_send_START();
+	i2c_send_byte(max17047_address);  	// write command
+	i2c_send_byte(0x08); //temperature register
+	i2c_send_STOP();
+	i2c_send_START();
+	i2c_send_byte(max17047_address + 0x01);  	// read command
+	i2c_receive_byte(&data_l, 1); // ack
+	i2c_receive_byte(&data_h, 0); // nack
+	i2c_send_STOP();
+	temperature = (int16_t)((((uint16_t)data_h)<<8) + (uint16_t)data_l);
+	double Temperature = temperature * 0.0039;
+
+
+
+
 }
 
 
