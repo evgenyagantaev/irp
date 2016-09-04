@@ -146,6 +146,9 @@ void spi2_chipselhigh()
 
     // set chipselects high
     HAL_GPIO_WritePin(GPIOB, chipsel1_out_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOB, chipsel2_out_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOB, chipsel3_out_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOB, chipsel4_out_Pin, GPIO_PIN_SET);
 
 }
 
@@ -154,6 +157,9 @@ void spi2_chipsellow()
 
     // set chipselects high
     HAL_GPIO_WritePin(GPIOB, chipsel1_out_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOB, chipsel2_out_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOB, chipsel3_out_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOB, chipsel4_out_Pin, GPIO_PIN_RESET);
 
 }
 

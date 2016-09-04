@@ -61,7 +61,7 @@ int main(void)
     MX_LPUART1_UART_Init();
     MX_USART1_UART_Init();
     MX_SPI2_Init();
-    // enable spi1
+    // enable spi2
     SPI2->CR1 |= SPI_CR1_SPE;
     MX_ADC_Init();
     MX_TIM2_Init();
@@ -128,11 +128,30 @@ int main(void)
     // main scheduler loop
     while(1)
     {
-        time_management_task();
+        //time_management_task();
 
-        int_adc_measure_task();
-        ext_pow_control_task();
-        battery_control_task();
+        //int_adc_measure_task();
+        //ext_pow_control_task();
+        //battery_control_task();
+
+    	uint16_t in_data;
+    	//spi2_chipsellow();
+		//spi_short_delay();
+
+    	GPIOB->BRR = (chipsel1_out_Pin | chipsel2_out_Pin | chipsel3_out_Pin | chipsel4_out_Pin);
+
+		// wait for spi transmitter readiness
+		while ((SPI2->SR & SPI_SR_TXE) == RESET );
+		SPI2->DR = 0x5555;
+		// wait while a transmission complete
+		while ((SPI2->SR & SPI_SR_RXNE) == RESET );
+		in_data = SPI2->DR;
+
+		GPIOB->BSRR = (chipsel1_out_Pin | chipsel2_out_Pin | chipsel3_out_Pin | chipsel4_out_Pin);
+
+		//spi_short_delay();
+		//spi2_chipselhigh();
+		spi_short_delay();
     }
 
 
