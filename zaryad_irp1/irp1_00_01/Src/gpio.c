@@ -84,7 +84,8 @@ void MX_GPIO_Init(void)
 
 	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(GPIOB, ch_out_Pin|disch_out_Pin, GPIO_PIN_RESET);
-	// debug
+
+	// debug!!!!!!!!!  switch charge on
 	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_SET);
 
 	// configure i2c pins

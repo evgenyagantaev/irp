@@ -7,6 +7,7 @@
 
 #include "spi1_irq_handler.h"
 #include "message_queue.h"
+#include "gpio.h"
 
 
 void SPI1_IRQHandler(void)
@@ -38,6 +39,22 @@ void SPI1_IRQHandler(void)
 		else if(spi1_in_data == MSG_GET_BATT_TEMPERATURE) // get battery temperature
 		{
 			int i = 0;
+		}
+		else if(spi1_in_data == COMMAND_CHARGE_ON) //
+		{
+			HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_SET);
+		}
+		else if(spi1_in_data == COMMAND_CHARGE_OFF) //
+		{
+			HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);
+		}
+		else if(spi1_in_data == COMMAND_DISCHARGE_ON) //
+		{
+			HAL_GPIO_WritePin(GPIOB, disch_out_Pin, GPIO_PIN_SET);
+		}
+		else if(spi1_in_data == COMMAND_DISCHARGE_OFF) //
+		{
+			HAL_GPIO_WritePin(GPIOB, disch_out_Pin, GPIO_PIN_RESET);
 		}
 		else
 		{

@@ -32,3 +32,17 @@ void button_set_long_status(int status)
 	button_long_press_detected = status;
 }
 
+int button_get_state()  // get state of button (is pressed or not)
+{
+	return button_is_pressed;
+}
+
+void button_set_state(int state) //set state (1 - is pressed, 0 - is not pressed)
+{
+	button_is_pressed = state;
+}
+
+
+
+
+
