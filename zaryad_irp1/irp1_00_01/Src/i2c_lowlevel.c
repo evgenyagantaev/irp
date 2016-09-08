@@ -123,11 +123,23 @@ uint8_t i2c_wait_ACK_NACK(void)
 	pause_2000_usec();
 	i2c_scl_high();
 
-	// read sda pin state
+	// read sda pin state *****************************************************
+	GPIO_InitStruct.Pin = GPIO_PIN_7;	// sda
+	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 	if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_7) == GPIO_PIN_RESET) // ack detected
 		return_value = 1; // ack
 	else
 		return_value = 0; // nack
+	GPIO_InitStruct.Pin = GPIO_PIN_7;	// sda
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	// read sda pin state end*****************************************************
+
 	pause_1000_usec();
 	pause_1000_usec();
 	i2c_scl_low();
@@ -159,6 +171,13 @@ uint8_t i2c_receive_byte(uint8_t *byte_to_save_in, uint8_t ack_nack)
 	pause_1000_usec();
 	i2c_sda_high();
 	pause_1000_usec();
+
+	// read sda pin state *****************************************************
+	GPIO_InitStruct.Pin = GPIO_PIN_7;	// sda
+	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 	int i;
 	for(i=0; i<8; i++)
 	{
@@ -172,6 +191,12 @@ uint8_t i2c_receive_byte(uint8_t *byte_to_save_in, uint8_t ack_nack)
 		i2c_scl_low();
 		pause_2000_usec();
 	}
+	GPIO_InitStruct.Pin = GPIO_PIN_7;	// sda
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	// read sda pin state end*****************************************************
 
 	if(ack_nack)
 		i2c_send_ACK();
@@ -226,6 +251,19 @@ uint16_t read_status()
 	return_value = (((uint16_t)data_h)<<8) + data_l;
 }
 
+void write_configuration(uint16_t configuration)
+{
+	// read configuration
+	i2c_send_START();
+	i2c_send_byte(max17047_address);  	// write command
+	i2c_send_byte(0x1d); //configuration register 0x1d
+	//i2c_send_STOP();
+	//i2c_send_START();
+	i2c_send_byte((uint8_t)configuration);  	// write data l
+	i2c_send_byte((uint8_t)(configuration>>8));  	// write data h
+	i2c_send_STOP();
+}
+
 void test_slave_on_bus()
 {
 	char message[64];
@@ -244,6 +282,7 @@ void test_slave_on_bus()
 	i2c_send_byte(max17047_address);  	// write command
 	i2c_send_STOP();
 	//*/
+
 
 	// read version (0x00ac)
 	i2c_send_START();

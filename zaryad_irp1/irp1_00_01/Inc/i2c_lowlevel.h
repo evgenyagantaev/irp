@@ -29,6 +29,7 @@ static inline uint8_t i2c_wait_ACK_NACK(void);
 
 void i2c_clock_period();
 
+void write_configuration(uint16_t configuration);
 
 uint8_t i2c_send_byte(uint8_t byte_to_send);
 uint8_t i2c_receive_byte(uint8_t *byte_to_save_in, uint8_t ack_nack);

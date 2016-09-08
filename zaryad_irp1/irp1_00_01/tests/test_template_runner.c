@@ -73,29 +73,31 @@ int main(void)
     /* MCU Configuration----------------------------------------------------------*/
 
 	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-	  HAL_Init();
+	HAL_Init();
 
-	  /* Configure the system clock */
-	  SystemClock_Config();
+	/* Configure the system clock */
+	SystemClock_Config();
 
-	  /* Initialize all configured peripherals */
-	  MX_GPIO_Init();
-	  MX_SPI1_Init();
-	  // enable spi1
-	  SPI1->CR1 |= SPI_CR1_SPE;
-	  // enable spi1 rxne interrupt
-	  SPI1->CR2 |= SPI_CR2_RXNEIE;   // enable rxne interrupt
-	  //MX_I2C1_Init();
-	  MX_USART1_UART_Init();
-	  MX_TIM2_Init();
-	  MX_TIM21_Init();
-	  MX_TIM22_Init();
+	/* Initialize all configured peripherals */
+	MX_GPIO_Init();
+	MX_SPI1_Init();
+	// enable spi1
+	SPI1->CR1 |= SPI_CR1_SPE;
+	// enable spi1 rxne interrupt
+	SPI1->CR2 |= SPI_CR2_RXNEIE;   // enable rxne interrupt
+	//MX_I2C1_Init();
+	MX_USART1_UART_Init();
+	MX_TIM2_Init();
+	MX_TIM21_Init();
+	MX_TIM22_Init();
 
 
     // here are tests
     //UnityBegin("test_code_template.c");
     //RUN_TEST(test_some_function, 15);
 
+	// configure max
+	write_configuration(0x2250);
 	uint16_t in_data = 0;
     while(1)
     {
