@@ -101,8 +101,9 @@ int main(void)
 	uint16_t in_data = 0;
     while(1)
     {
+    	battery_measurement_task();
 
-    	test_slave_on_bus();
+    	//test_slave_on_bus();
     	//in_data = read_status();
 
     	//sprintf((char *)message, "Hello %d\r\n", counter);

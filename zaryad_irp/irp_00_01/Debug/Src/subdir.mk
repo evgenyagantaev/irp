@@ -11,7 +11,7 @@ C_SRCS += \
 ../Src/button_interpreter_task.c \
 ../Src/button_polling_task.c \
 ../Src/ext_pow_control_task.c \
-../Src/external_power.c \
+../Src/ext_power_obj.c \
 ../Src/gpio.c \
 ../Src/int_adc_measure_task.c \
 ../Src/internal_adc.c \
@@ -33,7 +33,7 @@ OBJS += \
 ./Src/button_interpreter_task.o \
 ./Src/button_polling_task.o \
 ./Src/ext_pow_control_task.o \
-./Src/external_power.o \
+./Src/ext_power_obj.o \
 ./Src/gpio.o \
 ./Src/int_adc_measure_task.o \
 ./Src/internal_adc.o \
@@ -55,7 +55,7 @@ C_DEPS += \
 ./Src/button_interpreter_task.d \
 ./Src/button_polling_task.d \
 ./Src/ext_pow_control_task.d \
-./Src/external_power.d \
+./Src/ext_power_obj.d \
 ./Src/gpio.d \
 ./Src/int_adc_measure_task.d \
 ./Src/internal_adc.d \

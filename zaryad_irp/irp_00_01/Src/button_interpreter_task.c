@@ -9,6 +9,7 @@
 #include "button.h"
 
 #include "spi.h"
+#include "spi_pipe.h"
 #include "gpio.h"
 
 
@@ -27,22 +28,22 @@ void button_interpreter_task()
 			if(interpreter_state == 0)
 			{
 				// charge on
-				send_command(COMMAND_CHARGE_ON);
+				send_command(COMMAND_CHARGE_ON, 0);
 			}
 			else if(interpreter_state == 1)
 			{
 				// charge on
-				send_command(COMMAND_CHARGE_OFF);
+				send_command(COMMAND_CHARGE_OFF, 0);
 			}
 			else if(interpreter_state == 2)
 			{
 				// charge on
-				send_command(COMMAND_DISCHARGE_ON);
+				send_command(COMMAND_DISCHARGE_ON, 0);
 			}
 			else if(interpreter_state == 3)
 			{
 				// charge on
-				send_command(COMMAND_DISCHARGE_OFF);
+				send_command(COMMAND_DISCHARGE_OFF, 0);
 			}
 			interpreter_state++;
 			if(interpreter_state >= 4)
@@ -51,21 +52,7 @@ void button_interpreter_task()
 	}
 }
 
-void send_command(uint16_t command)
-{
-	uint16_t in_data;
-	// chipsel low
-	GPIOB->BRR = (chipsel1_out_Pin | chipsel2_out_Pin | chipsel3_out_Pin | chipsel4_out_Pin);
-	// wait for spi transmitter readiness
-	while ((SPI2->SR & SPI_SR_TXE) == RESET );
-	SPI2->DR = command;
-	// wait while a transmission complete
-	while ((SPI2->SR & SPI_SR_RXNE) == RESET );
-	in_data = SPI2->DR;
-	// chipsel high
-	GPIOB->BSRR = (chipsel1_out_Pin | chipsel2_out_Pin | chipsel3_out_Pin | chipsel4_out_Pin);
-	spi_short_delay();
-}
+
 
 
 

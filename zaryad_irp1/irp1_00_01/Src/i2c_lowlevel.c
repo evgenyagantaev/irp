@@ -4,19 +4,19 @@
 
 extern UART_HandleTypeDef huart1;
 
-static inline void pause_1250_usec(void)
+void pause_1250_usec(void)
 {
 	volatile int i;
 	for(i=0; i<2800; i++);
 }
 
-static inline void pause_250_usec(void)
+void pause_250_usec(void)
 {
 	volatile int i;
 	for(i=0; i<560; i++);
 }
 
-static inline void pause_1000_usec(void)
+void pause_1000_usec(void)
 {
 	pause_250_usec();
 	pause_250_usec();
@@ -24,7 +24,7 @@ static inline void pause_1000_usec(void)
 	pause_250_usec();
 }
 
-static inline void pause_2000_usec(void)
+void pause_2000_usec(void)
 {
 	pause_1000_usec();
 	pause_1000_usec();
@@ -32,22 +32,22 @@ static inline void pause_2000_usec(void)
 
 
 
-static inline void i2c_scl_low()
+void i2c_scl_low()
 {
 	GPIOB->BRR = GPIO_PIN_6;
 }
 
-static inline void i2c_scl_high()
+void i2c_scl_high()
 {
 	GPIOB->BSRR = GPIO_PIN_6;
 }
 
-static inline void i2c_sda_low()
+void i2c_sda_low()
 {
 	GPIOB->BRR = GPIO_PIN_7;
 }
 
-static inline void i2c_sda_high()
+void i2c_sda_high()
 {
 	GPIOB->BSRR = GPIO_PIN_7;
 }
@@ -60,14 +60,14 @@ void i2c_clock_period()
 	pause_2000_usec();
 }
 
-static inline void i2c_send_START(void)
+void i2c_send_START(void)
 {
 	pause_1000_usec();
 	i2c_sda_low();
 	pause_1000_usec();
 }
 
-static inline void i2c_send_START_REPEAT(void)
+void i2c_send_START_REPEAT(void)
 {
 	i2c_sda_high();
 	pause_1000_usec();
@@ -151,7 +151,7 @@ uint8_t i2c_wait_ACK_NACK(void)
 
 }
 
-static inline void i2c_send_STOP(void)
+void i2c_send_STOP(void)
 {
 	i2c_scl_high();
 	pause_1000_usec();
@@ -209,7 +209,7 @@ uint8_t i2c_receive_byte(uint8_t *byte_to_save_in, uint8_t ack_nack)
 	return return_value;
 }
 
-static inline void i2c_send_ACK(void)
+void i2c_send_ACK(void)
 {
 	i2c_sda_low();
 	pause_1000_usec();
@@ -220,7 +220,7 @@ static inline void i2c_send_ACK(void)
 	// scl low, sda low, ready for STOP signal
 }
 
-static inline void i2c_send_NACK(void)
+void i2c_send_NACK(void)
 {
 	i2c_sda_high();
 	pause_250_usec();

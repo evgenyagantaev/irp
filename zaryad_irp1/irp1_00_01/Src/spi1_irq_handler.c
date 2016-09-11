@@ -8,6 +8,7 @@
 #include "spi1_irq_handler.h"
 #include "message_queue.h"
 #include "gpio.h"
+#include "battery.h"
 
 
 void SPI1_IRQHandler(void)
@@ -15,6 +16,7 @@ void SPI1_IRQHandler(void)
 	int i;
 
 	uint16_t spi1_in_data;
+	uint16_t spi1_out_buffer;
 
 	if((SPI1->SR & SPI_SR_RXNE) != 0)
 	{
@@ -28,17 +30,17 @@ void SPI1_IRQHandler(void)
 
 		// parse command **********************************************
 
-		if(spi1_in_data == MSG_GET_BATT_VOLTAGE) // get battery voltage
+		if(spi1_in_data == COMMAND_GET_VOLTAGE) // get battery voltage
 		{
-			int i = 0;
+			spi1_send_data(battery_voltage_get());
 		}
-		else if(spi1_in_data == MSG_GET_BATT_CURRENT) // get battery current
+		else if(spi1_in_data == COMMAND_GET_CURRENT) // get battery current
 		{
-			int i = 0;
+			spi1_send_data(battery_current_get());
 		}
-		else if(spi1_in_data == MSG_GET_BATT_TEMPERATURE) // get battery temperature
+		else if(spi1_in_data == COMMAND_GET_TEMPERATURE) // get battery temperature
 		{
-			int i = 0;
+			spi1_send_data(battery_temperature_get());
 		}
 		else if(spi1_in_data == COMMAND_CHARGE_ON) //
 		{

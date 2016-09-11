@@ -8,23 +8,23 @@
 int i2c_configuration(void);
 
 //*
-static inline void pause_1250_usec(void);
-static inline void pause_250_usec(void);
+void pause_1250_usec(void);
+void pause_250_usec(void);
 
-static inline void i2c_scl_low();
-static inline void i2c_scl_high();
-static inline void i2c_sda_low();
-static inline void i2c_sda_high();
+void i2c_scl_low();
+void i2c_scl_high();
+void i2c_sda_low();
+void i2c_sda_high();
 
 
 
-static inline void i2c_send_START(void);
-static inline void i2c_send_STOP(void);
+void i2c_send_START(void);
+void i2c_send_STOP(void);
 
-static inline void i2c_send_ACK(void);
-static inline void i2c_send_NACK(void);
+void i2c_send_ACK(void);
+void i2c_send_NACK(void);
 
-static inline uint8_t i2c_wait_ACK_NACK(void);
+uint8_t i2c_wait_ACK_NACK(void);
 //*/
 
 void i2c_clock_period();

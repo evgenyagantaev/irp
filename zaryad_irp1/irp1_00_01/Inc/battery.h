@@ -10,9 +10,22 @@
 
 #include "stdint.h"
 
-static int32_t battery_voltage;     // milivolts
-static int32_t battery_temperature; // celsius * 100
-static int32_t battery_current;     // miliamperes
+static int32_t battery_voltage = 0;     // milivolts
+static int32_t battery_temperature = 0; // celsius * 100
+static int32_t battery_current = 0;     // miliamperes
+
+#define CHARGE_ON 1
+#define CHARGE_OFF 0
+#define DISCHARGE_ON 1
+#define DISCHARGE_OFF 0
+
+
+static int charge_flag = 0;
+static int discharge_flag = 0;
+int get_charge_flag();
+int get_discharge_flag();
+void set_charge_flag(int flag);
+void set_discharge_flag(int flag);
 
 
 

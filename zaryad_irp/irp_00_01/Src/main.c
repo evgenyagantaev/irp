@@ -133,9 +133,9 @@ int main(void)
         time_management_task();
         button_polling_task();
         button_interpreter_task();
+        ext_pow_control_task();
 
         //int_adc_measure_task();
-        //ext_pow_control_task();
         //battery_control_task();
 
     	/*

@@ -86,7 +86,7 @@ void MX_GPIO_Init(void)
 	HAL_GPIO_WritePin(GPIOB, ch_out_Pin|disch_out_Pin, GPIO_PIN_RESET);
 
 	// debug!!!!!!!!!  switch charge on
-	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_SET);
+	//HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_SET);
 
 	// configure i2c pins
 	GPIO_InitStruct.Pin = GPIO_PIN_6;	// scl
