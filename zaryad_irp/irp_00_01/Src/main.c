@@ -83,60 +83,20 @@ int main(void)
     HAL_UART_Transmit(&huart1, "Hello!\r\n", strlen("Hello!\r\n"), 500);
     HAL_Delay(1000);
 
-    // check power voltage VDC1 (adc channel 0)
     ADC_ChannelConfTypeDef sConfig;
-    sConfig.Channel = ADC_CHANNEL_1 | ADC_CHANNEL_2;
-    sConfig.Rank = ADC_RANK_NONE;
-    HAL_ADC_ConfigChannel(&hadc, &sConfig);
-    sConfig.Channel = ADC_CHANNEL_0;
-    sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
-    HAL_ADC_ConfigChannel(&hadc, &sConfig);
-    HAL_ADC_Start(&hadc);
-    if(HAL_ADC_PollForConversion(&hadc, 1000) != HAL_OK)
-    {
-        //Error_Handler();
-    }
-    uint32_t adc_ch0 = HAL_ADC_GetValue(&hadc);
-    uint32_t voltage = adc_ch0 * 3300 * 25 / 4096;
-    HAL_ADC_Stop(&hadc);
 
-    if(voltage < 25000)
-    {
-        // power voltage not ok
-        // power red led on
-        HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_SET);
-        // send commands to zru to stop charging
-        int i;
-        for(i=0; i<4; i++)
-        {
-            // chipsel low
-            HAL_GPIO_WritePin(GPIOB, cs_pin[i], GPIO_PIN_RESET);
-            // send command
-            //wait for txe
-            //while(!((SPI2->SR & SPI_SR_TXE) == SPI_SR_TXE));
-            // write data to spi2
-            //SPI2->DR = STOP_CHARGING;// stop charging command
-            // wait for rxne
-            //while(!((SPI2->SR & SPI_SR_RXNE) == SPI_SR_RXNE));
-            // fictious data read
-            //uint16_t spi2_in_data = SPI2->DR;
-            // chipsel high
-            HAL_GPIO_WritePin(GPIOB, cs_pin[i], GPIO_PIN_SET);
-
-        }
-
-    }
 
     // main scheduler loop
     while(1)
     {
-        time_management_task();
-        button_polling_task();
-        button_interpreter_task();
-        ext_pow_control_task();
+    	ext_pow_control_task();
+		time_management_task();
+		button_polling_task();
+		button_interpreter_task();
+		battery_control_task();
 
         //int_adc_measure_task();
-        //battery_control_task();
+
 
     	/*
     	// *********************** spi hard debug ***************************************

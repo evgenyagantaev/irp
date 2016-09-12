@@ -12,10 +12,23 @@
 #include "spi_pipe.h"
 #include "gpio.h"
 
+
+//debug
+#include "usart.h"
+extern UART_HandleTypeDef huart1;
+static char battery_control_message[128];
+
+
+
 static uint32_t frozen_seconds;
 
 void battery_control_task()
 {
+
+	//debug *********************
+	//int32_t ext_pow_voltage = ext_pow_get_voltage();
+	//sprintf(battery_control_message, "ext pow = %d\r\n", ext_pow_voltage);
+	//HAL_UART_Transmit(&huart1, battery_control_message, strlen(battery_control_message), 500);
 
 	// URGENT ACTIONS ****************************************************
 
@@ -51,6 +64,10 @@ void battery_control_task()
 			HAL_GPIO_WritePin(GPIOA, chargeOK_led_green_out_Pin, GPIO_PIN_RESET);
 
 			emergency_turn_off_flag = 1;
+
+			//debug
+			sprintf(battery_control_message, "turned off all charge and discharge\r\n");
+			HAL_UART_Transmit(&huart1, battery_control_message, strlen(battery_control_message), 500);
 		}
 	}
 	else // external power supply ok
@@ -64,6 +81,14 @@ void battery_control_task()
 		if(current_seconds > frozen_seconds)
 		{
 			frozen_seconds = current_seconds;
+
+			//debug
+			sprintf(battery_control_message, "seconds = %d\r\n", current_seconds);
+			HAL_UART_Transmit(&huart1, battery_control_message, strlen(battery_control_message), 500);
+			//debug *********************
+			int32_t ext_pow_voltage = ext_pow_get_voltage();
+			sprintf(battery_control_message, "ext pow = %d\r\n", ext_pow_voltage);
+			HAL_UART_Transmit(&huart1, battery_control_message, strlen(battery_control_message), 500);
 
 		}
 	}

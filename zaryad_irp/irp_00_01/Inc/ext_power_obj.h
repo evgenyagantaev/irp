@@ -10,7 +10,7 @@
 
 #include "stdint.h"
 
-static const int LOW_THRESHOLD = 20000;
+static const int LOW_THRESHOLD = 15000;
 static const int HIGH_THRESHOLD = 65000;
 
 static uint32_t vdc1; // milivolts
