@@ -7,6 +7,11 @@
 
 #include "ext_power_obj.h"
 #include "adc.h"
+
+
+
+
+
 extern ADC_HandleTypeDef hadc;
 
 
@@ -26,6 +31,10 @@ int ext_pow_get_status()
 
 void extpow_measure_voltage()
 {
+	static uint32_t counter;
+	counter++;
+
+
 	ADC_ChannelConfTypeDef sConfig;
 
 	// Select Channel 0 to be converted (VDC1)
