@@ -9,11 +9,17 @@ void pause_1250_usec(void)
 	volatile int i;
 	for(i=0; i<2800; i++);
 }
-
+/*
 void pause_250_usec(void)
 {
 	volatile int i;
 	for(i=0; i<560; i++);
+}
+*/
+void pause_250_usec(void) // ukorotil pauzu v 10 raz!!!!!!!!!!!!!!!!!!!!
+{
+	volatile int i;
+	for(i=0; i<56; i++);   // 56 vmesto 560 !!!!!!!!!!!!!!!!
 }
 
 void pause_1000_usec(void)

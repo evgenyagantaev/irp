@@ -10,6 +10,8 @@
 
 #include "stdint.h"
 
+#define MESSAGE_QUEUE_LENGTH 64
+
 #define COMMAND_CHARGE_ON			0x25
 #define COMMAND_CHARGE_OFF			0x26
 #define COMMAND_DISCHARGE_ON		0x27
@@ -24,7 +26,8 @@
 #define COMMAND_LOAD_ON				0x33
 #define COMMAND_LOAD_OFF			0x34
 
-static uint8_t message_queue[64];
+static uint8_t message_queue[MESSAGE_QUEUE_LENGTH];
+static int message_index;
 
 uint8_t message_push(uint8_t message);
 uint8_t message_pop();

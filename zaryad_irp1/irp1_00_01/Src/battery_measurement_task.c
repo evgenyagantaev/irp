@@ -8,6 +8,7 @@
 #include "battery_measurement_task.h"
 #include "i2c_lowlevel.h"
 #include "usart.h"
+#include "battery_obj.h"
 
 
 void battery_measurement_task()
@@ -23,6 +24,7 @@ void battery_measurement_task()
 
 	uint8_t data_l, data_h;
 
+	// debug
 	// read version (0x00ac)
 	i2c_send_START();
 	i2c_send_byte(max17047_address);  	// write command
@@ -37,6 +39,7 @@ void battery_measurement_task()
 	sprintf((char *)message, "version = 0x%x \r\n", version);
 	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
 
+	// debug
 	// read configuration
 	i2c_send_START();
 	i2c_send_byte(max17047_address);  	// write command
@@ -116,6 +119,7 @@ void battery_measurement_task()
 	rem_cap = (int16_t)((((uint16_t)data_h)<<8) + (uint16_t)data_l);
 	double Rem_cap = rem_cap * 0.5;
 	int32_t rem_cap_mah = (int32_t)Rem_cap;
+	battery_remaining_capacity_set(rem_cap_mah);
 	sprintf((char *)message, "remaining capacity = %d mAh\r\n", rem_cap_mah);
 	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
 

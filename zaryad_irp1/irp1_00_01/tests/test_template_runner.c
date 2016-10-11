@@ -31,6 +31,7 @@
 #include <stdio.h>
 
 #include "i2c_lowlevel.h"
+#include "charge_level_detector_obj.h"
 
 // here code to test
 //#include "ProductionCode.h"
@@ -98,11 +99,12 @@ int main(void)
 
 	// configure max
 	write_configuration(0x2250);
+	charge_level_detector_init();
 	uint16_t in_data = 0;
     while(1)
     {
     	battery_measurement_task();
-
+    	time_management_task();
 
     }
     //return (UnityEnd());

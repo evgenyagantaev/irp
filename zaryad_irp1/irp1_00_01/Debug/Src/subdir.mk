@@ -4,8 +4,9 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Src/battery.c \
 ../Src/battery_measurement_task.c \
+../Src/battery_obj.c \
+../Src/charge_level_detector_obj.c \
 ../Src/gpio.c \
 ../Src/i2c.c \
 ../Src/i2c_lowlevel.c \
@@ -17,12 +18,15 @@ C_SRCS += \
 ../Src/spi1_transceiver.c \
 ../Src/stm32l0xx_hal_msp.c \
 ../Src/stm32l0xx_it.c \
+../Src/switch_obj.c \
 ../Src/tim.c \
+../Src/time_management_task.c \
 ../Src/usart.c 
 
 OBJS += \
-./Src/battery.o \
 ./Src/battery_measurement_task.o \
+./Src/battery_obj.o \
+./Src/charge_level_detector_obj.o \
 ./Src/gpio.o \
 ./Src/i2c.o \
 ./Src/i2c_lowlevel.o \
@@ -34,12 +38,15 @@ OBJS += \
 ./Src/spi1_transceiver.o \
 ./Src/stm32l0xx_hal_msp.o \
 ./Src/stm32l0xx_it.o \
+./Src/switch_obj.o \
 ./Src/tim.o \
+./Src/time_management_task.o \
 ./Src/usart.o 
 
 C_DEPS += \
-./Src/battery.d \
 ./Src/battery_measurement_task.d \
+./Src/battery_obj.d \
+./Src/charge_level_detector_obj.d \
 ./Src/gpio.d \
 ./Src/i2c.d \
 ./Src/i2c_lowlevel.d \
@@ -51,7 +58,9 @@ C_DEPS += \
 ./Src/spi1_transceiver.d \
 ./Src/stm32l0xx_hal_msp.d \
 ./Src/stm32l0xx_it.d \
+./Src/switch_obj.d \
 ./Src/tim.d \
+./Src/time_management_task.d \
 ./Src/usart.d 
 
 

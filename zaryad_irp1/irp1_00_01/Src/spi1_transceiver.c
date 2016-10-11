@@ -16,16 +16,16 @@ void spi1_send_data(uint32_t data)
 
 	out_buffer = data >> 16;
 	// wait for spi transmitter readiness
-	while ((SPI2->SR & SPI_SR_TXE) == RESET );
-	SPI2->DR = out_buffer;
+	while ((SPI1->SR & SPI_SR_TXE) == RESET );
+	SPI1->DR = out_buffer;
 	// wait while a transmission complete
-	while ((SPI2->SR & SPI_SR_RXNE) == RESET );
-	in_data = SPI2->DR;
+	while ((SPI1->SR & SPI_SR_RXNE) == RESET );
+	in_data = SPI1->DR;
 	// wait for spi transmitter readiness
-	while ((SPI2->SR & SPI_SR_TXE) == RESET );
-	SPI2->DR = out_buffer;
+	while ((SPI1->SR & SPI_SR_TXE) == RESET );
+	SPI1->DR = out_buffer;
 	// wait while a transmission complete
-	while ((SPI2->SR & SPI_SR_RXNE) == RESET );
-	in_data = SPI2->DR;
+	while ((SPI1->SR & SPI_SR_RXNE) == RESET );
+	in_data = SPI1->DR;
 
 }
