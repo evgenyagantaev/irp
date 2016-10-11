@@ -21,9 +21,9 @@ void SPI1_IRQHandler(void)
 	if((SPI1->SR & SPI_SR_RXNE) != 0)
 	{
 		// disable spi1 rxne interrupt
-		SPI1->CR2 &= ~SPI_CR2_RXNEIE;   // disable rxne interrupt
+		//SPI1->CR2 &= ~SPI_CR2_RXNEIE;   // disable rxne interrupt
 		// stop systick timer
-		SysTick->CTRL  &= ~SysTick_CTRL_ENABLE_Msk;
+		//SysTick->CTRL  &= ~SysTick_CTRL_ENABLE_Msk;
 
 		// read from spi data register
 		spi1_in_data = SPI1->DR;
@@ -58,6 +58,18 @@ void SPI1_IRQHandler(void)
 		{
 			HAL_GPIO_WritePin(GPIOB, disch_out_Pin, GPIO_PIN_RESET);
 		}
+		else if(spi1_in_data == COMMAND_LOAD_ON) //
+		{
+			HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
+			HAL_Delay(700);
+			HAL_GPIO_WritePin(GPIOA, on_bat1_out_Pin, GPIO_PIN_SET);
+		}
+		else if(spi1_in_data == COMMAND_LOAD_OFF) //
+		{
+			HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_RESET);
+			HAL_Delay(700);
+			HAL_GPIO_WritePin(GPIOA, on_bat1_out_Pin, GPIO_PIN_RESET);
+		}
 		else
 		{
 			int i = 0;
@@ -66,8 +78,8 @@ void SPI1_IRQHandler(void)
 		//*************************************************************
 
 		// enable spi1 rxne interrupt
-		SPI1->CR2 |= SPI_CR2_RXNEIE;   // enable rxne interrupt
+		//SPI1->CR2 |= SPI_CR2_RXNEIE;   // enable rxne interrupt
 		// start systick timer
-		SysTick->CTRL  |= SysTick_CTRL_ENABLE_Msk;
+		//SysTick->CTRL  |= SysTick_CTRL_ENABLE_Msk;
 	}
 }

@@ -8,8 +8,10 @@
 #include "ext_pow_control_task.h"
 #include "ext_power_obj.h"
 #include "gpio.h"
+#include "spi_pipe.h"
 
 //debug
+#include "string.h"
 #include "usart.h"
 
 void ext_pow_control_task()
@@ -24,8 +26,8 @@ void ext_pow_control_task()
 
 		//debug
 		char message[64];
-		sprintf(message, "%dI%d\r\n", ext_pow_voltage, ext_pow_voltage);
-		HAL_UART_Transmit(&huart1, message, strlen(message), 500);
+		sprintf(message, "%ldI%ld\r\n", ext_pow_voltage, ext_pow_voltage);
+		HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 500);
 
 		if(ext_pow_voltage > HIGH_THRESHOLD)
 		{
@@ -38,9 +40,15 @@ void ext_pow_control_task()
 				HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_RESET);
 				// turn off charge
-				//..........................
+				send_command(COMMAND_CHARGE_OFF, CHANNEL0);
+				send_command(COMMAND_CHARGE_OFF, CHANNEL1);
+				send_command(COMMAND_CHARGE_OFF, CHANNEL2);
+				send_command(COMMAND_CHARGE_OFF, CHANNEL3);
 				// turn off load
-				//..........................
+				send_command(COMMAND_LOAD_OFF, CHANNEL0);
+				send_command(COMMAND_LOAD_OFF, CHANNEL1);
+				send_command(COMMAND_LOAD_OFF, CHANNEL2);
+				send_command(COMMAND_LOAD_OFF, CHANNEL3);
 				// turn off red charge led
 				HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_RESET);
 			}
@@ -56,8 +64,19 @@ void ext_pow_control_task()
 				// power red led on
 				HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_RESET);
+				// turn off load
+				send_command(COMMAND_LOAD_OFF, CHANNEL0);
+				send_command(COMMAND_LOAD_OFF, CHANNEL1);
+				send_command(COMMAND_LOAD_OFF, CHANNEL2);
+				send_command(COMMAND_LOAD_OFF, CHANNEL3);
 				// turn off charge
-				//................
+				send_command(COMMAND_CHARGE_OFF, CHANNEL0);
+				send_command(COMMAND_CHARGE_OFF, CHANNEL1);
+				send_command(COMMAND_CHARGE_OFF, CHANNEL2);
+				send_command(COMMAND_CHARGE_OFF, CHANNEL3);
+				// turn off red charge led
+				HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_RESET);
+
 			}
 		}
 		else if(ext_pow_voltage < LOW_LOAD_THRESHOLD)
@@ -71,12 +90,18 @@ void ext_pow_control_task()
 				HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_RESET);
 				// turn off charge
-				//................
+				send_command(COMMAND_CHARGE_OFF, CHANNEL0);
+				send_command(COMMAND_CHARGE_OFF, CHANNEL1);
+				send_command(COMMAND_CHARGE_OFF, CHANNEL2);
+				send_command(COMMAND_CHARGE_OFF, CHANNEL3);
 				// turn off red charge led
 				HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_RESET);
 				HAL_Delay(2000);
 				// turn on load
-				//................
+				send_command(COMMAND_LOAD_ON, CHANNEL0);
+				send_command(COMMAND_LOAD_ON, CHANNEL1);
+				send_command(COMMAND_LOAD_ON, CHANNEL2);
+				send_command(COMMAND_LOAD_ON, CHANNEL3);
 			}
 		}
 		else // everything ok
@@ -90,10 +115,16 @@ void ext_pow_control_task()
 				HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_RESET);
 				HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_SET);
 				// turn off load
-				//..........................
+				send_command(COMMAND_LOAD_OFF, CHANNEL0);
+				send_command(COMMAND_LOAD_OFF, CHANNEL1);
+				send_command(COMMAND_LOAD_OFF, CHANNEL2);
+				send_command(COMMAND_LOAD_OFF, CHANNEL3);
 				HAL_Delay(2000);
 				// turn on charge
-				//................
+				send_command(COMMAND_CHARGE_ON, CHANNEL0);
+				send_command(COMMAND_CHARGE_ON, CHANNEL1);
+				send_command(COMMAND_CHARGE_ON, CHANNEL2);
+				send_command(COMMAND_CHARGE_ON, CHANNEL3);
 				// turn on red charge led
 				HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_SET);
 			}

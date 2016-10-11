@@ -22,13 +22,14 @@ void send_command(uint16_t command, int channel)
 	uint16_t in_data;
 	// chipsel low
 	GPIOB->BRR = chipselect_mask[channel];
+	spi_short_delay();
 	// wait for spi transmitter readiness
 	while ((SPI2->SR & SPI_SR_TXE) == RESET );
 	SPI2->DR = command;
 	// wait while a transmission complete
 	while ((SPI2->SR & SPI_SR_RXNE) == RESET );
 	in_data = SPI2->DR;
+	spi_short_delay();
 	// chipsel high
 	GPIOB->BSRR = chipselect_mask[channel];
-	spi_short_delay();
 }

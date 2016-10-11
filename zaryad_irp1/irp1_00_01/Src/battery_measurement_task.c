@@ -19,7 +19,7 @@ void battery_measurement_task()
 	uint16_t vbatt;
 	int16_t current;
 	int16_t temperature;
-	int16_t full_cap;
+	int16_t rem_cap;
 
 	uint8_t data_l, data_h;
 
@@ -106,17 +106,17 @@ void battery_measurement_task()
 	// read capacity
 	i2c_send_START();
 	i2c_send_byte(max17047_address);  	// write command
-	i2c_send_byte(0x23); //full capacity register
+	i2c_send_byte(0x0f); //remaining capacity register
 	i2c_send_STOP();
 	i2c_send_START();
 	i2c_send_byte(max17047_address + 0x01);  	// read command
 	i2c_receive_byte(&data_l, 1); // ack
 	i2c_receive_byte(&data_h, 0); // nack
 	i2c_send_STOP();
-	full_cap = (int16_t)((((uint16_t)data_h)<<8) + (uint16_t)data_l);
-	double Full_cap = full_cap * 0.5;
-	int32_t full_cap_mah = (int32_t)Full_cap;
-	sprintf((char *)message, "full capacity = %d mAh\r\n", full_cap_mah);
+	rem_cap = (int16_t)((((uint16_t)data_h)<<8) + (uint16_t)data_l);
+	double Rem_cap = rem_cap * 0.5;
+	int32_t rem_cap_mah = (int32_t)Rem_cap;
+	sprintf((char *)message, "remaining capacity = %d mAh\r\n", rem_cap_mah);
 	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
 
 	sprintf((char *)message, "******************************************\r\n");

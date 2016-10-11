@@ -91,8 +91,8 @@ int main(void)
     {
     	ext_pow_control_task();
 		time_management_task();
-		//button_polling_task();
-		//button_interpreter_task();
+		button_polling_task();
+		button_interpreter_task();
 		//battery_control_task();
 
         //int_adc_measure_task();

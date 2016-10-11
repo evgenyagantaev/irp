@@ -103,13 +103,6 @@ int main(void)
     {
     	battery_measurement_task();
 
-    	//test_slave_on_bus();
-    	//in_data = read_status();
-
-    	//sprintf((char *)message, "Hello %d\r\n", counter);
-    	//HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
-    	//counter++;
-    	//HAL_Delay(1000);
 
     }
     //return (UnityEnd());

@@ -28,22 +28,34 @@ void button_interpreter_task()
 			if(interpreter_state == 0)
 			{
 				// charge on
-				send_command(COMMAND_CHARGE_ON, 0);
+				send_command(COMMAND_CHARGE_ON, CHANNEL0);
+				send_command(COMMAND_CHARGE_ON, CHANNEL1);
+				send_command(COMMAND_CHARGE_ON, CHANNEL2);
+				send_command(COMMAND_CHARGE_ON, CHANNEL3);
 			}
 			else if(interpreter_state == 1)
 			{
-				// charge on
-				send_command(COMMAND_CHARGE_OFF, 0);
+				// charge off
+				send_command(COMMAND_CHARGE_OFF, CHANNEL0);
+				send_command(COMMAND_CHARGE_OFF, CHANNEL1);
+				send_command(COMMAND_CHARGE_OFF, CHANNEL2);
+				send_command(COMMAND_CHARGE_OFF, CHANNEL3);
 			}
 			else if(interpreter_state == 2)
 			{
-				// charge on
-				send_command(COMMAND_DISCHARGE_ON, 0);
+				// discharge on
+				send_command(COMMAND_DISCHARGE_ON, CHANNEL0);
+				send_command(COMMAND_DISCHARGE_ON, CHANNEL1);
+				send_command(COMMAND_DISCHARGE_ON, CHANNEL2);
+				send_command(COMMAND_DISCHARGE_ON, CHANNEL3);
 			}
 			else if(interpreter_state == 3)
 			{
-				// charge on
-				send_command(COMMAND_DISCHARGE_OFF, 0);
+				// discharge off
+				send_command(COMMAND_DISCHARGE_OFF, CHANNEL0);
+				send_command(COMMAND_DISCHARGE_OFF, CHANNEL1);
+				send_command(COMMAND_DISCHARGE_OFF, CHANNEL2);
+				send_command(COMMAND_DISCHARGE_OFF, CHANNEL3);
 			}
 			interpreter_state++;
 			if(interpreter_state >= 4)
