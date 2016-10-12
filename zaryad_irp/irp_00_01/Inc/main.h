@@ -14,5 +14,6 @@
 #include "battery_control_task.h"
 #include "button_polling_task.h"
 #include "button_interpreter_task.h"
+#include "charge_check_task.h"
 
 #endif /* INC_MAIN_H_ */

@@ -14,6 +14,7 @@ static int32_t battery_voltage = 0;     			// milivolts
 static int32_t battery_temperature = 0; 			// celsius * 100
 static int32_t battery_current = 0;     			// miliamperes
 static int32_t battery_remaining_capacity = 0;     	// miliamperes hours
+static int32_t battery_charge_level = 0;  	    	// percents
 
 #define CHARGE_ON 1
 #define CHARGE_OFF 0

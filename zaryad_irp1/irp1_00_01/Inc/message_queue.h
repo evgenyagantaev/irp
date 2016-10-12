@@ -26,6 +26,8 @@
 #define COMMAND_LOAD_ON				0x33
 #define COMMAND_LOAD_OFF			0x34
 
+#define COMMAND_GET_CHARGE_LEVEL	0x35
+
 static uint8_t message_queue[MESSAGE_QUEUE_LENGTH];
 static int message_index;
 

@@ -4,9 +4,9 @@
  *  Created on: Aug 26, 2016
  *      Author: root
  */
-
 #include "message_interpreter_task.h"
 #include "message_queue.h"
+#include "charge_level_detector_obj.h"
 
 void message_interpreter_task()
 {
@@ -27,6 +27,10 @@ void message_interpreter_task()
 		else if(message == COMMAND_GET_TEMPERATURE) // get battery temperature
 		{
 			spi1_send_data(battery_temperature_get());
+		}
+		else if(message == COMMAND_GET_CHARGE_LEVEL) // get battery temperature
+		{
+			spi1_send_data(charge_level_get());
 		}
 		else if(message == COMMAND_CHARGE_ON) //
 		{

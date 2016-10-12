@@ -12,7 +12,9 @@
 #define VOLTAGE_HIGH_THRESHOLD 26000 // mV
 #define VOLTAGE_LOW_THRESHOLD 20000 // mV
 
-static int charge_level; // percents
+static const int VOLTAGE_SPAN = VOLTAGE_HIGH_THRESHOLD - VOLTAGE_LOW_THRESHOLD;
+
+static uint32_t charge_level; // percents
 
 static int pred_pred_temperature;
 static int pred_temperature;
@@ -24,6 +26,7 @@ int charge_level_get();
 void charge_level_set(int level);
 
 void charge_detector_temperature_set(int temperature);
+void charge_level_detect();
 
 
 #endif /* INC_CHARGE_LEVEL_DETECTOR_OBJ_H_ */

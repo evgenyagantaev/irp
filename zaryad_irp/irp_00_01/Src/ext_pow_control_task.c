@@ -40,15 +40,15 @@ void ext_pow_control_task()
 				HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_RESET);
 				// turn off charge
-				send_command(COMMAND_CHARGE_OFF, CHANNEL0);
-				send_command(COMMAND_CHARGE_OFF, CHANNEL1);
-				send_command(COMMAND_CHARGE_OFF, CHANNEL2);
-				send_command(COMMAND_CHARGE_OFF, CHANNEL3);
+				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL0);
+				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL1);
+				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL2);
+				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL3);
 				// turn off load
-				send_command(COMMAND_LOAD_OFF, CHANNEL0);
-				send_command(COMMAND_LOAD_OFF, CHANNEL1);
-				send_command(COMMAND_LOAD_OFF, CHANNEL2);
-				send_command(COMMAND_LOAD_OFF, CHANNEL3);
+				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL0);
+				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL1);
+				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL2);
+				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL3);
 				// turn off red charge led
 				HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_RESET);
 			}
@@ -65,15 +65,15 @@ void ext_pow_control_task()
 				HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_RESET);
 				// turn off load
-				send_command(COMMAND_LOAD_OFF, CHANNEL0);
-				send_command(COMMAND_LOAD_OFF, CHANNEL1);
-				send_command(COMMAND_LOAD_OFF, CHANNEL2);
-				send_command(COMMAND_LOAD_OFF, CHANNEL3);
+				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL0);
+				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL1);
+				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL2);
+				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL3);
 				// turn off charge
-				send_command(COMMAND_CHARGE_OFF, CHANNEL0);
-				send_command(COMMAND_CHARGE_OFF, CHANNEL1);
-				send_command(COMMAND_CHARGE_OFF, CHANNEL2);
-				send_command(COMMAND_CHARGE_OFF, CHANNEL3);
+				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL0);
+				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL1);
+				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL2);
+				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL3);
 				// turn off red charge led
 				HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_RESET);
 
@@ -90,18 +90,18 @@ void ext_pow_control_task()
 				HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_RESET);
 				// turn off charge
-				send_command(COMMAND_CHARGE_OFF, CHANNEL0);
-				send_command(COMMAND_CHARGE_OFF, CHANNEL1);
-				send_command(COMMAND_CHARGE_OFF, CHANNEL2);
-				send_command(COMMAND_CHARGE_OFF, CHANNEL3);
+				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL0);
+				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL1);
+				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL2);
+				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL3);
 				// turn off red charge led
 				HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_RESET);
 				HAL_Delay(2000);
 				// turn on load
-				send_command(COMMAND_LOAD_ON, CHANNEL0);
-				send_command(COMMAND_LOAD_ON, CHANNEL1);
-				send_command(COMMAND_LOAD_ON, CHANNEL2);
-				send_command(COMMAND_LOAD_ON, CHANNEL3);
+				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL0);
+				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL1);
+				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL2);
+				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL3);
 			}
 		}
 		else // everything ok
@@ -115,16 +115,16 @@ void ext_pow_control_task()
 				HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_RESET);
 				HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_SET);
 				// turn off load
-				send_command(COMMAND_LOAD_OFF, CHANNEL0);
-				send_command(COMMAND_LOAD_OFF, CHANNEL1);
-				send_command(COMMAND_LOAD_OFF, CHANNEL2);
-				send_command(COMMAND_LOAD_OFF, CHANNEL3);
+				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL0);
+				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL1);
+				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL2);
+				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL3);
 				HAL_Delay(2000);
 				// turn on charge
-				send_command(COMMAND_CHARGE_ON, CHANNEL0);
-				send_command(COMMAND_CHARGE_ON, CHANNEL1);
-				send_command(COMMAND_CHARGE_ON, CHANNEL2);
-				send_command(COMMAND_CHARGE_ON, CHANNEL3);
+				spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL0);
+				spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL1);
+				spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL2);
+				spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL3);
 				// turn on red charge led
 				HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_SET);
 			}

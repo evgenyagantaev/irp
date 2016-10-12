@@ -29,7 +29,10 @@
 #define COMMAND_LOAD_ON				0x33
 #define COMMAND_LOAD_OFF			0x34
 
-void send_command(uint16_t command, int channel);
+#define COMMAND_GET_CHARGE_LEVEL	0x35
+
+void spi_pipe_send_command(uint16_t command, int channel);
+int spi_pipe_receive_data(uint16_t *data, int channel);  // returns quote (0x0022)
 
 void spi_pipe_transmit(uint8_t byte);
 

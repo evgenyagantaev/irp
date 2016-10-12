@@ -9,6 +9,7 @@
 #include "i2c_lowlevel.h"
 #include "usart.h"
 #include "battery_obj.h"
+#include "charge_level_detector_obj.h"
 
 
 void battery_measurement_task()
@@ -125,4 +126,6 @@ void battery_measurement_task()
 
 	sprintf((char *)message, "******************************************\r\n");
 	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+
+	charge_level_detect();
 }

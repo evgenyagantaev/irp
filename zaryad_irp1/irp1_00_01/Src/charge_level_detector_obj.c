@@ -7,6 +7,7 @@
 
 #include "charge_level_detector_obj.h"
 #include "i2c_lowlevel.h"
+#include "battery_obj.h"
 
 
 void charge_level_detector_init()
@@ -40,9 +41,20 @@ void charge_detector_temperature_set(int temperature)
 	charge_detector_temperature = temperature;
 }
 
+void charge_level_detect()
+{
+	uint32_t voltage = battery_voltage_get();
+	charge_level = (int)((double)(voltage - VOLTAGE_LOW_THRESHOLD)/(double)VOLTAGE_SPAN * 100.0);
+}
 
-
-
+uint32_t charge_level_get()
+{
+	return charge_level;
+}
+void charge_level_set(uint32_t level)
+{
+	charge_level = level;
+}
 
 
 
