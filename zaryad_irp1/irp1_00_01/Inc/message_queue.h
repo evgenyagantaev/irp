@@ -28,6 +28,9 @@
 
 #define COMMAND_GET_CHARGE_LEVEL	0x35
 
+#define COMMAND_KTC_ON				0x36
+#define COMMAND_KTC_OFF				0x37
+
 static uint8_t message_queue[MESSAGE_QUEUE_LENGTH];
 static int message_index;
 

@@ -56,6 +56,14 @@ void message_interpreter_task()
 		{
 			switch_load_off();
 		}
+		else if(message == COMMAND_KTC_ON) //
+		{
+			switch_ktc_on();
+		}
+		else if(message == COMMAND_KTC_OFF) //
+		{
+			switch_ktc_off();
+		}
 		else
 		{
 			int i = 0;

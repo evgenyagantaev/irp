@@ -8,6 +8,8 @@
 #include "battery_measurement_task.h"
 #include "i2c_lowlevel.h"
 #include "usart.h"
+#include <stdio.h>
+#include <string.h>
 #include "battery_obj.h"
 #include "charge_level_detector_obj.h"
 

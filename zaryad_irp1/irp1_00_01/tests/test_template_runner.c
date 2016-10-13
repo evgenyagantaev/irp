@@ -33,6 +33,10 @@
 #include "i2c_lowlevel.h"
 #include "charge_level_detector_obj.h"
 
+#include "battery_measurement_task.h"
+#include "time_management_task.h"
+#include "message_interpreter_task.h"
+
 // here code to test
 //#include "ProductionCode.h"
 

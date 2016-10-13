@@ -31,6 +31,9 @@
 
 #define COMMAND_GET_CHARGE_LEVEL	0x35
 
+#define COMMAND_KTC_ON				0x36
+#define COMMAND_KTC_OFF				0x37
+
 void spi_pipe_send_command(uint16_t command, int channel);
 int spi_pipe_receive_data(uint16_t *data, int channel);  // returns quote (0x0022)
 

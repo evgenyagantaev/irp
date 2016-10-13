@@ -8,6 +8,9 @@
 #include "charge_level_detector_obj.h"
 #include "i2c_lowlevel.h"
 #include "battery_obj.h"
+#include "usart.h"
+#include <stdio.h>
+#include <string.h>
 
 
 void charge_level_detector_init()
@@ -44,7 +47,22 @@ void charge_detector_temperature_set(int temperature)
 void charge_level_detect()
 {
 	uint32_t voltage = battery_voltage_get();
-	charge_level = (int)((double)(voltage - VOLTAGE_LOW_THRESHOLD)/(double)VOLTAGE_SPAN * 100.0);
+	if((voltage <= 32000) && (voltage > VOLTAGE_LOW_THRESHOLD))
+	{
+		if(voltage < VOLTAGE_HIGH_THRESHOLD)
+			charge_level = (uint32_t)((double)(voltage - VOLTAGE_LOW_THRESHOLD)/(double)VOLTAGE_SPAN * 100.0);
+		else
+			charge_level = 100;
+	}
+	else
+	{
+		charge_level = 0;
+	}
+
+	char message[64];
+	sprintf((char *)message, "CHARGE LEVEL = %d   VOLTAGE = %d\r\n", charge_level, voltage);
+	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+
 }
 
 uint32_t charge_level_get()

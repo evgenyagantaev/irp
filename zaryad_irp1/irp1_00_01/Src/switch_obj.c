@@ -44,3 +44,10 @@ void switch_load_off()
 	HAL_GPIO_WritePin(GPIOA, on_bat1_out_Pin, GPIO_PIN_RESET);
 	set_load_flag(0);
 }
+void switch_ktc_on()
+{
+}
+void switch_ktc_off()
+{
+}
+

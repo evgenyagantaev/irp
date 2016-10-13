@@ -38,7 +38,7 @@ void charge_check_task()
 
 
 	// debug *********
-	charge_overall_level = 97;
+	//charge_overall_level = 97;
 
 	if(charge_overall_level >= 95)
 	{

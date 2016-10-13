@@ -90,13 +90,13 @@ int main(void)
     // main scheduler loop
     while(1)
     {
-    	//ext_pow_control_task();
-		//time_management_task();
-		//button_polling_task();
-		//button_interpreter_task();
+    	ext_pow_control_task();
+		time_management_task();
+		button_polling_task();
+		button_interpreter_task();
 		charge_check_task();
 		HAL_Delay(500);
-		//battery_control_task();
+		battery_control_task();
 
         //int_adc_measure_task();
 

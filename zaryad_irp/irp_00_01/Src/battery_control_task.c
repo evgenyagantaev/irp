@@ -41,14 +41,14 @@ void battery_control_task()
 		if(!emergency_turn_off_flag)
 		{
 			// turn off charge and discharge in all channels
-			send_command(COMMAND_CHARGE_OFF, 0);
-			send_command(COMMAND_CHARGE_OFF, 1);
-			send_command(COMMAND_CHARGE_OFF, 2);
-			send_command(COMMAND_CHARGE_OFF, 3);
-			send_command(COMMAND_DISCHARGE_OFF, 0);
-			send_command(COMMAND_DISCHARGE_OFF, 1);
-			send_command(COMMAND_DISCHARGE_OFF, 2);
-			send_command(COMMAND_DISCHARGE_OFF, 3);
+			spi_pipe_send_command(COMMAND_CHARGE_OFF, 0);
+			spi_pipe_send_command(COMMAND_CHARGE_OFF, 1);
+			spi_pipe_send_command(COMMAND_CHARGE_OFF, 2);
+			spi_pipe_send_command(COMMAND_CHARGE_OFF, 3);
+			spi_pipe_send_command(COMMAND_DISCHARGE_OFF, 0);
+			spi_pipe_send_command(COMMAND_DISCHARGE_OFF, 1);
+			spi_pipe_send_command(COMMAND_DISCHARGE_OFF, 2);
+			spi_pipe_send_command(COMMAND_DISCHARGE_OFF, 3);
 			// change batteries status
 			set_charge_flag(CHARGE_OFF, 0);
 			set_charge_flag(CHARGE_OFF, 1);

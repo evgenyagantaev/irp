@@ -13,6 +13,9 @@
 #include "gpio.h"
 
 
+static int ktc_on_flag = 0;
+
+
 void button_interpreter_task()
 {
 	if(!button_get_state()) // button is not pressed
@@ -20,11 +23,54 @@ void button_interpreter_task()
 		// check if button was pressed and this press is not served yet
 		if(button_get_short_status() || button_get_long_status())
 		{
-			// clear flags
-			button_set_short_status(0);
-			button_set_long_status(0);
 
+			if(button_get_long_status)
+			{
+				// clear flags
+				button_set_short_status(0);
+				button_set_long_status(0);
+
+				if(ktc_on_flag) // ktc is on, we switch it off
+				{
+					// send command ktc off
+					// turn off ktc in all channels
+					spi_pipe_send_command(COMMAND_KTC_OFF, 0);
+					spi_pipe_send_command(COMMAND_KTC_OFF, 1);
+					spi_pipe_send_command(COMMAND_KTC_OFF, 2);
+					spi_pipe_send_command(COMMAND_KTC_OFF, 3);
+
+					// turn off ktc led
+					HAL_GPIO_WritePin(GPIOA, ctc_led_red_out_Pin, GPIO_PIN_RESET);
+
+					ktc_on_flag = 0;
+				}
+				else
+				{
+					// send command ktc on
+					// turn on ktc in all channels
+					spi_pipe_send_command(COMMAND_KTC_ON, 0);
+					spi_pipe_send_command(COMMAND_KTC_ON, 1);
+					spi_pipe_send_command(COMMAND_KTC_ON, 2);
+					spi_pipe_send_command(COMMAND_KTC_ON, 3);
+
+					// turn on ktc led
+					HAL_GPIO_WritePin(GPIOA, ctc_led_red_out_Pin, GPIO_PIN_SET);
+
+					ktc_on_flag = 1;
+				}
+			}
+
+
+
+
+
+			// clear flags
+			//button_set_short_status(0);
+			//button_set_long_status(0);
+
+			// debug**************************************************
 			// check state and commit actions
+			/*
 			if(interpreter_state == 0)
 			{
 				// charge on
@@ -60,6 +106,8 @@ void button_interpreter_task()
 			interpreter_state++;
 			if(interpreter_state >= 4)
 				interpreter_state = 0;
+			//*/
+			// debug**************************************************
 		}
 	}
 }
