@@ -52,28 +52,28 @@ void charge_check_task()
 		GPIOA->BRR = (charge_led_red_out_Pin|chargeOK_led_green_out_Pin
 				|charge100_led_green_out_Pin|charge75_led_green_out_Pin
 				|charge50_led_green_out_Pin|charge25_led_green_out_Pin);
-		GPIOA->BSRR = (charge100_led_green_out_Pin | charge_led_red_out_Pin);
+		GPIOA->BSRR = (charge100_led_green_out_Pin);
 	}
 	else if(charge_overall_level >= 50)
 	{
 		GPIOA->BRR = (charge_led_red_out_Pin|chargeOK_led_green_out_Pin
 				|charge100_led_green_out_Pin|charge75_led_green_out_Pin
 				|charge50_led_green_out_Pin|charge25_led_green_out_Pin);
-		GPIOA->BSRR = (charge75_led_green_out_Pin | charge_led_red_out_Pin);
+		GPIOA->BSRR = (charge75_led_green_out_Pin);
 	}
 	else if(charge_overall_level >= 25)
 	{
 		GPIOA->BRR = (charge_led_red_out_Pin|chargeOK_led_green_out_Pin
 				|charge100_led_green_out_Pin|charge75_led_green_out_Pin
 				|charge50_led_green_out_Pin|charge25_led_green_out_Pin);
-		GPIOA->BSRR = (charge50_led_green_out_Pin | charge_led_red_out_Pin);
+		GPIOA->BSRR = (charge50_led_green_out_Pin );
 	}
 	else
 	{
 		GPIOA->BRR = (charge_led_red_out_Pin|chargeOK_led_green_out_Pin
 				|charge100_led_green_out_Pin|charge75_led_green_out_Pin
 				|charge50_led_green_out_Pin|charge25_led_green_out_Pin);
-		GPIOA->BSRR = (charge25_led_green_out_Pin | charge_led_red_out_Pin);
+		GPIOA->BSRR = (charge25_led_green_out_Pin );
 	}
 
 

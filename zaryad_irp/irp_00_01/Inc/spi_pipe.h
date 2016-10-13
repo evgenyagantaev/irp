@@ -35,7 +35,7 @@
 #define COMMAND_KTC_OFF				0x37
 
 void spi_pipe_send_command(uint16_t command, int channel);
-int spi_pipe_receive_data(uint16_t *data, int channel);  // returns quote (0x0022)
+int spi_pipe_receive_data(uint32_t *data, int channel);  // returns quote (0x0022)
 
 void spi_pipe_transmit(uint8_t byte);
 

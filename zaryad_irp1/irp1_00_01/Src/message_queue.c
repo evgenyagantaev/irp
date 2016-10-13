@@ -34,3 +34,8 @@ uint8_t message_pop()
 	else
 		return 255;
 }
+
+int get_message_index()
+{
+	return message_index;
+}

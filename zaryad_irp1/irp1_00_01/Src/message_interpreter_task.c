@@ -7,10 +7,13 @@
 #include "message_interpreter_task.h"
 #include "message_queue.h"
 #include "charge_level_detector_obj.h"
+#include "switch_obj.h"
+#include "spi1_transceiver.h"
+#include "battery_obj.h"
 
 void message_interpreter_task()
 {
-	if(message_index > 0)
+	if(get_message_index() > 0)
 	{
 		uint8_t message = message_pop();
 

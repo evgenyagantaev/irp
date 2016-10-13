@@ -26,7 +26,11 @@ void SPI1_IRQHandler(void)
 
 		// read from spi data register
 		spi1_in_data = SPI1->DR;
+		//debug
+		if(spi1_in_data == 0x25)
+			i++;
 		message_push((uint8_t)spi1_in_data);
+
 
 
 
