@@ -7,11 +7,18 @@
 
 #include <battery_obj.h>
 #include "spi1_irq_handler.h"
+#include "usart.h"
+#include <stdio.h>
+#include <string.h>
 
+//debug
+static int counter = 0;
+extern UART_HandleTypeDef huart1;
 
 
 void SPI1_IRQHandler(void)
 {
+	char message[64];
 	int i;
 
 	uint16_t spi1_in_data;
@@ -31,6 +38,10 @@ void SPI1_IRQHandler(void)
 			i++;
 		message_push((uint8_t)spi1_in_data);
 
+		//debug
+		counter++;
+		sprintf(message, "%d: spi data = 0x%x\r\n", counter, spi1_in_data);
+		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
 
 
 

@@ -61,12 +61,15 @@ void charge_level_detect()
 
 	char message[64];
 	sprintf((char *)message, "CHARGE LEVEL = %d   VOLTAGE = %d\r\n", charge_level, voltage);
-	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+	//HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
 
 }
 
 uint32_t charge_level_get()
 {
+	//debug
+	charge_level = 97;
+
 	return charge_level;
 }
 void charge_level_set(uint32_t level)

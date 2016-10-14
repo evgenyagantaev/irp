@@ -45,6 +45,7 @@ int spi_pipe_receive_data(uint32_t *data, int channel)  // returns quote (0x0022
 	// chipsel low
 	GPIOB->BRR = chipselect_mask[channel];
 	spi_short_delay();
+
 	// wait for spi transmitter readiness
 	while ((SPI2->SR & SPI_SR_TXE) == RESET );
 	SPI2->DR = 0x5555;
@@ -52,6 +53,7 @@ int spi_pipe_receive_data(uint32_t *data, int channel)  // returns quote (0x0022
 	while ((SPI2->SR & SPI_SR_RXNE) == RESET );
 	receive_buffer = SPI2->DR;		// msb
 	*data += ((uint32_t)receive_buffer << 16);
+	HAL_Delay(5);
 	// wait for spi transmitter readiness
 	while ((SPI2->SR & SPI_SR_TXE) == RESET );
 	SPI2->DR = 0x5555;
@@ -59,18 +61,22 @@ int spi_pipe_receive_data(uint32_t *data, int channel)  // returns quote (0x0022
 	while ((SPI2->SR & SPI_SR_RXNE) == RESET );
 	receive_buffer = SPI2->DR;		// lsb
 	*data += (uint32_t)receive_buffer;
+	HAL_Delay(5);
 
 	// receive quote *****************************
 	// wait for spi transmitter readiness
 	while ((SPI2->SR & SPI_SR_TXE) == RESET );
-	SPI2->DR = 0x5555;
+	SPI2->DR = 0xaaaa;
 	// wait while a transmission complete
 	while ((SPI2->SR & SPI_SR_RXNE) == RESET );
 	receive_buffer = SPI2->DR;		// quote (must be equal 0x0022)
+	HAL_Delay(5);
 
 	spi_short_delay();
 	// chipsel high
 	GPIOB->BSRR = chipselect_mask[channel];
+
+	return receive_buffer;
 }
 
 

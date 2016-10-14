@@ -14,7 +14,7 @@ void spi1_send_data(uint32_t data)
 	uint16_t in_data;
 	uint16_t out_buffer;
 
-	out_buffer = data >> 16;
+	out_buffer = (uint16_t)(data >> 16);
 	// wait for spi transmitter readiness
 	while ((SPI1->SR & SPI_SR_TXE) == RESET );
 	SPI1->DR = out_buffer;

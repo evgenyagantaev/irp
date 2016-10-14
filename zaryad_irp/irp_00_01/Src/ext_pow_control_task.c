@@ -25,9 +25,12 @@ void ext_pow_control_task()
 		uint32_t ext_pow_voltage = ext_pow_get_voltage();
 
 		//debug
-		char message[64];
-		sprintf(message, "%ldI%ld\r\n", ext_pow_voltage, ext_pow_voltage);
-		HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 500);
+		//ext_pow_voltage = 28000;
+
+		//debug
+		//char message[64];
+		//sprintf(message, "%ldI%ld\r\n", ext_pow_voltage, ext_pow_voltage);
+		//HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen(message), 500);
 
 		if(ext_pow_voltage > HIGH_THRESHOLD)
 		{

@@ -27,7 +27,6 @@ int ctc_on_flag = 0;
 int ctc_button_press_counter = 0;
 
 extern ADC_HandleTypeDef hadc;
-extern SPI_HandleTypeDef hspi2;
 
 #define GET_CHARGE 0x0021
 #define STOP_CHARGING 0x0022
@@ -95,7 +94,6 @@ int main(void)
 		button_polling_task();
 		button_interpreter_task();
 		charge_check_task();
-		HAL_Delay(500);
 		battery_control_task();
 
         //int_adc_measure_task();
