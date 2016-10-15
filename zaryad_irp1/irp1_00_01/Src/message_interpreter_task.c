@@ -33,7 +33,10 @@ void message_interpreter_task()
 		}
 		else if(message == COMMAND_GET_CHARGE_LEVEL) // get battery temperature
 		{
-			spi1_send_data(charge_level_get());
+
+			//spi1_send_data(charge_level_get());
+
+			spi1_send_data((uint32_t)0xaabbccdd);
 		}
 		else if(message == COMMAND_CHARGE_ON) //
 		{

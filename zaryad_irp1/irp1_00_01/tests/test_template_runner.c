@@ -90,6 +90,9 @@ int main(void)
 	SPI1->CR1 |= SPI_CR1_SPE;
 	// enable spi1 rxne interrupt
 	SPI1->CR2 |= SPI_CR2_RXNEIE;   // enable rxne interrupt
+	//debug*********************
+	SPI1->DR = 0xabcd;
+	//debug*********************
 	//MX_I2C1_Init();
 	MX_USART1_UART_Init();
 	MX_TIM2_Init();

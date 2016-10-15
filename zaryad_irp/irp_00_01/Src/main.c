@@ -12,6 +12,8 @@
 
 #include "main.h"
 
+#include "spi_pipe.h"
+
 
 
 // here code to test
@@ -89,12 +91,30 @@ int main(void)
     // main scheduler loop
     while(1)
     {
+    	//debug
+    	/*
+    	spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL0);
+    	HAL_Delay(2000);
+    	spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL0);
+    	HAL_Delay(2000);
+    	spi_pipe_send_command(COMMAND_DISCHARGE_ON, CHANNEL0);
+		HAL_Delay(2000);
+		spi_pipe_send_command(COMMAND_DISCHARGE_OFF, CHANNEL0);
+		HAL_Delay(2000);
+		spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL0);
+		HAL_Delay(2000);
+		spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL0);
+		HAL_Delay(2000);
+		//*/
+
+		//*
     	ext_pow_control_task();
 		time_management_task();
 		button_polling_task();
 		button_interpreter_task();
 		charge_check_task();
 		battery_control_task();
+		//*/
 
         //int_adc_measure_task();
 

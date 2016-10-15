@@ -68,7 +68,7 @@ void charge_level_detect()
 uint32_t charge_level_get()
 {
 	//debug
-	charge_level = 97;
+	//charge_level = 97;
 
 	return charge_level;
 }

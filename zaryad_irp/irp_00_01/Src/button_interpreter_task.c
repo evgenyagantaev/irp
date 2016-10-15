@@ -24,6 +24,7 @@ void button_interpreter_task()
 		if(button_get_short_status() || button_get_long_status())
 		{
 
+			/*
 			if(button_get_long_status)
 			{
 				// clear flags
@@ -59,18 +60,20 @@ void button_interpreter_task()
 					ktc_on_flag = 1;
 				}
 			}
+			//*/
 
 
 
 
 
-			// clear flags
-			//button_set_short_status(0);
-			//button_set_long_status(0);
 
 			// debug**************************************************
 			// check state and commit actions
-			/*
+			//*
+			// clear flags
+			button_set_short_status(0);
+			button_set_long_status(0);
+
 			if(interpreter_state == 0)
 			{
 				// charge on
