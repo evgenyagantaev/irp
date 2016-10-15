@@ -19,26 +19,7 @@ void message_interpreter_task()
 
 		// parse command **********************************************
 
-		if(message == COMMAND_GET_VOLTAGE) // get battery voltage
-		{
-			spi1_send_data(battery_voltage_get());
-		}
-		else if(message == COMMAND_GET_CURRENT) // get battery current
-		{
-			spi1_send_data(battery_current_get());
-		}
-		else if(message == COMMAND_GET_TEMPERATURE) // get battery temperature
-		{
-			spi1_send_data(battery_temperature_get());
-		}
-		else if(message == COMMAND_GET_CHARGE_LEVEL) // get battery temperature
-		{
-
-			//spi1_send_data(charge_level_get());
-
-			spi1_send_data((uint32_t)0xaabbccdd);
-		}
-		else if(message == COMMAND_CHARGE_ON) //
+		if(message == COMMAND_CHARGE_ON) //
 		{
 			switch_charge_on();
 		}

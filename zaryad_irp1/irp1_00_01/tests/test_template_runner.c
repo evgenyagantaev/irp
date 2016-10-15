@@ -113,6 +113,7 @@ int main(void)
     	battery_measurement_task();
     	time_management_task();
     	message_interpreter_task();
+    	battery_charge_control_task();
 
     }
     //return (UnityEnd());

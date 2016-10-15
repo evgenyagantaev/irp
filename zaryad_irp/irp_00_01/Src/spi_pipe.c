@@ -79,7 +79,7 @@ int spi_pipe_receive_data(uint32_t *data, int channel)  // returns quote (0x0022
 	GPIOB->BSRR = chipselect_mask[channel];
 	//***********************************************
 
-	HAL_Delay(50);
+	HAL_Delay(5);
 
 	// chipsel low
 	GPIOB->BRR = chipselect_mask[channel];
@@ -98,7 +98,7 @@ int spi_pipe_receive_data(uint32_t *data, int channel)  // returns quote (0x0022
 	//***********************************************
 	*data = data_buffer;
 
-	HAL_Delay(50);
+	HAL_Delay(5);
 
 	//debug
 	counter++;

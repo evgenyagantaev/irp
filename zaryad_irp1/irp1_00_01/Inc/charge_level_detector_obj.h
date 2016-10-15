@@ -18,9 +18,7 @@ static const int VOLTAGE_SPAN = VOLTAGE_HIGH_THRESHOLD - VOLTAGE_LOW_THRESHOLD;
 
 static uint32_t charge_level; // percents
 
-static int pred_pred_temperature;
-static int pred_temperature;
-static int charge_detector_temperature;
+
 
 void charge_level_detector_init();
 

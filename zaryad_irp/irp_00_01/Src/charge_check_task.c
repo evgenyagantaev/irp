@@ -32,7 +32,7 @@ void charge_check_task()
 	    for(i=0; i<4; i++)
 	    {
 	    	spi_pipe_send_command(COMMAND_GET_CHARGE_LEVEL, i);
-	    	HAL_Delay(50);
+	    	HAL_Delay(5);
 	    	quote = spi_pipe_receive_data(&private_charge_level, i);
 	    	if(quote == QUOTE_OK)
 	    	{
