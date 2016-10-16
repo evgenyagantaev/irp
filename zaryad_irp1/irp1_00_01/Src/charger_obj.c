@@ -14,6 +14,9 @@
 static int temperature_buffer[3];
 static uint32_t charger_frozen_seconds = 0;
 
+static int drop_charge_current_on = 0;
+static uint32_t drop_charge_period_start = 0;
+
 void charger_control_task()
 {
 	uint32_t current_seconds = time_manager_get_seconds();
@@ -23,6 +26,7 @@ void charger_control_task()
 		charger_frozen_seconds = current_seconds;
 
 		int battery_state = battery_state_get();
+
 
 		if(battery_state == CHARGING_STATE)
 		{
@@ -42,6 +46,32 @@ void charger_control_task()
 				HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);
 				battery_state_set(CHARGED_STATE);
 			}
+		}
+
+		if(battery_state == CHARGED_STATE && get_charge_flag())
+		{
+			// drop charge regime
+			if(drop_charge_current_on) // current on
+			{
+				if(current_seconds - drop_charge_period_start >= DROP_CHARGE_PERIOD) // it's time to switch current off
+				{
+					drop_charge_period_start = current_seconds;
+					drop_charge_current_on = 0;
+					// switch off
+					HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);
+				}
+			}
+			else // no current, idle period
+			{
+				if(current_seconds - drop_charge_period_start >= DROP_CHARGE_iDLE_PERIOD) // it's time to switch current on
+				{
+					drop_charge_period_start = current_seconds;
+					drop_charge_current_on = 1;
+					// switch on
+					HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_SET);
+				}
+			}
+
 		}
 	}
 }
