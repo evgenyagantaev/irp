@@ -90,7 +90,7 @@ void ext_pow_control_task()
 				ext_pow_voltage_state = 2;
 
 				ext_pow_set_status(1); // less
-				// power red led on
+				// power red led off
 				HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_RESET);
 				HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_RESET);
 				// turn off charge
