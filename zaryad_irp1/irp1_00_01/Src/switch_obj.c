@@ -52,7 +52,7 @@ void switch_load_off()
 }
 void switch_ktc_on()
 {
-	battery_state_set(CTC_STATE);
+	battery_state_set(CTC_CHARGING_STATE);
 }
 void switch_ktc_off()
 {
