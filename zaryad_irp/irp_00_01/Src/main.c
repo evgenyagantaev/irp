@@ -80,7 +80,7 @@ int main(void)
 
 	// vkluchenie **********************************
     HAL_Delay(1000);
-    HAL_GPIO_WritePin(GPIOB, relei_control_out_Pin, GPIO_PIN_SET); // relei on
+    //HAL_GPIO_WritePin(GPIOB, relei_control_out_Pin, GPIO_PIN_SET); // relei on
     test_leds();
     HAL_UART_Transmit(&huart1, "Hello!\r\n", strlen("Hello!\r\n"), 500);
     HAL_Delay(1000);
