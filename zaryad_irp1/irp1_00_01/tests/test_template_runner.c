@@ -36,6 +36,7 @@
 #include "battery_measurement_task.h"
 #include "time_management_task.h"
 #include "message_interpreter_task.h"
+#include "charger_obj.h"
 
 // here code to test
 //#include "ProductionCode.h"
@@ -72,8 +73,6 @@ void resetTest(void)
 
 int main(void)
 {
-	char message[128];
-	int counter = 0;
 
     /* MCU Configuration----------------------------------------------------------*/
 
@@ -107,13 +106,12 @@ int main(void)
 	// configure max
 	write_configuration(0x2250);
 	charge_level_detector_init();
-	uint16_t in_data = 0;
     while(1)
     {
     	battery_measurement_task();
     	time_management_task();
     	message_interpreter_task();
-    	battery_charge_control_task();
+    	charger_control_task();
 
     }
     //return (UnityEnd());

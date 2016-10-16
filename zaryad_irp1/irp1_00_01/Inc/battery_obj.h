@@ -16,6 +16,13 @@ static int32_t battery_current = 0;     			// miliamperes
 static int32_t battery_remaining_capacity = 0;     	// miliamperes hours
 static int32_t battery_charge_level = 0;  	    	// percents
 
+static int temperature_buffer[3];
+#define BATTERY_TEMPERATURE_CONTROL_PERIOD 60
+
+uint32_t temperature_period_start_get();
+uint32_t temperature_period_start_set(uint32_t period_start);
+int *battery_temperature_buffer_get();
+
 #define CHARGE_ON 1
 #define CHARGE_OFF 0
 #define DISCHARGE_ON 1
@@ -25,6 +32,20 @@ static int32_t battery_charge_level = 0;  	    	// percents
 static int charge_flag = 0;
 static int discharge_flag = 0;
 static int load_flag = 0;
+
+#define IDLE_STATE 0
+#define CHARGING_STATE 1
+#define CHARGED_STATE 2
+#define DISCHARGING_STATE 3
+#define LOAD_STATE 4
+#define CTC_STATE 5
+
+static int battery_state = IDLE_STATE;
+
+int battery_state_get();
+int battery_state_set(int state);
+
+
 int get_charge_flag();
 int get_discharge_flag();
 int get_load_flag();

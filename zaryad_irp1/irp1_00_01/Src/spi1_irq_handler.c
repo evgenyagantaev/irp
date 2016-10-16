@@ -60,6 +60,11 @@ void SPI1_IRQHandler(void)
 			data_to_send = charge_level_get();
 			SPI1->DR = (uint16_t)(data_to_send >> 16);
 		}
+		else if(message == COMMAND_GET_BATTERY_STATE) // get battery state (msb)
+		{
+			data_to_send = battery_state_get();
+			SPI1->DR = (uint16_t)(data_to_send >> 16);
+		}
 		else if(message == 0x5555) // lsb
 		{
 			SPI1->DR = (uint16_t)(data_to_send);

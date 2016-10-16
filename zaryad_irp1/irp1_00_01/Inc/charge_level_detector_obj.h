@@ -25,7 +25,6 @@ void charge_level_detector_init();
 uint32_t charge_level_get();
 void charge_level_set(uint32_t level);
 
-void charge_detector_temperature_set(int temperature);
 void charge_level_detect();
 
 

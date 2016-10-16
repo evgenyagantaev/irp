@@ -34,6 +34,19 @@
 #define COMMAND_KTC_ON				0x36
 #define COMMAND_KTC_OFF				0x37
 
+#define COMMAND_GET_BATTERY_STATE	0x38
+
+
+
+#define IDLE_STATE 0
+#define CHARGING_STATE 1
+#define CHARGED_STATE 2
+#define DISCHARGING_STATE 3
+#define LOAD_STATE 4
+#define CTC_STATE 5
+
+
+
 void spi_pipe_send_command(uint16_t command, int channel);
 int spi_pipe_receive_data(uint32_t *data, int channel);  // returns quote (0x0022)
 

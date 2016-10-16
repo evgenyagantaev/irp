@@ -6,6 +6,11 @@
  */
 
 #include "battery_obj.h"
+#include "time_management_task.h"
+
+
+static uint32_t temperature_period_start = 0;
+
 
 int32_t battery_voltage_get()
 {
@@ -32,6 +37,16 @@ int32_t battery_voltage_set(int32_t voltage)
 int32_t battery_temperature_set(int32_t temperature)
 {
 	battery_temperature = temperature;
+	// shift temperature buffer
+	uint32_t current_seconds = time_manager_get_seconds();
+	if((current_seconds - temperature_period_start) >= BATTERY_TEMPERATURE_CONTROL_PERIOD)
+	{
+		temperature_period_start = current_seconds;
+
+		temperature_buffer[0] = temperature_buffer[1];
+		temperature_buffer[1] = temperature_buffer[2];
+		temperature_buffer[2] = temperature;
+	}
 
 	return battery_temperature;
 }
@@ -74,3 +89,27 @@ void set_load_flag(int flag)
 	load_flag = flag;
 }
 
+int battery_state_get()
+{
+	return battery_state;
+}
+int battery_state_set(int state)
+{
+	battery_state = state;
+	return battery_state;
+}
+
+uint32_t temperature_period_start_get()
+{
+	return temperature_period_start;
+}
+uint32_t temperature_period_start_set(uint32_t period_start)
+{
+	temperature_period_start = period_start;
+	return temperature_period_start;
+}
+
+int *battery_temperature_buffer_get()
+{
+	return temperature_buffer;
+}

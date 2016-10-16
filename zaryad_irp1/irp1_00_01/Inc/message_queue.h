@@ -31,6 +31,9 @@
 #define COMMAND_KTC_ON				0x36
 #define COMMAND_KTC_OFF				0x37
 
+#define COMMAND_GET_BATTERY_STATE	0x38
+
+
 static uint8_t message_queue[MESSAGE_QUEUE_LENGTH];
 static int message_index;
 

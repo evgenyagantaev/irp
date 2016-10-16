@@ -28,7 +28,10 @@ void charge_check_task()
 	    uint16_t quote = 0;
                                                                                    
 	    int i;
-                                                                                   
+
+	    //check charge levels ********************************************************
+	    //****************************************************************************
+
 	    for(i=0; i<4; i++)
 	    {
 	    	spi_pipe_send_command(COMMAND_GET_CHARGE_LEVEL, i);
@@ -75,6 +78,65 @@ void charge_check_task()
 	    	GPIOA->BRR = (charge100_led_green_out_Pin|charge75_led_green_out_Pin
 	    			|charge50_led_green_out_Pin|charge25_led_green_out_Pin);
 
+	    }
+
+
+	    //check batteries states ********************************************************
+	    //*******************************************************************************
+
+	    uint32_t states[4];
+
+	    for(i=0; i<4; i++)
+	    {
+	    	//debug
+	    	//spi_pipe_send_command(COMMAND_GET_BATTERY_STATE, 0);
+			spi_pipe_send_command(COMMAND_GET_BATTERY_STATE, i);
+			HAL_Delay(5);
+			//debug
+			//quote = spi_pipe_receive_data(&(states[i]), 0);
+			quote = spi_pipe_receive_data(&(states[i]), i);
+			if(quote != QUOTE_OK)
+			{
+				states[i] = 0;
+			}
+		}
+
+	    // check full charge state
+	    int result = 0;
+	    for(i=0; i<4; i++)
+	    {
+	    	if(states[i] == CHARGED_STATE)
+	    		result++;
+	    }
+	    if(result == 4)
+	    {
+	    	// turn off "charging" red led
+	    	GPIOA->BRR = charge_led_red_out_Pin;
+	    	// turn on "charged" green led
+	    	GPIOA->BSRR = chargeOK_led_green_out_Pin;
+	    }
+	    else
+	    {
+	    	// turn off "charged" green led
+	    	GPIOA->BRR = chargeOK_led_green_out_Pin;
+
+	    	// check charging state
+	    	int result = 0;
+			for(i=0; i<4; i++)
+			{
+				if(states[i] == CHARGING_STATE)
+					result++;
+			}
+			if(result > 0)
+			{
+				// turn on "charging" red led
+				GPIOA->BSRR = charge_led_red_out_Pin;
+			}
+			else
+			{
+				// turn off "charging" red led
+				GPIOA->BRR = charge_led_red_out_Pin;
+			}
 	    }
                                                                                    
 	}

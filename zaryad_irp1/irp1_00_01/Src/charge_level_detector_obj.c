@@ -11,6 +11,7 @@
 #include "usart.h"
 #include <stdio.h>
 #include <string.h>
+#include "time_management_task.h"
 
 
 void charge_level_detector_init()
@@ -34,15 +35,12 @@ void charge_level_detector_init()
 	//sprintf((char *)message, "temperature x 100 C = %d\r\n", temperature_mult_100);
 	//HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
 
-	pred_pred_temperature = pred_temperature = charge_detector_temperature = temperature_mult_100;
+	int *temperature_buffer = battery_temperature_buffer_get();
+
+	temperature_buffer[0] = temperature_buffer[1] = temperature_buffer[2] = temperature_mult_100;
+	temperature_period_start_set(time_manager_get_seconds());
 }
 
-void charge_detector_temperature_set(int temperature)
-{
-	pred_pred_temperature = pred_temperature;
-	pred_temperature = charge_detector_temperature;
-	charge_detector_temperature = temperature;
-}
 
 void charge_level_detect()
 {

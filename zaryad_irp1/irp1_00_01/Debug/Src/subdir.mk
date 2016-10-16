@@ -7,6 +7,7 @@ C_SRCS += \
 ../Src/battery_measurement_task.c \
 ../Src/battery_obj.c \
 ../Src/charge_level_detector_obj.c \
+../Src/charger_obj.c \
 ../Src/gpio.c \
 ../Src/i2c.c \
 ../Src/i2c_lowlevel.c \
@@ -27,6 +28,7 @@ OBJS += \
 ./Src/battery_measurement_task.o \
 ./Src/battery_obj.o \
 ./Src/charge_level_detector_obj.o \
+./Src/charger_obj.o \
 ./Src/gpio.o \
 ./Src/i2c.o \
 ./Src/i2c_lowlevel.o \
@@ -47,6 +49,7 @@ C_DEPS += \
 ./Src/battery_measurement_task.d \
 ./Src/battery_obj.d \
 ./Src/charge_level_detector_obj.d \
+./Src/charger_obj.d \
 ./Src/gpio.d \
 ./Src/i2c.d \
 ./Src/i2c_lowlevel.d \
