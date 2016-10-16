@@ -9,6 +9,7 @@
 #include "time_management_task.h"
 #include "battery_obj.h"
 #include "gpio.h"
+#include "switch_obj.h"
 
 
 static int temperature_buffer[3];
@@ -72,6 +73,24 @@ void charger_control_task()
 				}
 			}
 
+		}
+
+		if((battery_state == DISCHARGING_STATE) || (battery_state == LOAD_STATE))
+		{
+			// check discharge cancel voltage criterion
+			if(battery_voltage_get() <= DISCHARGE_CRITICAL_VOLTAGE)
+			{
+				if(get_discharge_flag())  // in discharge mode
+				{
+					// turn off discharge
+					switch_discharge_off();
+				}
+				else if(get_load_flag())
+				{
+					// turn off load
+					switch_load_off();
+				}
+			}
 		}
 	}
 }
