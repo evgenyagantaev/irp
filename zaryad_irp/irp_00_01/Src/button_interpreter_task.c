@@ -13,6 +13,7 @@
 #include "spi_pipe.h"
 #include "gpio.h"
 
+#include "ctc_controller_obj.h"
 
 static int ktc_on_flag = 0;
 
@@ -71,6 +72,8 @@ void button_interpreter_task()
 						HAL_GPIO_WritePin(GPIOA, ctc_led_red_out_Pin, GPIO_PIN_SET);
 
 						ktc_on_flag = 1;
+
+						ctc_set_stage(CTC_JUST_ACTIVATED);
 					}
 				}
 				//*/

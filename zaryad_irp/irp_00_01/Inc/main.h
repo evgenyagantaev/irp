@@ -15,5 +15,6 @@
 #include "button_polling_task.h"
 #include "button_interpreter_task.h"
 #include "charge_check_task.h"
+#include "ctc_controller_obj.h"
 
 #endif /* INC_MAIN_H_ */

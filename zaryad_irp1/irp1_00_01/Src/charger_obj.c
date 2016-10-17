@@ -49,7 +49,7 @@ void charger_control_task()
 			}
 		}
 
-		if(battery_state == CHARGED_STATE && get_charge_flag())
+		if((battery_state == CHARGED_STATE) && get_charge_flag())
 		{
 			// drop charge regime
 			if(drop_charge_current_on) // current on
@@ -91,6 +91,11 @@ void charger_control_task()
 					switch_load_off();
 				}
 			}
+		}
+
+		if(battery_state == CTC_CHARGED_STATE)
+		{
+
 		}
 	}
 }

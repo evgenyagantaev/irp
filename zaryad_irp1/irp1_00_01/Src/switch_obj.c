@@ -36,7 +36,7 @@ void switch_discharge_off()
 }
 void switch_load_on()
 {
-	HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
+	//HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
 	HAL_Delay(700);
 	HAL_GPIO_WritePin(GPIOA, on_bat1_out_Pin, GPIO_PIN_SET);
 	set_load_flag(1);
@@ -52,7 +52,10 @@ void switch_load_off()
 }
 void switch_ktc_on()
 {
-	battery_state_set(CTC_CHARGING_STATE);
+	if(battery_state_get() == CHARGING_STATE)
+		battery_state_set(CTC_CHARGING_STATE);
+	else if(battery_state_get() == CHARGED_STATE)
+		battery_state_set(CTC_CHARGED_STATE);
 }
 void switch_ktc_off()
 {

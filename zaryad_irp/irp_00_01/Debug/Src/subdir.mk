@@ -11,6 +11,7 @@ C_SRCS += \
 ../Src/button_interpreter_task.c \
 ../Src/button_polling_task.c \
 ../Src/charge_check_task.c \
+../Src/ctc_controller_obj.c \
 ../Src/ext_pow_control_task.c \
 ../Src/ext_power_obj.c \
 ../Src/gpio.c \
@@ -34,6 +35,7 @@ OBJS += \
 ./Src/button_interpreter_task.o \
 ./Src/button_polling_task.o \
 ./Src/charge_check_task.o \
+./Src/ctc_controller_obj.o \
 ./Src/ext_pow_control_task.o \
 ./Src/ext_power_obj.o \
 ./Src/gpio.o \
@@ -57,6 +59,7 @@ C_DEPS += \
 ./Src/button_interpreter_task.d \
 ./Src/button_polling_task.d \
 ./Src/charge_check_task.d \
+./Src/ctc_controller_obj.d \
 ./Src/ext_pow_control_task.d \
 ./Src/ext_power_obj.d \
 ./Src/gpio.d \

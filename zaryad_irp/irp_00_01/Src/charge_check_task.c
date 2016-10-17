@@ -8,6 +8,7 @@
 #include "charge_check_task.h"
 #include "spi_pipe.h"
 #include "gpio.h"
+#include "time_management_task.h"
 
 
 static uint32_t frozen_seconds = 0;

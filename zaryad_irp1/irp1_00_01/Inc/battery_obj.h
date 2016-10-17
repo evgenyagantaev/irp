@@ -39,8 +39,10 @@ static int load_flag = 0;
 #define DISCHARGING_STATE 3
 #define LOAD_STATE 4
 #define CTC_CHARGING_STATE 5
-#define CTC_DISCHARGING_STATE 6
-#define CTC_COMPLETE_STATE 7
+#define CTC_CHARGED_STATE 6
+#define CTC_DISCHARGING_STATE 7
+#define CTC_DISCHARGED_STATE 8
+#define CTC_COMPLETE_STATE 9
 
 static int battery_state = IDLE_STATE;
 

@@ -114,6 +114,7 @@ int main(void)
 		button_interpreter_task();
 		charge_check_task();
 		battery_control_task();
+		ctc_controller_task();
 		//*/
 
         //int_adc_measure_task();
