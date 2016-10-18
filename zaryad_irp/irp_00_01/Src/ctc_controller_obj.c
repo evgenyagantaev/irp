@@ -45,15 +45,15 @@ void ctc_controller_task()
 			int result = 0;
 			for(i=0; i<4; i++)
 			{
-				if(states[i] == CTC_CHARGED)
+				if(states[i] == CTC_CHARGED_STATE)
 					result++;
 			}
 			if(result == 4)
 			{
-				spi_pipe_send_command(COMMAND_CTC_DISCHARGE_ON, 0);
-				spi_pipe_send_command(COMMAND_CTC_DISCHARGE_ON, 1);
-				spi_pipe_send_command(COMMAND_CTC_DISCHARGE_ON, 2);
-				spi_pipe_send_command(COMMAND_CTC_DISCHARGE_ON, 3);
+				spi_pipe_send_command(COMMAND_DISCHARGE_ON, 0);
+				spi_pipe_send_command(COMMAND_DISCHARGE_ON, 1);
+				spi_pipe_send_command(COMMAND_DISCHARGE_ON, 2);
+				spi_pipe_send_command(COMMAND_DISCHARGE_ON, 3);
 			}
 		}
 
