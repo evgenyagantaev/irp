@@ -15,7 +15,7 @@ static int ctc_stage = CTC_INACTIVE;
 static uint32_t ctc_frozen_seconds = 0;
 
 
-
+// regime ctc ustanavlivaetsya "snaruzhi" interpretatorom nazhatiya knopki
 
 void ctc_set_stage(int stage)
 {
@@ -30,6 +30,12 @@ void ctc_controller_task()
 	if(current_seconds > (ctc_frozen_seconds + CTC_CONTROL_PERIOD))
 	{
 		ctc_frozen_seconds = current_seconds;
+
+		if(ctc_stage != CTC_INACTIVE)
+		{
+
+		}
+
 	}
 
 

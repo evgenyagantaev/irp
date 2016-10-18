@@ -58,6 +58,8 @@ void button_interpreter_task()
 						HAL_GPIO_WritePin(GPIOA, ctc_led_red_out_Pin, GPIO_PIN_RESET);
 
 						ktc_on_flag = 0;
+
+						ctc_set_stage(CTC_JUST_INACTIVATED);
 					}
 					else
 					{

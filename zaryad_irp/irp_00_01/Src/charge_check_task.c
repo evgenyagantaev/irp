@@ -13,6 +13,16 @@
 
 static uint32_t frozen_seconds = 0;
 
+static uint32_t states[4];
+
+void channel_states_get(uint32_t *ref_states)
+{
+	int i;
+	for(i=0; i<4; i++)
+	{
+		ref_states[i] = states[i];
+	}
+}
 
 
 void charge_check_task()
@@ -85,7 +95,7 @@ void charge_check_task()
 	    //check batteries states ********************************************************
 	    //*******************************************************************************
 
-	    uint32_t states[4];
+
 
 	    for(i=0; i<4; i++)
 	    {
