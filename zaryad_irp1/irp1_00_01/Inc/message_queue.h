@@ -34,6 +34,7 @@
 #define COMMAND_GET_BATTERY_STATE	0x38
 
 #define COMMAND_CTC_DISCHARGE_ON	0x39
+#define COMMAND_CTC_RECHARGE_ON		0x40
 
 
 static uint8_t message_queue[MESSAGE_QUEUE_LENGTH];

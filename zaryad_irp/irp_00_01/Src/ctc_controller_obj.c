@@ -10,6 +10,7 @@
 #include "time_management_task.h"
 #include "time_management_task.h"
 #include "spi_pipe.h"
+#include "gpio.h"
 
 
 static int ctc_stage = CTC_INACTIVE;
@@ -38,9 +39,9 @@ void ctc_controller_task()
 		if(ctc_stage != CTC_INACTIVE)
 		{
 			uint32_t states[4];
-			// check if ctc charged state is realized
 			channel_states_get(states);
 
+			// check if ctc charged state is realized
 			int i;
 			int result = 0;
 			for(i=0; i<4; i++)
@@ -50,10 +51,43 @@ void ctc_controller_task()
 			}
 			if(result == 4)
 			{
-				spi_pipe_send_command(COMMAND_DISCHARGE_ON, 0);
-				spi_pipe_send_command(COMMAND_DISCHARGE_ON, 1);
-				spi_pipe_send_command(COMMAND_DISCHARGE_ON, 2);
-				spi_pipe_send_command(COMMAND_DISCHARGE_ON, 3);
+				spi_pipe_send_command(COMMAND_CTC_DISCHARGE_ON, 0);
+				spi_pipe_send_command(COMMAND_CTC_DISCHARGE_ON, 1);
+				spi_pipe_send_command(COMMAND_CTC_DISCHARGE_ON, 2);
+				spi_pipe_send_command(COMMAND_CTC_DISCHARGE_ON, 3);
+			}
+
+			// check if ctc discharged state is realized
+			result = 0;
+			for(i=0; i<4; i++)
+			{
+				if(states[i] == CTC_DISCHARGED_STATE)
+					result++;
+			}
+			if(result == 4)
+			{
+				spi_pipe_send_command(COMMAND_CTC_RECHARGE_ON, 0);
+				spi_pipe_send_command(COMMAND_CTC_RECHARGE_ON, 1);
+				spi_pipe_send_command(COMMAND_CTC_RECHARGE_ON, 2);
+				spi_pipe_send_command(COMMAND_CTC_RECHARGE_ON, 3);
+			}
+
+			// check if ctc recharged (complete) state is realized
+			result = 0;
+			for(i=0; i<4; i++)
+			{
+				if(states[i] == CTC_RECHARGED_STATE)
+					result++;
+			}
+			if(result == 4)
+			{
+				// ctc complete *************************
+				// turn on green led
+				// turn on ktc led
+				HAL_GPIO_WritePin(GPIOA, ctc_led_red_out_Pin, GPIO_PIN_RESET);
+				// turn on ktc led
+				HAL_GPIO_WritePin(GPIOA, ctc_led_green_out_Pin, GPIO_PIN_SET);
+				ctc_stage = CTC_INACTIVE;
 			}
 		}
 

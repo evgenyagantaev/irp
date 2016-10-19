@@ -28,7 +28,7 @@ void charger_control_task()
 
 		int battery_state = battery_state_get();
 
-
+		//***************************************************************************************
 		if(battery_state == CHARGING_STATE)
 		{
 			// check temperature criterion
@@ -193,12 +193,6 @@ void charger_control_task()
 				battery_state_set(CTC_DISCHARGED_STATE);
 			}
 		}
-
-
-
-
-
-
 
 
 

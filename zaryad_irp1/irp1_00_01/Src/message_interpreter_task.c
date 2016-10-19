@@ -55,6 +55,10 @@ void message_interpreter_task()
 		{
 			switch_ktc_discharge_on();
 		}
+		else if(message == COMMAND_CTC_RECHARGE_ON) //
+		{
+			switch_ktc_recharge_on();
+		}
 		else
 		{
 			int i = 0;
