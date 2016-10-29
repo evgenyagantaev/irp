@@ -70,7 +70,8 @@ void battery_measurement_task()
 	// read vbatt
 	i2c_send_START();
 	i2c_send_byte(max17047_address);  	// write command
-	i2c_send_byte(0x09); //Vcell register
+	//i2c_send_byte(0x09); //Vcell register
+	i2c_send_byte(0x19); //Vcell register
 	i2c_send_STOP();
 	i2c_send_START();
 	i2c_send_byte(max17047_address + 0x01);  	// read command
@@ -95,7 +96,8 @@ void battery_measurement_task()
 	// read current
 	i2c_send_START();
 	i2c_send_byte(max17047_address);  	// write command
-	i2c_send_byte(0x0a); //current register
+	//i2c_send_byte(0x0a); //current register
+	i2c_send_byte(0x0b); //current register
 	i2c_send_STOP();
 	i2c_send_START();
 	i2c_send_byte(max17047_address + 0x01);  	// read command
@@ -120,7 +122,8 @@ void battery_measurement_task()
 	// read temperature
 	i2c_send_START();
 	i2c_send_byte(max17047_address);  	// write command
-	i2c_send_byte(0x08); //temperature register
+	//i2c_send_byte(0x08); //temperature register
+	i2c_send_byte(0x16); //temperature register
 	i2c_send_STOP();
 	i2c_send_START();
 	i2c_send_byte(max17047_address + 0x01);  	// read command
@@ -137,15 +140,16 @@ void battery_measurement_task()
 		temperature_mult_100 = temperature_integral/AVERAGING_PERIOD;
 		battery_temperature_set(temperature_mult_100);
 		temperature_integral = 0;
-		sprintf((char *)message, "%13d\r\n", temperature_mult_100);
+		sprintf((char *)message, "%13d", temperature_mult_100);
 		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
 	}
 
-	/*
+	//*
 	// read capacity
 	i2c_send_START();
 	i2c_send_byte(max17047_address);  	// write command
 	i2c_send_byte(0x0f); //remaining capacity register
+	//i2c_send_byte(0x18); //full capacity register
 	i2c_send_STOP();
 	i2c_send_START();
 	i2c_send_byte(max17047_address + 0x01);  	// read command
@@ -153,14 +157,18 @@ void battery_measurement_task()
 	i2c_receive_byte(&data_h, 0); // nack
 	i2c_send_STOP();
 	rem_cap = (int16_t)((((uint16_t)data_h)<<8) + (uint16_t)data_l);
-	double Rem_cap = rem_cap * 0.5;
+	double Rem_cap = rem_cap * 3.0;
 	int32_t rem_cap_mah = (int32_t)Rem_cap;
-	battery_remaining_capacity_set(rem_cap_mah);
-	sprintf((char *)message, "remaining capacity = %d mAh\r\n", rem_cap_mah);
-	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
 
-	sprintf((char *)message, "******************************************\r\n");
-	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+	if (averaging_counter >= AVERAGING_PERIOD)
+	{
+		battery_remaining_capacity_set(rem_cap_mah);
+		sprintf((char *)message, "%13d\r\n", rem_cap_mah);
+		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+	}
+
+
+
 	//*/
 
 	if (averaging_counter >= AVERAGING_PERIOD)
