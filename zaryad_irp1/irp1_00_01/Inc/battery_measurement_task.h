@@ -9,7 +9,7 @@
 #define INC_BATTERY_MEASUREMENT_TASK_H_
 
 
-#define AVERAGING_PERIOD 25
+#define AVERAGING_PERIOD 75
 
 
 void battery_measurement_task();

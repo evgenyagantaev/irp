@@ -89,10 +89,17 @@ void ext_pow_control_task()
 			{
 				ext_pow_voltage_state = 2;
 
+				// turn on load
+				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL0);
+				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL1);
+				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL2);
+				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL3);
+
 				ext_pow_set_status(1); // less
 				// power red led off
 				HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_RESET);
 				HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_RESET);
+				HAL_Delay(1000);
 				// turn off charge
 				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL0);
 				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL1);
@@ -101,11 +108,7 @@ void ext_pow_control_task()
 				// turn off red charge led
 				HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_RESET);
 				//HAL_Delay(2000);
-				// turn on load
-				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL0);
-				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL1);
-				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL2);
-				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL3);
+
 				HAL_GPIO_WritePin(GPIOB, relei_control_out_Pin, GPIO_PIN_RESET); // relei off
 			}
 		}
