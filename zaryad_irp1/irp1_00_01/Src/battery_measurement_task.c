@@ -14,6 +14,12 @@
 #include "charge_level_detector_obj.h"
 
 
+static int averaging_counter = 0;
+static int32_t battery_voltage_integral = 0;
+static int32_t current_integral = 0;
+static int32_t temperature_integral = 0;
+
+
 void battery_measurement_task()
 {
 	char message[64];
@@ -27,7 +33,10 @@ void battery_measurement_task()
 
 	uint8_t data_l, data_h;
 
+	averaging_counter++;
+
 	// debug
+	/*
 	// read version (0x00ac)
 	i2c_send_START();
 	i2c_send_byte(max17047_address);  	// write command
@@ -56,6 +65,7 @@ void battery_measurement_task()
 	configuration = (((uint16_t)data_h)<<8) + (uint16_t)data_l;
 	sprintf((char *)message, "configuration = 0x%x \r\n", configuration);
 	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+	//*/
 
 	// read vbatt
 	i2c_send_START();
@@ -70,10 +80,17 @@ void battery_measurement_task()
 	vbatt = (((uint16_t)data_h)<<8) + (uint16_t)data_l;
 	vbatt >>= 3;
 	double Vcell = ((vbatt * 0.625) * 8.0);
-	int32_t Vcell_mv = (uint32_t)Vcell;
-	battery_voltage_set(Vcell_mv);
-	sprintf((char *)message, "Vcell = %d mV\r\n", Vcell_mv);
-	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+	int32_t Vcell_mv = (int32_t)Vcell;
+	battery_voltage_integral += Vcell_mv;
+
+	if (averaging_counter >= AVERAGING_PERIOD)
+	{
+		Vcell_mv = battery_voltage_integral/AVERAGING_PERIOD;
+		battery_voltage_set(Vcell_mv);
+		battery_voltage_integral = 0;
+		sprintf((char *)message, "%13d", Vcell_mv);
+		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+	}
 
 	// read current
 	i2c_send_START();
@@ -87,10 +104,18 @@ void battery_measurement_task()
 	i2c_send_STOP();
 	current = (int16_t)((((uint16_t)data_h)<<8) + (uint16_t)data_l);
 	double Current = 1.5625e-6/2.5e-3 * current;
-	int32_t current_ma = (uint32_t)(Current * 1000);
-	battery_current_set(current_ma);
-	sprintf((char *)message, "Current = %d mA\r\n", current_ma);
-	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+	int32_t current_ma = (int32_t)(Current * 1000);
+	current_integral += current_ma;
+
+	if (averaging_counter >= AVERAGING_PERIOD)
+	{
+		current_ma = current_integral/AVERAGING_PERIOD;
+		battery_current_set(current_ma);
+		current_integral = 0;
+		sprintf((char *)message, "%13d", current_ma);
+		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+	}
+
 
 	// read temperature
 	i2c_send_START();
@@ -105,10 +130,18 @@ void battery_measurement_task()
 	temperature = (int16_t)((((uint16_t)data_h)<<8) + (uint16_t)data_l);
 	double Temperature = temperature * 0.0039;
 	int32_t temperature_mult_100 = (int32_t)(Temperature * 100);
-	battery_temperature_set(temperature_mult_100);
-	sprintf((char *)message, "temperature x 100 C = %d\r\n", temperature_mult_100);
-	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+	temperature_integral += temperature_mult_100;
 
+	if (averaging_counter >= AVERAGING_PERIOD)
+	{
+		temperature_mult_100 = temperature_integral/AVERAGING_PERIOD;
+		battery_temperature_set(temperature_mult_100);
+		temperature_integral = 0;
+		sprintf((char *)message, "%13d\r\n", temperature_mult_100);
+		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+	}
+
+	/*
 	// read capacity
 	i2c_send_START();
 	i2c_send_byte(max17047_address);  	// write command
@@ -128,6 +161,10 @@ void battery_measurement_task()
 
 	sprintf((char *)message, "******************************************\r\n");
 	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+	//*/
+
+	if (averaging_counter >= AVERAGING_PERIOD)
+		averaging_counter = 0;
 
 	charge_level_detect();
 }

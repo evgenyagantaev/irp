@@ -70,6 +70,9 @@ void ctc_controller_task()
 				spi_pipe_send_command(COMMAND_CTC_RECHARGE_ON, 1);
 				spi_pipe_send_command(COMMAND_CTC_RECHARGE_ON, 2);
 				spi_pipe_send_command(COMMAND_CTC_RECHARGE_ON, 3);
+
+				// turn on "charging" red led
+				GPIOA->BSRR = charge_led_red_out_Pin;
 			}
 
 			// check if ctc recharged (complete) state is realized
@@ -83,10 +86,14 @@ void ctc_controller_task()
 			{
 				// ctc complete *************************
 				// turn on green led
-				// turn on ktc led
+				// turn off ktc red led
 				HAL_GPIO_WritePin(GPIOA, ctc_led_red_out_Pin, GPIO_PIN_RESET);
-				// turn on ktc led
+				// turn on ktc green led
 				HAL_GPIO_WritePin(GPIOA, ctc_led_green_out_Pin, GPIO_PIN_SET);
+				// turn off "charging" red led
+				GPIOA->BRR = charge_led_red_out_Pin;
+				// turn on charge ok green led
+				HAL_GPIO_WritePin(GPIOA, chargeOK_led_green_out_Pin, GPIO_PIN_SET);
 				ctc_stage = CTC_INACTIVE;
 			}
 		}

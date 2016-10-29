@@ -53,6 +53,7 @@ void message_interpreter_task()
 		}
 		else if(message == COMMAND_CTC_DISCHARGE_ON) //
 		{
+			switch_charge_off();
 			switch_ktc_discharge_on();
 		}
 		else if(message == COMMAND_CTC_RECHARGE_ON) //

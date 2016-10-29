@@ -59,11 +59,12 @@ void switch_ktc_on()
 }
 void switch_ktc_off()
 {
-	battery_state_set(IDLE_STATE);
+	battery_state_set(CHARGING_STATE);
 }
 
 void switch_ktc_discharge_on()
 {
+
 	HAL_GPIO_WritePin(GPIOB, disch_out_Pin, GPIO_PIN_SET);
 	set_discharge_flag(1);
 	battery_state_set(CTC_DISCHARGING_STATE);
