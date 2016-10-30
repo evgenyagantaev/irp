@@ -10,6 +10,8 @@
 
 #include "stdint.h"
 
+#define EXT_POW_MEASURE_PERIOD 3
+
 static uint32_t ext_pow_frozen_systick;
 static int ext_pow_voltage_state = -1;
 

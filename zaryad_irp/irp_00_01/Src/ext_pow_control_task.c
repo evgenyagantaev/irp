@@ -17,7 +17,7 @@
 void ext_pow_control_task()
 {
 	uint32_t current_tick = HAL_GetTick();
-	if(current_tick >= (ext_pow_frozen_systick + 10))
+	if(current_tick >= (ext_pow_frozen_systick + EXT_POW_MEASURE_PERIOD))
 	{
 		ext_pow_frozen_systick = current_tick;
 

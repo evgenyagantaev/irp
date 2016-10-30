@@ -45,3 +45,8 @@ int get_message_index()
 {
 	return message_index;
 }
+
+void drop_message_queue()
+{
+	message_index = 0;
+}

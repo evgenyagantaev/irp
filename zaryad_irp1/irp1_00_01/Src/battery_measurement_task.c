@@ -13,6 +13,8 @@
 #include "battery_obj.h"
 #include "charge_level_detector_obj.h"
 
+#include "coulombcounter_obj.h"
+
 
 static int averaging_counter = 0;
 static int32_t battery_voltage_integral = 0;
@@ -144,7 +146,7 @@ void battery_measurement_task()
 		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
 	}
 
-	//*
+	/*
 	// read capacity
 	i2c_send_START();
 	i2c_send_byte(max17047_address);  	// write command
@@ -166,10 +168,18 @@ void battery_measurement_task()
 		sprintf((char *)message, "%13d\r\n", rem_cap_mah);
 		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
 	}
-
-
-
 	//*/
+
+
+	int32_t rem_cap_mah = coulombmeter_get();
+
+	if (averaging_counter >= AVERAGING_PERIOD)
+	{
+		battery_remaining_capacity_set(rem_cap_mah);
+		sprintf((char *)message, "%13d\r\n", rem_cap_mah);
+		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+	}
+
 
 	if (averaging_counter >= AVERAGING_PERIOD)
 		averaging_counter = 0;

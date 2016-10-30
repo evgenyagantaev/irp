@@ -68,6 +68,7 @@ void SPI1_IRQHandler(void)
 		else if(message == COMMAND_LOAD_ON) // get battery state (msb)
 		{
 			HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
+			drop_message_queue();
 			message_push((uint8_t)spi1_in_data);
 		}
 		else if(message == 0x5555) // lsb

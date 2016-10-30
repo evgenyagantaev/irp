@@ -43,5 +43,6 @@ static int message_index;
 uint8_t message_push(uint8_t message);
 uint8_t message_pop();
 int get_message_index();
+void drop_message_queue();
 
 #endif /* INC_MESSAGE_QUEUE_H_ */

@@ -18,6 +18,10 @@ static uint32_t charger_frozen_seconds = 0;
 static int drop_charge_current_on = 0;
 static uint32_t drop_charge_period_start = 0;
 
+static int voltage_derivative = 0;
+static int voltage_deriv_max = 0;
+static int voltage_local_max = 0;
+
 void charger_control_task()
 {
 	uint32_t current_seconds = time_manager_get_seconds();
@@ -27,21 +31,52 @@ void charger_control_task()
 		charger_frozen_seconds = current_seconds;
 
 		int battery_state = battery_state_get();
+		int stop_charge_flag = 0;
 
 		//***************************************************************************************
 		if(battery_state == CHARGING_STATE)
 		{
+
 			// check temperature criterion
 			int *temperature_buffer = battery_temperature_buffer_get();
 
-			if(
-				(temperature_buffer[2] >= CHARGE_CRITICAL_TEMPERATURE) ||
-				(
-					(temperature_buffer[1] > temperature_buffer[0]) &&
-					(temperature_buffer[2] > temperature_buffer[1]) &&
-					((temperature_buffer[2] - temperature_buffer[0]) >= CHARGE_CRITICAL_TEMPERATURE_SPEED)
-				)
-			  )
+			// check critical temperature criterion
+			if(temperature_buffer[2] >= CHARGE_CRITICAL_TEMPERATURE)
+			{
+				// stop charge, switch to drop charging
+				stop_charge_flag = 1;
+			}
+			else // no critical temperature
+			{
+				// check voltage threshold
+				int32_t voltage = battery_voltage_get();
+				if(voltage >= LOW_CHECK_CHARGE_VOLTAGE_THRESHOLD)
+				{
+					// check temperature growth speed criterion
+					if(
+						(temperature_buffer[1] > temperature_buffer[0]) &&
+						(temperature_buffer[2] > temperature_buffer[1]) &&
+						((temperature_buffer[2] - temperature_buffer[0]) >= CHARGE_CRITICAL_TEMPERATURE_SPEED)
+					  )
+					{
+						// stop charge, switch to drop charging
+						stop_charge_flag = 1;
+					}
+					else // no temperature growth
+					{
+						// check delta U criterion
+						if(voltage >= voltage_local_max)
+							voltage_local_max = voltage;
+						if((voltage_local_max - voltage) >= VOLTAGE_DELTA_U)
+						{
+							// stop charge, switch to drop charging
+							stop_charge_flag = 1;
+						}
+					}
+				}
+			}//*****************************************************
+
+			if(stop_charge_flag)
 			{
 				// stop charge, switch to drop charging
 				HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);

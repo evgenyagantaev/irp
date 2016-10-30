@@ -9,6 +9,8 @@
 #include "stm32l0xx_hal.h"
 #include "gpio.h"
 
+#include "coulombcounter_obj.h"
+
 
 void time_management_task()
 {
@@ -19,6 +21,10 @@ void time_management_task()
         seconds_tick++;
         // toggle led
         //HAL_GPIO_TogglePin(GPIOA, power_led_green_out_Pin);
+
+        // fit coulombmeter
+        fit_coulombmeter();
+
     }
 
 }
