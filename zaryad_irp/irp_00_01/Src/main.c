@@ -13,6 +13,7 @@
 #include "main.h"
 
 #include "spi_pipe.h"
+#include "ext_power_obj.h"
 
 
 
@@ -86,7 +87,12 @@ int main(void)
     HAL_Delay(1000);
 
     ADC_ChannelConfTypeDef sConfig;
-
+    int i;
+    for(i=0; i<10; i++)
+    {
+    	extpow_measure_voltage();
+    	ext_pow_get_voltage();
+    }
 
     // main scheduler loop
     while(1)

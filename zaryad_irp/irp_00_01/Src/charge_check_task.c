@@ -116,7 +116,7 @@ void charge_check_task()
 	    int result = 0;
 	    for(i=0; i<4; i++)
 	    {
-	    	if(states[i] == CHARGED_STATE)
+	    	if((states[i] == CHARGED_STATE) || (states[i] == CTC_RECHARGED_STATE))
 	    		result++;
 	    }
 	    if(result == 4)
@@ -135,7 +135,7 @@ void charge_check_task()
 	    	int result = 0;
 			for(i=0; i<4; i++)
 			{
-				if((states[i] == CHARGING_STATE) || (states[i] == CTC_CHARGING_STATE))
+				if((states[i] == CHARGING_STATE) || (states[i] == CTC_CHARGING_STATE) || (states[i] == CTC_RECHARGING_STATE))
 					result++;
 			}
 			if(result > 0)

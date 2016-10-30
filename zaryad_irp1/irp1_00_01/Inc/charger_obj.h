@@ -13,7 +13,7 @@
 #define CHARGE_CRITICAL_TEMPERATURE 4500
 #define CHARGE_CRITICAL_VOLTAGE 34000
 #define CHARGE_CRITICAL_TEMPERATURE_SPEED 100
-#define DISCHARGE_CRITICAL_VOLTAGE 21000
+#define DISCHARGE_CRITICAL_VOLTAGE 27000
 
 #define DROP_CHARGE_PERIOD 4
 #define DROP_CHARGE_iDLE_PERIOD 24
@@ -24,5 +24,7 @@
 
 
 void charger_control_task();
+
+int charger_check_criterions();
 
 #endif /* INC_CHARGER_OBJ_H_ */

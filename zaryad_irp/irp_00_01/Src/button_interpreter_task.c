@@ -70,6 +70,8 @@ void button_interpreter_task()
 						spi_pipe_send_command(COMMAND_KTC_ON, 2);
 						spi_pipe_send_command(COMMAND_KTC_ON, 3);
 
+						// turn off green ktc led
+						HAL_GPIO_WritePin(GPIOA, ctc_led_green_out_Pin, GPIO_PIN_RESET);
 						// turn on ktc led
 						HAL_GPIO_WritePin(GPIOA, ctc_led_red_out_Pin, GPIO_PIN_SET);
 

@@ -33,50 +33,13 @@ void charger_control_task()
 		charger_frozen_seconds = current_seconds;
 
 		int battery_state = battery_state_get();
-		int stop_charge_flag = 0;
+
 
 		//***************************************************************************************
 		if(battery_state == CHARGING_STATE)
 		{
 
-			// check temperature criterion
-			int *temperature_buffer = battery_temperature_buffer_get();
-
-			// check critical temperature criterion
-			if(temperature_buffer[2] >= CHARGE_CRITICAL_TEMPERATURE)
-			{
-				// stop charge, switch to drop charging
-				stop_charge_flag = 1;
-			}
-			else // no critical temperature
-			{
-				// check voltage threshold
-				int32_t voltage = battery_voltage_get();
-				if(voltage >= LOW_CHECK_CHARGE_VOLTAGE_THRESHOLD)
-				{
-					// check temperature growth speed criterion
-					if(
-						(temperature_buffer[1] > temperature_buffer[0]) &&
-						(temperature_buffer[2] > temperature_buffer[1]) &&
-						((temperature_buffer[2] - temperature_buffer[0]) >= CHARGE_CRITICAL_TEMPERATURE_SPEED)
-					  )
-					{
-						// stop charge, switch to drop charging
-						stop_charge_flag = 1;
-					}
-					else // no temperature growth
-					{
-						// check delta U criterion
-						if(voltage >= voltage_local_max)
-							voltage_local_max = voltage;
-						if((voltage_local_max - voltage) >= VOLTAGE_DELTA_U)
-						{
-							// stop charge, switch to drop charging
-							stop_charge_flag = 1;
-						}
-					}
-				}
-			}//*****************************************************
+			int stop_charge_flag = charger_check_criterions();
 
 			if(stop_charge_flag)
 			{
@@ -86,105 +49,50 @@ void charger_control_task()
 				// tune capacity
 				coulombmeter_set(discharge_capacity_get());
 			}
-		}
-
-		if((battery_state == CHARGED_STATE) && get_charge_flag())
-		{
-			// drop charge regime
-			if(drop_charge_current_on) // current on
-			{
-				if(current_seconds - drop_charge_period_start >= DROP_CHARGE_PERIOD) // it's time to switch current off
-				{
-					drop_charge_period_start = current_seconds;
-					drop_charge_current_on = 0;
-					// switch off
-					HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);
-				}
-			}
-			else // no current, idle period
-			{
-				if(current_seconds - drop_charge_period_start >= DROP_CHARGE_iDLE_PERIOD) // it's time to switch current on
-				{
-					drop_charge_period_start = current_seconds;
-					drop_charge_current_on = 1;
-					// switch on
-					HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_SET);
-				}
-			}
-
-		}
-		//*********************************************************************************************
-
+		}// end if(battery_state == CHARGING_STATE) *********************************************
 		if(battery_state == CTC_CHARGING_STATE)
 		{
-			// check temperature criterion
-			int *temperature_buffer = battery_temperature_buffer_get();
 
-			if(
-				(temperature_buffer[2] >= CHARGE_CRITICAL_TEMPERATURE) ||
-				(
-					(temperature_buffer[1] > temperature_buffer[0]) &&
-					(temperature_buffer[2] > temperature_buffer[1]) &&
-					((temperature_buffer[2] - temperature_buffer[0]) >= CHARGE_CRITICAL_TEMPERATURE_SPEED)
-				)
-			  )
+			int stop_charge_flag = charger_check_criterions();
+
+			if(stop_charge_flag)
 			{
 				// stop charge, switch to drop charging
 				HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);
 				battery_state_set(CTC_CHARGED_STATE);
-			}
-		}
-
-		if((battery_state == CTC_CHARGED_STATE) && get_charge_flag())
-		{
-			// drop charge regime
-			if(drop_charge_current_on) // current on
-			{
-				if(current_seconds - drop_charge_period_start >= DROP_CHARGE_PERIOD) // it's time to switch current off
-				{
-					drop_charge_period_start = current_seconds;
-					drop_charge_current_on = 0;
-					// switch off
-					HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);
-				}
-			}
-			else // no current, idle period
-			{
-				if(current_seconds - drop_charge_period_start >= DROP_CHARGE_iDLE_PERIOD) // it's time to switch current on
-				{
-					drop_charge_period_start = current_seconds;
-					drop_charge_current_on = 1;
-					// switch on
-					HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_SET);
-				}
+				// tune capacity
+				coulombmeter_set(discharge_capacity_get());
 			}
 
-		}
-
-
+		}// end if(battery_state == CTC_CHARGING_STATE) **********************************************
 		//*********************************************************************************************
-
 		if(battery_state == CTC_RECHARGING_STATE)
 		{
-			// check temperature criterion
-			int *temperature_buffer = battery_temperature_buffer_get();
+			int stop_charge_flag = charger_check_criterions();
 
-			if(
-				(temperature_buffer[2] >= CHARGE_CRITICAL_TEMPERATURE) ||
-				(
-					(temperature_buffer[1] > temperature_buffer[0]) &&
-					(temperature_buffer[2] > temperature_buffer[1]) &&
-					((temperature_buffer[2] - temperature_buffer[0]) >= CHARGE_CRITICAL_TEMPERATURE_SPEED)
-				)
-			  )
+			if(stop_charge_flag)
 			{
 				// stop charge, switch to drop charging
 				HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);
 				battery_state_set(CTC_RECHARGED_STATE);
+				// tune capacity
+				coulombmeter_set(discharge_capacity_get());
 			}
-		}
 
-		if((battery_state == CTC_RECHARGED_STATE) && get_charge_flag())
+		}// end if(battery_state == CTC_RECHARGING_STATE)  ************************************
+
+
+
+		//*************************************************************************************
+		//*************************************************************************************
+		//*************************************************************************************
+		//*************************************************************************************
+		//*************************************************************************************
+		//*************************************************************************************
+		//*************************************************************************************
+		//*************************************************************************************
+
+		if(((battery_state==CHARGED_STATE) || (battery_state==CTC_CHARGED_STATE) || (battery_state==CTC_RECHARGED_STATE)) && get_charge_flag())
 		{
 			// drop charge regime
 			if(drop_charge_current_on) // current on
@@ -209,6 +117,7 @@ void charger_control_task()
 			}
 
 		}
+		//*********************************************************************************************
 
 
 		//*********************************************************************************************
@@ -252,3 +161,50 @@ void charger_control_task()
 	}
 }
 
+
+// returns 1 if some of criterions is valid, 0 otherwise
+int charger_check_criterions()
+{
+	int stop_charge_flag = 0;
+
+	// check temperature criterion
+	int *temperature_buffer = battery_temperature_buffer_get();
+
+	// check critical temperature criterion
+	if(temperature_buffer[2] >= CHARGE_CRITICAL_TEMPERATURE)
+	{
+		// stop charge, switch to drop charging
+		stop_charge_flag = 1;
+	}
+	else // no critical temperature
+	{
+		// check voltage threshold
+		int32_t voltage = battery_voltage_get();
+		if(voltage >= LOW_CHECK_CHARGE_VOLTAGE_THRESHOLD)
+		{
+			// check temperature growth speed criterion
+			if(
+				(temperature_buffer[1] > temperature_buffer[0]) &&
+				(temperature_buffer[2] > temperature_buffer[1]) &&
+				((temperature_buffer[2] - temperature_buffer[0]) >= CHARGE_CRITICAL_TEMPERATURE_SPEED)
+			  )
+			{
+				// stop charge, switch to drop charging
+				stop_charge_flag = 1;
+			}
+			else // no temperature growth
+			{
+				// check delta U criterion
+				if(voltage >= voltage_local_max)
+					voltage_local_max = voltage;
+				if((voltage_local_max - voltage) >= VOLTAGE_DELTA_U)
+				{
+					// stop charge, switch to drop charging
+					stop_charge_flag = 1;
+				}
+			}
+		}
+	}//*****************************************************
+
+	return stop_charge_flag;
+}
