@@ -10,6 +10,7 @@
 
 
 static double coulombmeter = 5000.0;
+static double discharge_capacity = 12000.0;
 
 
 void fit_coulombmeter()
@@ -20,4 +21,19 @@ void fit_coulombmeter()
 int32_t coulombmeter_get()
 {
 	return (int32_t)coulombmeter;
+}
+
+void coulombmeter_set(double value)
+{
+	coulombmeter = value;
+}
+
+
+double discharge_capacity_get()
+{
+	return discharge_capacity;
+}
+void discharge_capacity_set(double value)
+{
+	discharge_capacity = value;
 }

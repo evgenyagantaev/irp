@@ -13,6 +13,8 @@
 #include <string.h>
 #include "time_management_task.h"
 
+#include "coulombcounter_obj.h"
+
 
 void charge_level_detector_init()
 {
@@ -21,7 +23,7 @@ void charge_level_detector_init()
 	// measure temperature
 	i2c_send_START();
 	i2c_send_byte(max17047_address);  	// write command
-	i2c_send_byte(0x08); //temperature register
+	i2c_send_byte(0x16); //temperature register
 	i2c_send_STOP();
 	i2c_send_START();
 	i2c_send_byte(max17047_address + 0x01);  	// read command
@@ -44,8 +46,23 @@ void charge_level_detector_init()
 
 void charge_level_detect()
 {
-	uint32_t voltage = battery_voltage_get();
-	if((voltage <= 32000) && (voltage > VOLTAGE_LOW_THRESHOLD))
+
+	charge_level = (uint32_t)(coulombmeter_get()/discharge_capacity_get()*100);
+	if(charge_level < 0)
+		charge_level = 0;
+	else if(charge_level > 100)
+		charge_level = 100;
+
+	//char message[64];
+	//sprintf((char *)message, "CHARGE LEVEL = %d   VOLTAGE = %d\r\n", charge_level, voltage);
+	//HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+
+}
+
+void initial_charge_level_estimation()
+{
+	uint32_t voltage = battery_live_voltage_get();
+	if((voltage <= VOLTAGE_HIGH_THRESHOLD) && (voltage > VOLTAGE_LOW_THRESHOLD))
 	{
 		if(voltage < VOLTAGE_HIGH_THRESHOLD)
 			charge_level = (uint32_t)((double)(voltage - VOLTAGE_LOW_THRESHOLD)/(double)VOLTAGE_SPAN * 100.0);
@@ -57,10 +74,9 @@ void charge_level_detect()
 		charge_level = 0;
 	}
 
-	char message[64];
-	sprintf((char *)message, "CHARGE LEVEL = %d   VOLTAGE = %d\r\n", charge_level, voltage);
-	//HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
-
+	// set initial remaining capacity
+	double initial_capacity = discharge_capacity_get() * (double)charge_level / 100.0;
+	coulombmeter_set(initial_capacity);
 }
 
 uint32_t charge_level_get()

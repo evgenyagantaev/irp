@@ -105,6 +105,7 @@ int main(void)
 
 	// configure max
 	write_configuration(0x2250);
+	initial_charge_level_estimation();
 	charge_level_detector_init();
     while(1)
     {

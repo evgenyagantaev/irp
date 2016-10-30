@@ -11,6 +11,8 @@
 #include "gpio.h"
 #include "switch_obj.h"
 
+#include "coulombcounter_obj.h"
+
 
 static int temperature_buffer[3];
 static uint32_t charger_frozen_seconds = 0;
@@ -81,6 +83,8 @@ void charger_control_task()
 				// stop charge, switch to drop charging
 				HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);
 				battery_state_set(CHARGED_STATE);
+				// tune capacity
+				coulombmeter_set(discharge_capacity_get());
 			}
 		}
 
