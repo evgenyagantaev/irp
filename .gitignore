@@ -5,4 +5,5 @@ RemoteSystemsTempFiles/**/*
 **/*.map
 **/*.bin
 **/*.list
+**/*.log
 
