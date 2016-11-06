@@ -27,7 +27,7 @@ void eeprom_write_discharge_capacity(uint32_t discharge_capaciy)
 }
 uint32_t eeprom_read_discharge_capacity()
 {
-	return *(__IO uint32_t *)EEPROM_DISCHCAP_ADDRESS;
+	return *((uint32_t *)EEPROM_DISCHCAP_ADDRESS);
 }
 void eeprom_write_remaining_capacity(uint32_t remaining_capaciy)
 {
@@ -38,5 +38,5 @@ void eeprom_write_remaining_capacity(uint32_t remaining_capaciy)
 }
 uint32_t eeprom_read_remaining_capacity()
 {
-	return *(__IO uint32_t *)EEPROM_REMCAP_ADDRESS;
+	return *((uint32_t *)EEPROM_REMCAP_ADDRESS);
 }

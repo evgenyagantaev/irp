@@ -8,6 +8,8 @@
 #ifndef INC_EEPROM_STORAGE_OBJ_H_
 #define INC_EEPROM_STORAGE_OBJ_H_
 
+#include "stdint.h"
+
 
 #define EEPROM_MARK 0x01234567
 #define EEPROM_BASE_ADDRESS 0x08080000

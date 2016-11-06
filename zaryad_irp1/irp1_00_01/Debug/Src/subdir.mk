@@ -9,6 +9,7 @@ C_SRCS += \
 ../Src/charge_level_detector_obj.c \
 ../Src/charger_obj.c \
 ../Src/coulombcounter_obj.c \
+../Src/eeprom_storage_obj.c \
 ../Src/gpio.c \
 ../Src/i2c.c \
 ../Src/i2c_lowlevel.c \
@@ -31,6 +32,7 @@ OBJS += \
 ./Src/charge_level_detector_obj.o \
 ./Src/charger_obj.o \
 ./Src/coulombcounter_obj.o \
+./Src/eeprom_storage_obj.o \
 ./Src/gpio.o \
 ./Src/i2c.o \
 ./Src/i2c_lowlevel.o \
@@ -53,6 +55,7 @@ C_DEPS += \
 ./Src/charge_level_detector_obj.d \
 ./Src/charger_obj.d \
 ./Src/coulombcounter_obj.d \
+./Src/eeprom_storage_obj.d \
 ./Src/gpio.d \
 ./Src/i2c.d \
 ./Src/i2c_lowlevel.d \
