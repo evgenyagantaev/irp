@@ -26,6 +26,7 @@
 
 
 void eeprom_write_mark();
+uint32_t eeprom_read_mark();
 void eeprom_write_discharge_capacity(uint32_t discharge_capaciy);
 uint32_t eeprom_read_discharge_capacity();
 void eeprom_write_remaining_capacity(uint32_t remaining_capaciy);

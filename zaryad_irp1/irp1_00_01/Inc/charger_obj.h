@@ -27,4 +27,6 @@ void charger_control_task();
 
 int charger_check_criterions();
 
+void reset_voltage_local_max();
+
 #endif /* INC_CHARGER_OBJ_H_ */

@@ -8,10 +8,12 @@
 #include "switch_obj.h"
 #include "gpio.h"
 #include "battery_obj.h"
+#include "charger_obj.h"
 
 
 void switch_charge_on()
 {
+	reset_voltage_local_max();
 	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_SET);
 	set_charge_flag(1);
 	battery_state_set(CHARGING_STATE);
@@ -53,7 +55,10 @@ void switch_load_off()
 void switch_ktc_on()
 {
 	if(battery_state_get() == CHARGING_STATE)
+	{
+		reset_voltage_local_max();
 		battery_state_set(CTC_CHARGING_STATE);
+	}
 	else if(battery_state_get() == CHARGED_STATE)
 		battery_state_set(CTC_CHARGED_STATE);
 }
@@ -74,6 +79,7 @@ void switch_ktc_discharge_on()
 
 void switch_ktc_recharge_on()
 {
+	reset_voltage_local_max();
 	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_SET);
 	set_charge_flag(1);
 	battery_state_set(CTC_RECHARGING_STATE);

@@ -37,6 +37,7 @@
 #include "time_management_task.h"
 #include "message_interpreter_task.h"
 #include "charger_obj.h"
+#include "eeprom_storage_obj.h"
 
 // here code to test
 //#include "ProductionCode.h"
@@ -102,6 +103,10 @@ int main(void)
     // here are tests
     //UnityBegin("test_code_template.c");
     //RUN_TEST(test_some_function, 15);
+
+	//uint32_t eeprom_mark = eeprom_read_mark();
+	//eeprom_write_mark();
+	//eeprom_mark = eeprom_read_mark();
 
 	// configure max
 	write_configuration(0x2250);

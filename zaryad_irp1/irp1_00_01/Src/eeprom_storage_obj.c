@@ -16,7 +16,10 @@ void eeprom_write_mark()
 	HAL_FLASHEx_DATAEEPROM_Program(FLASH_TYPEPROGRAMDATA_WORD, EEPROM_MARK_ADDRESS, EEPROM_MARK);
 	HAL_FLASHEx_DATAEEPROM_Lock();
 }
-
+uint32_t eeprom_read_mark()
+{
+	return *((uint32_t *)EEPROM_MARK_ADDRESS);
+}
 
 void eeprom_write_discharge_capacity(uint32_t discharge_capaciy)
 {
