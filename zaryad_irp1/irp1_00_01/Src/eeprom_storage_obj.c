@@ -16,9 +16,18 @@ void eeprom_write_mark()
 	HAL_FLASHEx_DATAEEPROM_Program(FLASH_TYPEPROGRAMDATA_WORD, EEPROM_MARK_ADDRESS, EEPROM_MARK);
 	HAL_FLASHEx_DATAEEPROM_Lock();
 }
+void eeprom_clear_mark()
+{
+	HAL_FLASHEx_DATAEEPROM_Unlock();
+	HAL_FLASHEx_DATAEEPROM_Erase(EEPROM_MARK_ADDRESS);
+	HAL_FLASHEx_DATAEEPROM_Program(FLASH_TYPEPROGRAMDATA_WORD, EEPROM_MARK_ADDRESS, 0x00000000);
+	HAL_FLASHEx_DATAEEPROM_Lock();
+}
 uint32_t eeprom_read_mark()
 {
-	return *((uint32_t *)EEPROM_MARK_ADDRESS);
+	uint32_t return_data = *((uint32_t *)0x08080000);
+	//return *((uint32_t *)EEPROM_MARK_ADDRESS);
+	return return_data;
 }
 
 void eeprom_write_discharge_capacity(uint32_t discharge_capaciy)

@@ -104,9 +104,11 @@ int main(void)
     //UnityBegin("test_code_template.c");
     //RUN_TEST(test_some_function, 15);
 
-	//uint32_t eeprom_mark = eeprom_read_mark();
-	//eeprom_write_mark();
-	//eeprom_mark = eeprom_read_mark();
+	uint32_t eeprom_mark = eeprom_read_mark();
+	eeprom_write_mark();
+	eeprom_mark = eeprom_read_mark();
+	eeprom_clear_mark();
+	eeprom_mark = eeprom_read_mark();
 
 	// configure max
 	write_configuration(0x2250);
