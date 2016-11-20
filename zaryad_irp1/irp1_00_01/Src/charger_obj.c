@@ -26,6 +26,8 @@ static int voltage_derivative = 0;
 static int voltage_deriv_max = 0;
 static int voltage_local_max = 0;
 
+static int32_t critical_capacity_threshold = 12000;
+
 void charger_control_task()
 {
 	uint32_t current_seconds = time_manager_get_seconds();
@@ -228,10 +230,25 @@ int charger_check_criterions()
 						// stop charge, switch to drop charging
 						stop_charge_flag = 1;
 					}
+					else // no critical delta U
+					{
+						// check pumped in capacity criterion
+						double current_coulombmeter = coulombmeter_get();
+						if(current_coulombmeter >= critical_capacity_threshold)
+						{
+							//debug
+							sprintf((char *)charger_message, "STOP CHARGE (capacity) -> %7d %7d\r\n", (int32_t)current_coulombmeter, critical_capacity_threshold);
+							HAL_UART_Transmit(&huart1, charger_message, strlen((const char *)charger_message), 500);
+
+							// stop charge, switch to drop charging
+							stop_charge_flag = 1;
+						}
+					}
 				}
-			}
-		}
-	}//*****************************************************
+			}// end if (voltage > CHARGE_CRITICAL_VOLTAGE)
+		}// end if(voltage >= LOW_CHECK_CHARGE_VOLTAGE_THRESHOLD)
+	}// end else // no critical temperature
+	//*****************************************************
 
 	return stop_charge_flag;
 }
@@ -240,4 +257,10 @@ void reset_voltage_local_max()
 {
 	int32_t voltage = battery_voltage_get();
 	voltage_local_max = voltage;
+}
+
+
+void set_critical_capacity_threshold(int32_t value)
+{
+	critical_capacity_threshold = value;
 }

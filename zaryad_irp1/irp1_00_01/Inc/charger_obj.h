@@ -8,6 +8,8 @@
 #ifndef INC_CHARGER_OBJ_H_
 #define INC_CHARGER_OBJ_H_
 
+#include "stdint.h"
+
 #define CHARGE_CONTROL_PERIOD 2
 
 #define CHARGE_CRITICAL_TEMPERATURE 4500
@@ -28,5 +30,7 @@ void charger_control_task();
 int charger_check_criterions();
 
 void reset_voltage_local_max();
+
+void set_critical_capacity_threshold(int32_t value);
 
 #endif /* INC_CHARGER_OBJ_H_ */

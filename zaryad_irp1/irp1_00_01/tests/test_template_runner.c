@@ -104,16 +104,33 @@ int main(void)
     //UnityBegin("test_code_template.c");
     //RUN_TEST(test_some_function, 15);
 
-	uint32_t eeprom_mark = eeprom_read_mark();
-	eeprom_write_mark();
-	eeprom_mark = eeprom_read_mark();
-	eeprom_clear_mark();
-	eeprom_mark = eeprom_read_mark();
+	// ***** EEPROM STORAGE MAP *****
+	// base address 0x0808 0000
+	// addr 0x0000 0000 priznak togo, chto v eeprom uzhe ran'she pisali kakie-to znacheniya (0x0123 4567)
+	// addr 0x0000 0004 razryadnaya emkost' (zapisyvaetsya po okonchanii polnogo razryada)
+	// addr 0x0000 0008 ostatochnaya emkost' (obnovlyaetsya raz v 10 minut)
+
+	//eeprom_write_mark();
+	//eeprom_mark = eeprom_read_mark();
+	//eeprom_clear_mark();
+	//eeprom_mark = eeprom_read_mark();
 
 	// configure max
 	write_configuration(0x2250);
-	initial_charge_level_estimation();
-	charge_level_detector_init();
+
+	uint32_t eeprom_mark = eeprom_read_mark();
+	if(eeprom_mark == EEPROM_MARK) // there are data in eeprom
+	{
+		// read discharge capacity
+		discharge_capacity_set((double)eeprom_read_discharge_capacity());
+		// read coulombmeter (remaining capacity)
+		coulombmeter_set((double)eeprom_read_remaining_capacity());
+	}
+	else
+	{
+		initial_charge_level_estimation();
+		charge_level_detector_init();
+	}
     while(1)
     {
     	battery_measurement_task();

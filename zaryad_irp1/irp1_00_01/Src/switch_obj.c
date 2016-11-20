@@ -9,6 +9,8 @@
 #include "gpio.h"
 #include "battery_obj.h"
 #include "charger_obj.h"
+#include "coulombcounter_obj.h"
+#include "eeprom_storage_obj.h"
 
 
 void switch_charge_on()
@@ -17,6 +19,14 @@ void switch_charge_on()
 	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_SET);
 	set_charge_flag(1);
 	battery_state_set(CHARGING_STATE);
+	// calculate and set critical pumped in capacity threshold
+	int32_t coulombmeter = coulombmeter_get();
+	int32_t current_discharge = (int32_t)discharge_capacity_get() - coulombmeter;
+	if(current_discharge > 0)
+	{
+		double recharge_value = 1.5 * (double)current_discharge;
+		set_critical_capacity_threshold(coulombmeter + (int32_t)recharge_value);
+	}
 }
 void switch_charge_off()
 {
@@ -75,6 +85,8 @@ void switch_ktc_discharge_on()
 	HAL_GPIO_WritePin(GPIOB, disch_out_Pin, GPIO_PIN_SET);
 	set_discharge_flag(1);
 	battery_state_set(CTC_DISCHARGING_STATE);
+	// reset discharge capacity counter
+	set_discharge_cap_meter(0.0);
 }
 
 void switch_ktc_recharge_on()
@@ -83,4 +95,11 @@ void switch_ktc_recharge_on()
 	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_SET);
 	set_charge_flag(1);
 	battery_state_set(CTC_RECHARGING_STATE);
+	// save calculated discharge capacity counter
+	discharge_capacity_set(get_discharge_cap_meter());
+	// save discharge capacity in eeprom
+	eeprom_write_discharge_capacity((int32_t)get_discharge_cap_meter());
+	// calculate and set critical pumped in capacity threshold
+	double recharge_value = 1.5 * discharge_capacity_get();
+	set_critical_capacity_threshold((int32_t)recharge_value);
 }
