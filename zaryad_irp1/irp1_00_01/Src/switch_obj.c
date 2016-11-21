@@ -95,11 +95,6 @@ void switch_ktc_recharge_on()
 	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_SET);
 	set_charge_flag(1);
 	battery_state_set(CTC_RECHARGING_STATE);
-	// save calculated discharge capacity counter
-	discharge_capacity_set(get_discharge_cap_meter());
-	// save discharge capacity in eeprom
-	eeprom_write_discharge_capacity((int32_t)get_discharge_cap_meter());
-	// calculate and set critical pumped in capacity threshold
-	double recharge_value = 1.5 * discharge_capacity_get();
-	set_critical_capacity_threshold((int32_t)recharge_value);
+	//reset coulombmeter
+	coulombmeter_set(0.0);
 }

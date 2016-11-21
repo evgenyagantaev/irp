@@ -8,6 +8,12 @@
 #include "eeprom_storage_obj.h"
 #include "stm32l0xx_hal.h"
 
+#include "usart.h"
+#include <stdio.h>
+#include <string.h>
+
+//debug
+
 
 void eeprom_write_mark()
 {
@@ -22,6 +28,7 @@ void eeprom_clear_mark()
 	HAL_FLASHEx_DATAEEPROM_Erase(EEPROM_MARK_ADDRESS);
 	HAL_FLASHEx_DATAEEPROM_Program(FLASH_TYPEPROGRAMDATA_WORD, EEPROM_MARK_ADDRESS, 0x00000000);
 	HAL_FLASHEx_DATAEEPROM_Lock();
+	HAL_UART_Transmit(&huart1, "EEPROM clean!\r\n", strlen("EEPROM clean!\r\n"), 500);
 }
 uint32_t eeprom_read_mark()
 {

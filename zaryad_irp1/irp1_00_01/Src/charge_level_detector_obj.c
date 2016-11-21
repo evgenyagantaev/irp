@@ -31,6 +31,28 @@ void charge_level_detector_init()
 	i2c_receive_byte(&data_h, 0); // nack
 	i2c_send_STOP();
 	int16_t temperature = (int16_t)((((uint16_t)data_h)<<8) + (uint16_t)data_l);
+	// measure temperature
+	i2c_send_START();
+	i2c_send_byte(max17047_address);  	// write command
+	i2c_send_byte(0x16); //temperature register
+	i2c_send_STOP();
+	i2c_send_START();
+	i2c_send_byte(max17047_address + 0x01);  	// read command
+	i2c_receive_byte(&data_l, 1); // ack
+	i2c_receive_byte(&data_h, 0); // nack
+	i2c_send_STOP();
+	temperature = (int16_t)((((uint16_t)data_h)<<8) + (uint16_t)data_l);
+	// measure temperature
+	i2c_send_START();
+	i2c_send_byte(max17047_address);  	// write command
+	i2c_send_byte(0x16); //temperature register
+	i2c_send_STOP();
+	i2c_send_START();
+	i2c_send_byte(max17047_address + 0x01);  	// read command
+	i2c_receive_byte(&data_l, 1); // ack
+	i2c_receive_byte(&data_h, 0); // nack
+	i2c_send_STOP();
+	temperature = (int16_t)((((uint16_t)data_h)<<8) + (uint16_t)data_l);
 	double Temperature = temperature * 0.0039;
 	int32_t temperature_mult_100 = (int32_t)(Temperature * 100);
 	//battery_temperature_set(temperature_mult_100);
@@ -39,7 +61,10 @@ void charge_level_detector_init()
 
 	int *temperature_buffer = battery_temperature_buffer_get();
 
-	temperature_buffer[0] = temperature_buffer[1] = temperature_buffer[2] = temperature_mult_100;
+	temperature_buffer[0] = temperature_mult_100;
+	temperature_buffer[1] = temperature_mult_100;
+	temperature_buffer[2] = temperature_mult_100;
+
 	temperature_period_start_set(time_manager_get_seconds());
 }
 
@@ -61,17 +86,27 @@ void charge_level_detect()
 
 void initial_charge_level_estimation()
 {
-	uint32_t voltage = battery_live_voltage_get();
+	battery_live_voltage_get();
+	battery_live_voltage_get();
+	battery_live_voltage_get();
+
+	uint32_t voltage = battery_live_voltage_get();HAL_Delay(100);
+	voltage += battery_live_voltage_get();HAL_Delay(100);
+	voltage += battery_live_voltage_get();HAL_Delay(100);
+	voltage += battery_live_voltage_get();HAL_Delay(100);
+	voltage += battery_live_voltage_get();
+	voltage /= 5;
+
 	if((voltage <= VOLTAGE_HIGH_THRESHOLD) && (voltage > VOLTAGE_LOW_THRESHOLD))
 	{
-		if(voltage < VOLTAGE_HIGH_THRESHOLD)
-			charge_level = (uint32_t)((double)(voltage - VOLTAGE_LOW_THRESHOLD)/(double)VOLTAGE_SPAN * 100.0);
-		else
-			charge_level = 100;
+		charge_level = (uint32_t)((double)(voltage - VOLTAGE_LOW_THRESHOLD)/(double)VOLTAGE_SPAN * 100.0);
 	}
 	else
 	{
-		charge_level = 0;
+		if(voltage > VOLTAGE_HIGH_THRESHOLD)
+			charge_level = 100;
+		else
+			charge_level = 0;
 	}
 
 	// set initial remaining capacity

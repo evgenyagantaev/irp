@@ -9,6 +9,7 @@
 #include "charge_level_detector_obj.h"
 #include "spi1_irq_handler.h"
 #include "message_queue.h"
+#include "eeprom_storage_obj.h"
 
 #include "usart.h"
 #include <stdio.h>
@@ -70,6 +71,10 @@ void SPI1_IRQHandler(void)
 			HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
 			drop_message_queue();
 			message_push((uint8_t)spi1_in_data);
+		}
+		else if(message == COMMAND_CLEAN_EEPROM) //
+		{
+			eeprom_clear_mark();
 		}
 		else if(message == 0x5555) // lsb
 		{

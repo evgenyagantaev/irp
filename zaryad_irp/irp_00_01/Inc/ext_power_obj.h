@@ -10,7 +10,7 @@
 
 #include "stdint.h"
 
-static const int LOW_LOAD_THRESHOLD = 30000;
+static const int LOW_LOAD_THRESHOLD = 28000;
 static const int LOW_CHARGE_THRESHOLD = 40000;
 static const int HIGH_THRESHOLD = 55000;
 

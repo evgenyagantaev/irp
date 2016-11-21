@@ -83,6 +83,43 @@ int main(void)
     HAL_Delay(1000);
     //HAL_GPIO_WritePin(GPIOB, relei_control_out_Pin, GPIO_PIN_SET); // relei on
     test_leds();
+    // check if button is pressed
+    if(HAL_GPIO_ReadPin(ctc_onoff_button_exti15_GPIO_Port, ctc_onoff_button_exti15_Pin) == GPIO_PIN_RESET)
+    {
+    	HAL_UART_Transmit(&huart1, "Button pressed!\r\n", strlen("Button pressed!\r\n"), 500);
+    	HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOA, chargeOK_led_green_out_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOA, ctc_led_red_out_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOA, ctc_led_green_out_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOA, charge100_led_green_out_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOA, charge75_led_green_out_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOA, charge50_led_green_out_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOA, charge25_led_green_out_Pin, GPIO_PIN_SET);
+		HAL_Delay(5000);
+    	// clean eeprom
+    	spi_pipe_send_command(COMMAND_CLEAN_EEPROM, 0);
+		spi_pipe_send_command(COMMAND_CLEAN_EEPROM, 1);
+		spi_pipe_send_command(COMMAND_CLEAN_EEPROM, 2);
+		spi_pipe_send_command(COMMAND_CLEAN_EEPROM, 3);
+		HAL_UART_Transmit(&huart1, "EEPROM clean!\r\n", strlen("EEPROM clean!\r\n"), 500);
+
+		HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, chargeOK_led_green_out_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, ctc_led_red_out_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, ctc_led_green_out_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, charge100_led_green_out_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, charge75_led_green_out_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, charge50_led_green_out_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, charge25_led_green_out_Pin, GPIO_PIN_RESET);
+
+
+    }
+    HAL_Delay(2000);
+
     HAL_UART_Transmit(&huart1, "Hello!\r\n", strlen("Hello!\r\n"), 500);
     HAL_Delay(1000);
 

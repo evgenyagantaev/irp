@@ -11,6 +11,7 @@
 #include "spi1_transceiver.h"
 #include "battery_obj.h"
 
+
 void message_interpreter_task()
 {
 	if(get_message_index() > 0)
@@ -65,6 +66,6 @@ void message_interpreter_task()
 			int i = 0;
 		}
 
-		//*************************************************************
+		//************************************************************* COMMAND_CLEAN_EEPROM
 	}
 }

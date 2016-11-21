@@ -36,6 +36,8 @@
 #define COMMAND_CTC_DISCHARGE_ON	0x39
 #define COMMAND_CTC_RECHARGE_ON		0x40
 
+#define COMMAND_CLEAN_EEPROM		0x41
+
 
 static uint8_t message_queue[MESSAGE_QUEUE_LENGTH];
 static int message_index;

@@ -117,7 +117,7 @@ int main(void)
 
 	// configure max
 	write_configuration(0x2250);
-
+	//HAL_Delay(7000);
 	uint32_t eeprom_mark = eeprom_read_mark();
 	if(eeprom_mark == EEPROM_MARK) // there are data in eeprom
 	{
@@ -129,8 +129,11 @@ int main(void)
 	else
 	{
 		initial_charge_level_estimation();
-		charge_level_detector_init();
 	}
+
+	charge_level_detector_init();
+
+
     while(1)
     {
     	battery_measurement_task();

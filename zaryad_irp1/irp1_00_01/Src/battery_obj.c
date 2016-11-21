@@ -71,6 +71,7 @@ int32_t battery_temperature_set(int32_t temperature)
 	battery_temperature = temperature;
 	// shift temperature buffer
 	uint32_t current_seconds = time_manager_get_seconds();
+
 	if((current_seconds - temperature_period_start) >= BATTERY_TEMPERATURE_CONTROL_PERIOD)
 	{
 		temperature_period_start = current_seconds;

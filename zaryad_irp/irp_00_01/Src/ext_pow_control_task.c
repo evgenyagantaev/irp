@@ -9,6 +9,7 @@
 #include "ext_power_obj.h"
 #include "gpio.h"
 #include "spi_pipe.h"
+#include "ctc_controller_obj.h"
 
 //debug
 #include "string.h"
@@ -52,6 +53,12 @@ void ext_pow_control_task()
 				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL1);
 				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL2);
 				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL3);
+				// turn off ktc
+				spi_pipe_send_command(COMMAND_KTC_OFF, CHANNEL0);
+				spi_pipe_send_command(COMMAND_KTC_OFF, CHANNEL1);
+				spi_pipe_send_command(COMMAND_KTC_OFF, CHANNEL2);
+				spi_pipe_send_command(COMMAND_KTC_OFF, CHANNEL3);
+				ctc_set_stage(CTC_INACTIVE);
 				// turn off red charge led
 				HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_RESET);
 			}
@@ -77,6 +84,12 @@ void ext_pow_control_task()
 				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL1);
 				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL2);
 				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL3);
+				// turn off ktc
+				spi_pipe_send_command(COMMAND_KTC_OFF, CHANNEL0);
+				spi_pipe_send_command(COMMAND_KTC_OFF, CHANNEL1);
+				spi_pipe_send_command(COMMAND_KTC_OFF, CHANNEL2);
+				spi_pipe_send_command(COMMAND_KTC_OFF, CHANNEL3);
+				ctc_set_stage(CTC_INACTIVE);
 				// turn off red charge led
 				HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_RESET);
 
@@ -105,11 +118,24 @@ void ext_pow_control_task()
 				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL1);
 				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL2);
 				spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL3);
+				// turn off ktc
+				spi_pipe_send_command(COMMAND_KTC_OFF, CHANNEL0);
+				spi_pipe_send_command(COMMAND_KTC_OFF, CHANNEL1);
+				spi_pipe_send_command(COMMAND_KTC_OFF, CHANNEL2);
+				spi_pipe_send_command(COMMAND_KTC_OFF, CHANNEL3);
+				ctc_set_stage(CTC_INACTIVE);
 				// turn off red charge led
 				HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_RESET);
 				//HAL_Delay(2000);
 
 				HAL_GPIO_WritePin(GPIOB, relei_control_out_Pin, GPIO_PIN_RESET); // relei off
+
+				// turn on load
+				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL0);
+				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL1);
+				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL2);
+				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL3);
+
 			}
 		}
 		else // everything ok

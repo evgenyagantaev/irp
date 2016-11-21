@@ -143,6 +143,14 @@ void charger_control_task()
 				// turn off discharge
 				switch_discharge_off();
 				battery_state_set(CTC_DISCHARGED_STATE);
+				// save calculated discharge capacity counter
+				discharge_capacity_set(get_discharge_cap_meter());
+				// save discharge capacity in eeprom
+				eeprom_write_mark();
+				eeprom_write_discharge_capacity((int32_t)get_discharge_cap_meter());
+				// calculate and set critical pumped in capacity threshold
+				double recharge_value = 1.5 * discharge_capacity_get();
+				set_critical_capacity_threshold((int32_t)recharge_value);
 			}
 		}
 
@@ -174,80 +182,84 @@ int charger_check_criterions()
 	// check temperature criterion
 	int *temperature_buffer = battery_temperature_buffer_get();
 
-	// check critical temperature criterion
-	if(temperature_buffer[2] >= CHARGE_CRITICAL_TEMPERATURE)
+	if (time_manager_get_seconds() >= 120) // check initial pause
 	{
-		//debug
-		sprintf((char *)charger_message, "STOP CHARGE (critical temperature) -> %7d\r\n", temperature_buffer[2]);
-		HAL_UART_Transmit(&huart1, charger_message, strlen((const char *)charger_message), 500);
-
-		// stop charge, switch to drop charging
-		stop_charge_flag = 1;
-	}
-	else // no critical temperature
-	{
-		// check voltage threshold
-		int32_t voltage = battery_voltage_get();
-		if(voltage >= LOW_CHECK_CHARGE_VOLTAGE_THRESHOLD)
+		// check critical temperature criterion
+		if(temperature_buffer[2] >= CHARGE_CRITICAL_TEMPERATURE)
 		{
-			// check critical voltage criterion
-			if (voltage > CHARGE_CRITICAL_VOLTAGE)
-			{
-				//debug
-				sprintf((char *)charger_message, "STOP CHARGE (critical voltage) -> %7d\r\n", voltage);
-				HAL_UART_Transmit(&huart1, charger_message, strlen((const char *)charger_message), 500);
+			//debug
+			sprintf((char *)charger_message, "STOP CHARGE (critical temperature) -> %7d\r\n", temperature_buffer[2]);
+			HAL_UART_Transmit(&huart1, charger_message, strlen((const char *)charger_message), 500);
 
-				// stop charge, switch to drop charging
-				stop_charge_flag = 1;
-			}
-			else // no critical voltage
+			// stop charge, switch to drop charging
+			stop_charge_flag = 1;
+		}
+		else // no critical temperature
+		{
+			// check voltage threshold
+			int32_t voltage = battery_voltage_get();
+			if(voltage >= LOW_CHECK_CHARGE_VOLTAGE_THRESHOLD)
 			{
-				// check temperature growth speed criterion
-				if(
-					(temperature_buffer[1] > temperature_buffer[0]) &&
-					(temperature_buffer[2] > temperature_buffer[1]) &&
-					((temperature_buffer[2] - temperature_buffer[0]) >= CHARGE_CRITICAL_TEMPERATURE_SPEED)
-				  )
+				// check critical voltage criterion
+				if (voltage > CHARGE_CRITICAL_VOLTAGE)
 				{
 					//debug
-					sprintf((char *)charger_message, "STOP CHARGE (temperature speed) -> %7d %7d %7d\r\n", temperature_buffer[1], temperature_buffer[1], temperature_buffer[2]);
+					sprintf((char *)charger_message, "STOP CHARGE (critical voltage) -> %7d\r\n", voltage);
 					HAL_UART_Transmit(&huart1, charger_message, strlen((const char *)charger_message), 500);
 
 					// stop charge, switch to drop charging
 					stop_charge_flag = 1;
 				}
-				else // no temperature growth
+				else // no critical voltage
 				{
-					// check delta U criterion
-					if(voltage >= voltage_local_max)
-						voltage_local_max = voltage;
-					if((voltage_local_max - voltage) >= VOLTAGE_DELTA_U)
+					// check temperature growth speed criterion
+					if(
+						(temperature_buffer[1] > temperature_buffer[0]) &&
+						(temperature_buffer[2] > temperature_buffer[1]) &&
+						((temperature_buffer[2] - temperature_buffer[0]) >= CHARGE_CRITICAL_TEMPERATURE_SPEED)
+					  )
 					{
 						//debug
-						sprintf((char *)charger_message, "STOP CHARGE (delta U) -> %7d %7d\r\n", voltage_local_max, voltage);
+						sprintf((char *)charger_message, "STOP CHARGE (temperature speed) -> %7d %7d %7d\r\n", temperature_buffer[0], temperature_buffer[1], temperature_buffer[2]);
 						HAL_UART_Transmit(&huart1, charger_message, strlen((const char *)charger_message), 500);
 
 						// stop charge, switch to drop charging
 						stop_charge_flag = 1;
 					}
-					else // no critical delta U
+					else // no temperature growth
 					{
-						// check pumped in capacity criterion
-						double current_coulombmeter = coulombmeter_get();
-						if(current_coulombmeter >= critical_capacity_threshold)
+						// check delta U criterion
+						if(voltage >= voltage_local_max)
+							voltage_local_max = voltage;
+						if((voltage_local_max - voltage) >= VOLTAGE_DELTA_U)
 						{
 							//debug
-							sprintf((char *)charger_message, "STOP CHARGE (capacity) -> %7d %7d\r\n", (int32_t)current_coulombmeter, critical_capacity_threshold);
+							sprintf((char *)charger_message, "STOP CHARGE (delta U) -> %7d %7d\r\n", voltage_local_max, voltage);
 							HAL_UART_Transmit(&huart1, charger_message, strlen((const char *)charger_message), 500);
 
 							// stop charge, switch to drop charging
 							stop_charge_flag = 1;
 						}
+						else // no critical delta U
+						{
+							// check pumped in capacity criterion
+							double current_coulombmeter = coulombmeter_get();
+							if(current_coulombmeter >= critical_capacity_threshold)
+							{
+								//debug
+								sprintf((char *)charger_message, "STOP CHARGE (capacity) -> %7d %7d\r\n", (int32_t)current_coulombmeter, critical_capacity_threshold);
+								HAL_UART_Transmit(&huart1, charger_message, strlen((const char *)charger_message), 500);
+
+								// stop charge, switch to drop charging
+								stop_charge_flag = 1;
+							}
+						}
 					}
-				}
-			}// end if (voltage > CHARGE_CRITICAL_VOLTAGE)
-		}// end if(voltage >= LOW_CHECK_CHARGE_VOLTAGE_THRESHOLD)
-	}// end else // no critical temperature
+				}// end if (voltage > CHARGE_CRITICAL_VOLTAGE)
+			}// end if(voltage >= LOW_CHECK_CHARGE_VOLTAGE_THRESHOLD)
+		}// end else // no critical temperature
+
+	}// end if (time_manager_get_seconds() >= 120) // check initial pause
 	//*****************************************************
 
 	return stop_charge_flag;
