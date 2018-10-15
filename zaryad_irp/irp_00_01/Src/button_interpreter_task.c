@@ -94,51 +94,55 @@ void button_interpreter_task()
 				button_set_short_status(0);
 				button_set_long_status(0);
 
-				if(interpreter_state == 0)
+				// enter in debug mode only if pb4 pin = 0 (i.e. set debug mode jumper)
+				if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) == GPIO_PIN_RESET)
 				{
-					// charge on
-					spi_pipe_send_command(COMMAND_CLEAN_EEPROM, CHANNEL0);
-					spi_pipe_send_command(COMMAND_CLEAN_EEPROM, CHANNEL1);
-					spi_pipe_send_command(COMMAND_CLEAN_EEPROM, CHANNEL2);
-					spi_pipe_send_command(COMMAND_CLEAN_EEPROM, CHANNEL3);
+					if(interpreter_state == 0)
+					{
+						// charge on
+						spi_pipe_send_command(COMMAND_CLEAN_EEPROM, CHANNEL0);
+						spi_pipe_send_command(COMMAND_CLEAN_EEPROM, CHANNEL1);
+						spi_pipe_send_command(COMMAND_CLEAN_EEPROM, CHANNEL2);
+						spi_pipe_send_command(COMMAND_CLEAN_EEPROM, CHANNEL3);
+					}
+					if(interpreter_state == 1)
+					{
+						// charge on
+						spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL0);
+						spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL1);
+						spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL2);
+						spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL3);
+					}
+					else if(interpreter_state == 2)
+					{
+						// charge off
+						spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL0);
+						spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL1);
+						spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL2);
+						spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL3);
+					}
+					else if(interpreter_state == 3)
+					{
+						// discharge on
+						spi_pipe_send_command(COMMAND_DISCHARGE_ON, CHANNEL0);
+						spi_pipe_send_command(COMMAND_DISCHARGE_ON, CHANNEL1);
+						spi_pipe_send_command(COMMAND_DISCHARGE_ON, CHANNEL2);
+						spi_pipe_send_command(COMMAND_DISCHARGE_ON, CHANNEL3);
+					}
+					else if(interpreter_state == 4)
+					{
+						// discharge off
+						spi_pipe_send_command(COMMAND_DISCHARGE_OFF, CHANNEL0);
+						spi_pipe_send_command(COMMAND_DISCHARGE_OFF, CHANNEL1);
+						spi_pipe_send_command(COMMAND_DISCHARGE_OFF, CHANNEL2);
+						spi_pipe_send_command(COMMAND_DISCHARGE_OFF, CHANNEL3);
+					}
+					interpreter_state++;
+					if(interpreter_state >= 5)
+						interpreter_state = 0;
+					//*/
+					// debug**************************************************
 				}
-				if(interpreter_state == 1)
-				{
-					// charge on
-					spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL0);
-					spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL1);
-					spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL2);
-					spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL3);
-				}
-				else if(interpreter_state == 2)
-				{
-					// charge off
-					spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL0);
-					spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL1);
-					spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL2);
-					spi_pipe_send_command(COMMAND_CHARGE_OFF, CHANNEL3);
-				}
-				else if(interpreter_state == 3)
-				{
-					// discharge on
-					spi_pipe_send_command(COMMAND_DISCHARGE_ON, CHANNEL0);
-					spi_pipe_send_command(COMMAND_DISCHARGE_ON, CHANNEL1);
-					spi_pipe_send_command(COMMAND_DISCHARGE_ON, CHANNEL2);
-					spi_pipe_send_command(COMMAND_DISCHARGE_ON, CHANNEL3);
-				}
-				else if(interpreter_state == 4)
-				{
-					// discharge off
-					spi_pipe_send_command(COMMAND_DISCHARGE_OFF, CHANNEL0);
-					spi_pipe_send_command(COMMAND_DISCHARGE_OFF, CHANNEL1);
-					spi_pipe_send_command(COMMAND_DISCHARGE_OFF, CHANNEL2);
-					spi_pipe_send_command(COMMAND_DISCHARGE_OFF, CHANNEL3);
-				}
-				interpreter_state++;
-				if(interpreter_state >= 5)
-					interpreter_state = 0;
-				//*/
-				// debug**************************************************
 
 			}
 		}
