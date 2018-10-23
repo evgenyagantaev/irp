@@ -19,10 +19,15 @@ int32_t ext_pow_get_voltage()
 {
     return vdc1;
 }
+int32_t ext_pow_get_vdca()
+{
+    return vdca;
+}
 void ext_pow_set_status(uint8_t status)
 {
     external_power_status = status;
 }
+
 int ext_pow_get_status()
 {
     return external_power_status;

@@ -24,6 +24,7 @@ void ext_pow_control_task()
 
 		extpow_measure_voltage();
 		uint32_t ext_pow_voltage = ext_pow_get_voltage();
+		vdca = ext_pow_get_vdca();
 
 		//debug
 		//ext_pow_voltage = 28000;
@@ -136,6 +137,17 @@ void ext_pow_control_task()
 				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL2);
 				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL3);
 
+			}
+			else //ext_pow_voltage_state == 2
+			{
+				if(vdca < 20000)  // < 20V
+				{
+					// turn off load in all 4 channels
+					spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL0);
+					spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL1);
+					spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL2);
+					spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL3);
+				}
 			}
 		}
 		else // everything ok
