@@ -14,7 +14,7 @@
 #include "charge_level_detector_obj.h"
 
 #include "coulombcounter_obj.h"
-
+#include "switch_obj.h"
 
 static int averaging_counter = 0;
 static int32_t battery_voltage_integral = 0;
@@ -93,6 +93,17 @@ void battery_measurement_task()
 		battery_voltage_integral = 0;
 		sprintf((char *)message, "%13d", Vcell_mv);
 		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+
+		// check if voltage below the low level
+		if(Vcell_mv < 22000)
+		{
+			// turn off load
+			sprintf((char *)message, "Vyrubaem nagruzku!!!");
+			HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+			switch_load_off();
+			// reset remaining capacity
+			coulombmeter_set(0.0);
+		}
 	}
 
 	// read current

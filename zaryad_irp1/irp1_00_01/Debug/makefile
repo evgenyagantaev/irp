@@ -33,10 +33,10 @@ endif
 all: irp1_00_01.elf
 
 # Tool invocations
-irp1_00_01.elf: $(OBJS) $(USER_OBJS)
+irp1_00_01.elf: $(OBJS) $(USER_OBJS) ../STM32L051K6Tx_FLASH.ld
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU GCC Linker'
-	arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft -specs=nosys.specs -specs=nano.specs -T"../STM32L051K6Tx_FLASH.ld" -Wl,-Map=output.map -Wl,--gc-sections -lm -o "irp1_00_01.elf" @"objects.list" $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft -specs=nosys.specs -specs=nano.specs -T"../STM32L051K6Tx_FLASH.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "irp1_00_01.elf" @"objects.list" $(USER_OBJS) $(LIBS) -lm
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build

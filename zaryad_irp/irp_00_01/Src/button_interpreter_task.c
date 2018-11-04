@@ -137,8 +137,24 @@ void button_interpreter_task()
 						spi_pipe_send_command(COMMAND_DISCHARGE_OFF, CHANNEL2);
 						spi_pipe_send_command(COMMAND_DISCHARGE_OFF, CHANNEL3);
 					}
+					else if(interpreter_state == 5)
+					{
+						// load on
+						spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL0);
+						spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL1);
+						spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL2);
+						spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL3);
+					}
+					else if(interpreter_state == 6)
+					{
+						// load off
+						spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL0);
+						spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL1);
+						spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL2);
+						spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL3);
+					}
 					interpreter_state++;
-					if(interpreter_state >= 5)
+					if(interpreter_state >= 7)
 						interpreter_state = 0;
 					//*/
 					// debug**************************************************
