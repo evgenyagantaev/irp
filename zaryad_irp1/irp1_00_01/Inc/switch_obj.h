@@ -16,5 +16,9 @@ void switch_load_on();
 void switch_load_off();
 void switch_ktc_on();
 void switch_ktc_off();
+void switch_ktc_discharge_on();
+void switch_ktc_recharge_on();
+void switch_onbat2_on();
+void switch_onbat2_off();
 
 #endif /* INC_SWITCH_OBJ_H_ */

@@ -14,6 +14,8 @@
 
 void message_interpreter_task()
 {
+	int i=0;
+
 	if(get_message_index() > 0)
 	{
 		uint8_t message = message_pop();
@@ -61,9 +63,17 @@ void message_interpreter_task()
 		{
 			switch_ktc_recharge_on();
 		}
+		else if(message == COMMAND_ONBAT2_ON) //
+		{
+			switch_onbat2_on();
+		}
+		else if(message == COMMAND_ONBAT2_OFF) //
+		{
+			switch_onbat2_off();
+		}
 		else
 		{
-			int i = 0;
+			i++;
 		}
 
 		//************************************************************* COMMAND_CLEAN_EEPROM

@@ -29,6 +29,8 @@ SPI_HandleTypeDef hspi1;
 int ctc_on_flag = 0;
 int ctc_button_press_counter = 0;
 
+//int onbat2_on_off = 0;
+
 extern ADC_HandleTypeDef hadc;
 
 #define GET_CHARGE 0x0021
@@ -49,9 +51,9 @@ void test_leds(void);
 
 int main(void)
 {
-    const uint16_t cs_pin[] = {GPIO_PIN_0, GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3};
+    //const uint16_t cs_pin[] = {GPIO_PIN_0, GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3};
 
-    char message[128];
+    //char message[128];
 
     /* MCU Configuration----------------------------------------------------------*/
 
@@ -86,7 +88,7 @@ int main(void)
     // check if button is pressed
     if(HAL_GPIO_ReadPin(ctc_onoff_button_exti15_GPIO_Port, ctc_onoff_button_exti15_Pin) == GPIO_PIN_RESET)
     {
-    	HAL_UART_Transmit(&huart1, "Button pressed!\r\n", strlen("Button pressed!\r\n"), 500);
+    	HAL_UART_Transmit(&huart1, (uint8_t *)"Button pressed!\r\n", strlen("Button pressed!\r\n"), 500);
     	HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_SET);
@@ -103,7 +105,7 @@ int main(void)
 		spi_pipe_send_command(COMMAND_CLEAN_EEPROM, 1);
 		spi_pipe_send_command(COMMAND_CLEAN_EEPROM, 2);
 		spi_pipe_send_command(COMMAND_CLEAN_EEPROM, 3);
-		HAL_UART_Transmit(&huart1, "EEPROM clean!\r\n", strlen("EEPROM clean!\r\n"), 500);
+		HAL_UART_Transmit(&huart1, (uint8_t *)"EEPROM clean!\r\n", strlen("EEPROM clean!\r\n"), 500);
 
 		HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_RESET);
@@ -120,10 +122,10 @@ int main(void)
     }
     HAL_Delay(2000);
 
-    HAL_UART_Transmit(&huart1, "Hello!\r\n", strlen("Hello!\r\n"), 500);
+    HAL_UART_Transmit(&huart1, (uint8_t *)"Hello!\r\n", strlen("Hello!\r\n"), 500);
     HAL_Delay(1000);
 
-    ADC_ChannelConfTypeDef sConfig;
+    //ADC_ChannelConfTypeDef sConfig;
     int i;
     for(i=0; i<10; i++)
     {
@@ -245,7 +247,7 @@ void test_leds(void)
   */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    static int odd_even = 0;
+    //static int odd_even = 0;
 
     if(GPIO_Pin == ctc_onoff_button_exti15_Pin)
     {
@@ -262,6 +264,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
         	HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_SET);
         	for(i=0;i<500000;i++)
         		j = i;
+        	i = j;
         }
 
         HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);

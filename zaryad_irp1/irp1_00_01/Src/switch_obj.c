@@ -48,19 +48,27 @@ void switch_discharge_off()
 }
 void switch_load_on()
 {
-	HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
-	HAL_Delay(700);
+	//HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
+	//HAL_Delay(700);
 	HAL_GPIO_WritePin(GPIOA, on_bat1_out_Pin, GPIO_PIN_SET);
 	set_load_flag(1);
 	battery_state_set(LOAD_STATE);
 }
 void switch_load_off()
 {
-	HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_RESET);
-	HAL_Delay(700);
+	//HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_RESET);
+	//HAL_Delay(700);
 	HAL_GPIO_WritePin(GPIOA, on_bat1_out_Pin, GPIO_PIN_RESET);
 	set_load_flag(0);
 	battery_state_set(IDLE_STATE);
+}
+void switch_onbat2_on()
+{
+	HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
+}
+void switch_onbat2_off()
+{
+	HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_RESET);
 }
 void switch_ktc_on()
 {

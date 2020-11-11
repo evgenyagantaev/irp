@@ -12,6 +12,8 @@
 #include "spi_pipe.h"
 #include "gpio.h"
 
+#include "charge_check_task.h"
+
 
 static int ctc_stage = CTC_INACTIVE;
 

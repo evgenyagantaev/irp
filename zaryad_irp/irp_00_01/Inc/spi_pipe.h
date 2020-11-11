@@ -41,6 +41,9 @@
 
 #define COMMAND_CLEAN_EEPROM		0x41
 
+//#define COMMAND_ONBAT2_ON			0x42
+//#define COMMAND_ONBAT2_OFF		0x43
+
 
 
 #define IDLE_STATE 0

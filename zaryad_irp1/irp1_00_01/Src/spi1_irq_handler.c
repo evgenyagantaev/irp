@@ -10,6 +10,7 @@
 #include "spi1_irq_handler.h"
 #include "message_queue.h"
 #include "eeprom_storage_obj.h"
+#include "spi1_transceiver.h"
 
 #include "usart.h"
 #include <stdio.h>
@@ -66,7 +67,7 @@ void SPI1_IRQHandler(void)
 			data_to_send = battery_state_get();
 			SPI1->DR = (uint16_t)(data_to_send >> 16);
 		}
-		else if(message == COMMAND_LOAD_ON) // get battery state (msb)
+		else if(message == COMMAND_LOAD_ON) //
 		{
 			HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
 			drop_message_queue();

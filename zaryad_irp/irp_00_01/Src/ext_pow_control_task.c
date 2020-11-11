@@ -15,6 +15,8 @@
 #include "string.h"
 #include "usart.h"
 
+//extern int onbat2_on_off;
+
 void ext_pow_control_task()
 {
 	uint32_t current_tick = HAL_GetTick();
@@ -25,6 +27,29 @@ void ext_pow_control_task()
 		extpow_measure_voltage();
 		uint32_t ext_pow_voltage = ext_pow_get_voltage();
 		vdca = ext_pow_get_vdca();
+
+		/*
+		if((vdca > 21000) && (onbat2_on_off == 0))  // > 21V
+		{
+			spi_pipe_send_command(COMMAND_ONBAT2_ON, CHANNEL0);
+			spi_pipe_send_command(COMMAND_ONBAT2_ON, CHANNEL1);
+			spi_pipe_send_command(COMMAND_ONBAT2_ON, CHANNEL2);
+			spi_pipe_send_command(COMMAND_ONBAT2_ON, CHANNEL3);
+
+			onbat2_on_off = 1;
+		}
+
+		if((vdca < 20000) && (onbat2_on_off == 1))  // < 20V
+		{
+			spi_pipe_send_command(COMMAND_ONBAT2_OFF, CHANNEL0);
+			spi_pipe_send_command(COMMAND_ONBAT2_OFF, CHANNEL1);
+			spi_pipe_send_command(COMMAND_ONBAT2_OFF, CHANNEL2);
+			spi_pipe_send_command(COMMAND_ONBAT2_OFF, CHANNEL3);
+
+			onbat2_on_off = 0;
+		}
+		//*/
+
 
 		//debug
 		//ext_pow_voltage = 28000;

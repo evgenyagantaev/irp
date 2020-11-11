@@ -17,12 +17,8 @@ C_DEPS += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-tests/%.o: ../tests/%.c
-	@echo 'Building file: $<'
-	@echo 'Invoking: MCU GCC Compiler'
-	@echo $(PWD)
-	arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -I"D:/workspace/stm32/irp_github/zaryad_irp/irp_00_01/Inc" -I"D:/workspace/stm32/irp_github/zaryad_irp/irp_00_01/Drivers/STM32L0xx_HAL_Driver/Inc" -I"D:/workspace/stm32/irp_github/zaryad_irp/irp_00_01/Drivers/STM32L0xx_HAL_Driver/Inc/Legacy" -I"D:/workspace/stm32/irp_github/zaryad_irp/irp_00_01/Drivers/CMSIS/Include" -I"D:/workspace/stm32/irp_github/zaryad_irp/irp_00_01/Drivers/CMSIS/Device/ST/STM32L0xx/Include"  -O0 -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
-	@echo 'Finished building: $<'
-	@echo ' '
-
+tests/test_code_template.o: ../tests/test_code_template.c
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m0plus -std=gnu11 -g3 '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -c -I../Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -O0 -ffunction-sections -Wall -fstack-usage -MMD -MP -MF"tests/test_code_template.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
+tests/unity.o: ../tests/unity.c
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m0plus -std=gnu11 -g3 '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -c -I../Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -O0 -ffunction-sections -Wall -fstack-usage -MMD -MP -MF"tests/unity.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 
