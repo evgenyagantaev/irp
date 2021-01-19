@@ -95,7 +95,7 @@ void battery_measurement_task()
 		HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 
 		// check if voltage below the low level
-		if(Vcell_mv < 20600)
+		if(Vcell_mv < 20000)
 		{
 			// turn off load
 			sprintf((char *)message, "Vyrubaem nagruzku!!!");
@@ -105,11 +105,19 @@ void battery_measurement_task()
 			coulombmeter_set(0.0);
 		}
 
-		if(Vcell_mv < 20600)
+		if(Vcell_mv < 20000)
+		//if(Vcell_mv < 21000)
+		//if(Vcell_mv < 21500)
+		//if(Vcell_mv < 22000)
+		//if(Vcell_mv < 22500)
 		{
 			switch_onbat2_off();
 		}
-		else if(Vcell_mv > 24000)
+		//else if(Vcell_mv > 24000)
+		//else if(Vcell_mv > 24000)
+		//else if(Vcell_mv > 24500)
+		else if(Vcell_mv > 25000)
+		//else if(Vcell_mv > 25500)
 		{
 			switch_onbat2_on();
 		}

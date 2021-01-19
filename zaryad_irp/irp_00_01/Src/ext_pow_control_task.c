@@ -28,25 +28,13 @@ void ext_pow_control_task()
 		uint32_t ext_pow_voltage = ext_pow_get_voltage();
 		vdca = ext_pow_get_vdca();
 
-		/*
-		if((vdca > 21000) && (onbat2_on_off == 0))  // > 21V
+		if((vdca < 20600))  // < 20.6V
 		{
-			spi_pipe_send_command(COMMAND_ONBAT2_ON, CHANNEL0);
-			spi_pipe_send_command(COMMAND_ONBAT2_ON, CHANNEL1);
-			spi_pipe_send_command(COMMAND_ONBAT2_ON, CHANNEL2);
-			spi_pipe_send_command(COMMAND_ONBAT2_ON, CHANNEL3);
+			spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL0);
+			spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL1);
+			spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL2);
+			spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL3);
 
-			onbat2_on_off = 1;
-		}
-
-		if((vdca < 20000) && (onbat2_on_off == 1))  // < 20V
-		{
-			spi_pipe_send_command(COMMAND_ONBAT2_OFF, CHANNEL0);
-			spi_pipe_send_command(COMMAND_ONBAT2_OFF, CHANNEL1);
-			spi_pipe_send_command(COMMAND_ONBAT2_OFF, CHANNEL2);
-			spi_pipe_send_command(COMMAND_ONBAT2_OFF, CHANNEL3);
-
-			onbat2_on_off = 0;
 		}
 		//*/
 
@@ -165,7 +153,7 @@ void ext_pow_control_task()
 			}
 			else //ext_pow_voltage_state == 2
 			{
-				if(vdca < 20000)  // < 20V
+				if(vdca < 20600)  // < 20.6V
 				{
 					// turn off load in all 4 channels
 					spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL0);

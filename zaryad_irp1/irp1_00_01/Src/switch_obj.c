@@ -56,11 +56,14 @@ void switch_load_on()
 }
 void switch_load_off()
 {
-	//HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_RESET);
-	//HAL_Delay(700);
+	HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_RESET);
+	HAL_Delay(700);
 	HAL_GPIO_WritePin(GPIOA, on_bat1_out_Pin, GPIO_PIN_RESET);
 	set_load_flag(0);
 	battery_state_set(IDLE_STATE);
+
+	//reset coulombmeter
+	coulombmeter_set(0.0);
 }
 void switch_onbat2_on()
 {
