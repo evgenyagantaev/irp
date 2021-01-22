@@ -44,7 +44,7 @@ void switch_discharge_on()
 }
 void switch_discharge_off()
 {
-	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
+	//HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
 
 	HAL_GPIO_WritePin(GPIOB, disch_out_Pin, GPIO_PIN_RESET);
 	set_discharge_flag(0);
@@ -52,7 +52,7 @@ void switch_discharge_off()
 }
 void switch_load_on()
 {
-	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
+	//HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
 
 	//HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
 	//HAL_Delay(700);
@@ -62,7 +62,7 @@ void switch_load_on()
 }
 void switch_load_off()
 {
-	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
+	//HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
 
 	HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_RESET);
 	HAL_Delay(700);
@@ -93,7 +93,7 @@ void switch_ktc_on()
 }
 void switch_ktc_off()
 {
-	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
+	//HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
 
 	HAL_GPIO_WritePin(GPIOB, disch_out_Pin, GPIO_PIN_RESET);
 	set_discharge_flag(0);
