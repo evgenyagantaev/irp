@@ -51,6 +51,9 @@ void switch_load_on()
 	//HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
 	//HAL_Delay(700);
 	HAL_GPIO_WritePin(GPIOA, on_bat1_out_Pin, GPIO_PIN_SET);
+	//************* postproduction correction ************
+	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);
+	//************* postproduction correction ************
 	set_load_flag(1);
 	battery_state_set(LOAD_STATE);
 }
