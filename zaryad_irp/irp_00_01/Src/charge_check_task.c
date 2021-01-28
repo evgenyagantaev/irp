@@ -78,7 +78,7 @@ void charge_check_task()
 	    			|charge50_led_green_out_Pin|charge25_led_green_out_Pin);
 	    	GPIOA->BSRR = (charge50_led_green_out_Pin );
 	    }
-	    else if(charge_overall_level >= 5)
+	    else if(charge_overall_level >= 25)
 		{
 			GPIOA->BRR = (charge100_led_green_out_Pin|charge75_led_green_out_Pin
 					|charge50_led_green_out_Pin|charge25_led_green_out_Pin);

@@ -17,13 +17,16 @@
 
 void ext_pow_control_task()
 {
+	static int complete_discharge_flag = 0;
+
 	uint32_t current_tick = HAL_GetTick();
 	if(current_tick >= (ext_pow_frozen_systick + EXT_POW_MEASURE_PERIOD))
 	{
 		ext_pow_frozen_systick = current_tick;
 
 		extpow_measure_voltage();
-		uint32_t ext_pow_voltage = ext_pow_get_voltage();
+		uint32_t ext_pow_voltage = 0;
+		ext_pow_voltage = ext_pow_get_voltage();
 		vdca = ext_pow_get_vdca();
 
 		//debug
@@ -132,6 +135,7 @@ void ext_pow_control_task()
 				HAL_GPIO_WritePin(GPIOB, relei_control_out_Pin, GPIO_PIN_RESET); // relei off
 
 				// turn on load
+				complete_discharge_flag = 0;
 				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL0);
 				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL1);
 				spi_pipe_send_command(COMMAND_LOAD_ON, CHANNEL2);
@@ -140,14 +144,18 @@ void ext_pow_control_task()
 			}
 			else //ext_pow_voltage_state == 2
 			{
-				if(vdca < 20000)  // < 20V
+				//*
+				if((vdca < 22700) && (!complete_discharge_flag))  // < 22V
 				{
 					// turn off load in all 4 channels
 					spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL0);
 					spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL1);
 					spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL2);
 					spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL3);
+
+					complete_discharge_flag = 1;
 				}
+				//*/
 			}
 		}
 		else // everything ok
@@ -167,7 +175,7 @@ void ext_pow_control_task()
 				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL1);
 				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL2);
 				spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL3);
-				//HAL_Delay(2000);
+				HAL_Delay(2000);
 				// turn on charge
 				spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL0);
 				spi_pipe_send_command(COMMAND_CHARGE_ON, CHANNEL1);

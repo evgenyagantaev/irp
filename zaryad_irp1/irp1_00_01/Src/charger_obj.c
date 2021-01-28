@@ -30,6 +30,10 @@ static int32_t critical_capacity_threshold = 12000;
 
 void charger_control_task()
 {
+	//char message[64];
+	//sprintf((char *)message, "charger_control_task\r\n");
+	//HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+
 	uint32_t current_seconds = time_manager_get_seconds();
 
 	if(current_seconds - charger_frozen_seconds >= CHARGE_CONTROL_PERIOD)
@@ -155,9 +159,13 @@ void charger_control_task()
 		}
 
 
-
+		/*
 		if(battery_state == LOAD_STATE)
 		{
+			char message[64];
+			sprintf((char *)message, "check discharge\r\n");
+			HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+
 			// check discharge cancel voltage criterion
 			if(battery_voltage_get() <= DISCHARGE_CRITICAL_VOLTAGE)
 			{
@@ -165,6 +173,7 @@ void charger_control_task()
 				switch_load_off();
 			}
 		}
+		*/
 
 		if(battery_state == CTC_CHARGED_STATE)
 		{

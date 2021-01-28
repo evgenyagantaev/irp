@@ -11,9 +11,15 @@
 #include "spi1_transceiver.h"
 #include "battery_obj.h"
 
+#include "usart.h"
+
 
 void message_interpreter_task()
 {
+	//char message[64];
+	//sprintf((char *)message, "message_interpreter_task\r\n");
+	//AL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+
 	if(get_message_index() > 0)
 	{
 		uint8_t message = message_pop();
@@ -30,6 +36,7 @@ void message_interpreter_task()
 		}
 		else if(message == COMMAND_DISCHARGE_ON) //
 		{
+
 			switch_discharge_on();
 		}
 		else if(message == COMMAND_DISCHARGE_OFF) //
@@ -42,6 +49,10 @@ void message_interpreter_task()
 		}
 		else if(message == COMMAND_LOAD_OFF) //
 		{
+			char message[64];
+			sprintf((char *)message, "command load off\r\n");
+			HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+
 			switch_load_off();
 		}
 		else if(message == COMMAND_KTC_ON) //

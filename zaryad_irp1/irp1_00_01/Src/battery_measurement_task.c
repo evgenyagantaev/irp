@@ -94,16 +94,18 @@ void battery_measurement_task()
 		sprintf((char *)message, "%13d", Vcell_mv);
 		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
 
+		/*
 		// check if voltage below the low level
-		if(Vcell_mv < 22000)
+		if((Vcell_mv < 22000) && (get_load_flag() != 0))
 		{
 			// turn off load
-			sprintf((char *)message, "Vyrubaem nagruzku!!!");
+			sprintf((char *)message, "Vyrubaem nagruzku!!!\r\n");
 			HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
 			switch_load_off();
 			// reset remaining capacity
 			coulombmeter_set(0.0);
 		}
+		*/
 	}
 
 	// read current

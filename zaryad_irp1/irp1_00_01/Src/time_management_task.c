@@ -11,9 +11,15 @@
 
 #include "coulombcounter_obj.h"
 
+#include "usart.h"
+
 
 void time_management_task()
 {
+	//char message[64];
+	//sprintf((char *)message, "time_management_task\r\n");
+	//HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+
     uint32_t current_tick = HAL_GetTick();
     if(current_tick >= (frozen_systick + 1000))
     {

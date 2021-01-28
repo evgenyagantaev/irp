@@ -12,6 +12,8 @@
 #include "coulombcounter_obj.h"
 #include "eeprom_storage_obj.h"
 
+#include "usart.h"
+
 
 void switch_charge_on()
 {
@@ -48,6 +50,10 @@ void switch_discharge_off()
 }
 void switch_load_on()
 {
+	char message[64];
+	sprintf((char *)message, "switch load on\r\n");
+	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+
 	HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
 	HAL_Delay(700);
 	HAL_GPIO_WritePin(GPIOA, on_bat1_out_Pin, GPIO_PIN_SET);
@@ -56,6 +62,10 @@ void switch_load_on()
 }
 void switch_load_off()
 {
+	char message[64];
+	sprintf((char *)message, "switch load off\r\n");
+	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+
 	HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_RESET);
 	HAL_Delay(700);
 	HAL_GPIO_WritePin(GPIOA, on_bat1_out_Pin, GPIO_PIN_RESET);
