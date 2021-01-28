@@ -15,6 +15,8 @@
 #include "string.h"
 #include "usart.h"
 
+//extern int onbat2_on_off;
+
 void ext_pow_control_task()
 {
 	static int complete_discharge_flag = 0;
@@ -28,6 +30,17 @@ void ext_pow_control_task()
 		uint32_t ext_pow_voltage = 0;
 		ext_pow_voltage = ext_pow_get_voltage();
 		vdca = ext_pow_get_vdca();
+
+		if((vdca < 20600))  // < 20.6V
+		{
+			spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL0);
+			spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL1);
+			spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL2);
+			spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL3);
+
+		}
+		//*/
+
 
 		//debug
 		//ext_pow_voltage = 28000;
@@ -144,8 +157,12 @@ void ext_pow_control_task()
 			}
 			else //ext_pow_voltage_state == 2
 			{
+<<<<<<< HEAD
 				//*
 				if((vdca < 22700) && (!complete_discharge_flag))  // < 22V
+=======
+				if(vdca < 20600)  // < 20.6V
+>>>>>>> 06bf4b699112e0da69333e50aebd69cc3ed4b288
 				{
 					// turn off load in all 4 channels
 					spi_pipe_send_command(COMMAND_LOAD_OFF, CHANNEL0);

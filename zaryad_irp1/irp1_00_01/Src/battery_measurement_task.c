@@ -26,12 +26,12 @@ void battery_measurement_task()
 {
 	char message[64];
 
-	uint16_t version;
-	uint16_t configuration;
+	//uint16_t version;
+	//uint16_t configuration;
 	uint16_t vbatt;
 	int16_t current;
 	int16_t temperature;
-	int16_t rem_cap;
+	//int16_t rem_cap;
 
 	uint8_t data_l, data_h;
 
@@ -91,21 +91,50 @@ void battery_measurement_task()
 		Vcell_mv = battery_voltage_integral/AVERAGING_PERIOD;
 		battery_voltage_set(Vcell_mv);
 		battery_voltage_integral = 0;
-		sprintf((char *)message, "%13d", Vcell_mv);
-		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+		sprintf((char *)message, "%13ld", Vcell_mv);
+		HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 
 		/*
 		// check if voltage below the low level
+<<<<<<< HEAD
 		if((Vcell_mv < 22000) && (get_load_flag() != 0))
 		{
 			// turn off load
 			sprintf((char *)message, "Vyrubaem nagruzku!!!\r\n");
 			HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+=======
+		if(Vcell_mv < 20000)
+		{
+			// turn off load
+			sprintf((char *)message, "Vyrubaem nagruzku!!!");
+			HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+>>>>>>> 06bf4b699112e0da69333e50aebd69cc3ed4b288
 			switch_load_off();
 			// reset remaining capacity
 			coulombmeter_set(0.0);
 		}
+<<<<<<< HEAD
 		*/
+=======
+
+		if(Vcell_mv < 20000)
+		//if(Vcell_mv < 21000)
+		//if(Vcell_mv < 21500)
+		//if(Vcell_mv < 22000)
+		//if(Vcell_mv < 22500)
+		{
+			switch_onbat2_off();
+		}
+		//else if(Vcell_mv > 24000)
+		//else if(Vcell_mv > 24000)
+		//else if(Vcell_mv > 24500)
+		else if(Vcell_mv > 25000)
+		//else if(Vcell_mv > 25500)
+		{
+			switch_onbat2_on();
+		}
+
+>>>>>>> 06bf4b699112e0da69333e50aebd69cc3ed4b288
 	}
 
 	// read current
@@ -129,8 +158,8 @@ void battery_measurement_task()
 		current_ma = current_integral/AVERAGING_PERIOD;
 		battery_current_set(current_ma);
 		current_integral = 0;
-		sprintf((char *)message, "%13d", current_ma);
-		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+		sprintf((char *)message, "%13ld", current_ma);
+		HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 	}
 
 
@@ -155,8 +184,8 @@ void battery_measurement_task()
 		temperature_mult_100 = temperature_integral/AVERAGING_PERIOD;
 		battery_temperature_set(temperature_mult_100);
 		temperature_integral = 0;
-		sprintf((char *)message, "%13d", temperature_mult_100);
-		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+		sprintf((char *)message, "%13ld", temperature_mult_100);
+		HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 	}
 
 	/*
@@ -189,8 +218,8 @@ void battery_measurement_task()
 	if (averaging_counter >= AVERAGING_PERIOD)
 	{
 		battery_remaining_capacity_set(rem_cap_mah);
-		sprintf((char *)message, "%13d\r\n", rem_cap_mah);
-		HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+		sprintf((char *)message, "%13ld\r\n", rem_cap_mah);
+		HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 	}
 
 

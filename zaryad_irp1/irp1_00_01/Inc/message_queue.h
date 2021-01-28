@@ -38,6 +38,9 @@
 
 #define COMMAND_CLEAN_EEPROM		0x41
 
+#define COMMAND_ONBAT2_ON			0x42
+#define COMMAND_ONBAT2_OFF			0x43
+
 
 static uint8_t message_queue[MESSAGE_QUEUE_LENGTH];
 static int message_index;

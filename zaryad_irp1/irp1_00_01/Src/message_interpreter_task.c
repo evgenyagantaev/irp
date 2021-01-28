@@ -16,9 +16,13 @@
 
 void message_interpreter_task()
 {
+<<<<<<< HEAD
 	//char message[64];
 	//sprintf((char *)message, "message_interpreter_task\r\n");
 	//AL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+=======
+	int i=0;
+>>>>>>> 06bf4b699112e0da69333e50aebd69cc3ed4b288
 
 	if(get_message_index() > 0)
 	{
@@ -72,9 +76,17 @@ void message_interpreter_task()
 		{
 			switch_ktc_recharge_on();
 		}
+		else if(message == COMMAND_ONBAT2_ON) //
+		{
+			switch_onbat2_on();
+		}
+		else if(message == COMMAND_ONBAT2_OFF) //
+		{
+			switch_onbat2_off();
+		}
 		else
 		{
-			int i = 0;
+			i++;
 		}
 
 		//************************************************************* COMMAND_CLEAN_EEPROM

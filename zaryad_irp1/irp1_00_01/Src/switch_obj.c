@@ -38,39 +38,65 @@ void switch_charge_off()
 }
 void switch_discharge_on()
 {
+	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
+
 	HAL_GPIO_WritePin(GPIOB, disch_out_Pin, GPIO_PIN_SET);
 	set_discharge_flag(1);
 	battery_state_set(DISCHARGING_STATE);
 }
 void switch_discharge_off()
 {
+	//HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
+
 	HAL_GPIO_WritePin(GPIOB, disch_out_Pin, GPIO_PIN_RESET);
 	set_discharge_flag(0);
 	battery_state_set(IDLE_STATE);
 }
 void switch_load_on()
 {
+<<<<<<< HEAD
 	char message[64];
 	sprintf((char *)message, "switch load on\r\n");
 	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
 
 	HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
 	HAL_Delay(700);
+=======
+	//HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
+
+	//HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
+	//HAL_Delay(700);
+>>>>>>> 06bf4b699112e0da69333e50aebd69cc3ed4b288
 	HAL_GPIO_WritePin(GPIOA, on_bat1_out_Pin, GPIO_PIN_SET);
 	set_load_flag(1);
 	battery_state_set(LOAD_STATE);
 }
 void switch_load_off()
 {
+<<<<<<< HEAD
 	char message[64];
 	sprintf((char *)message, "switch load off\r\n");
 	HAL_UART_Transmit(&huart1, message, strlen((const char *)message), 500);
+=======
+	//HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
+>>>>>>> 06bf4b699112e0da69333e50aebd69cc3ed4b288
 
 	HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_RESET);
 	HAL_Delay(700);
 	HAL_GPIO_WritePin(GPIOA, on_bat1_out_Pin, GPIO_PIN_RESET);
 	set_load_flag(0);
 	battery_state_set(IDLE_STATE);
+
+	//reset coulombmeter
+	coulombmeter_set(0.0);
+}
+void switch_onbat2_on()
+{
+	HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_SET);
+}
+void switch_onbat2_off()
+{
+	HAL_GPIO_WritePin(GPIOA, on_bat2_out_Pin, GPIO_PIN_RESET);
 }
 void switch_ktc_on()
 {
@@ -84,6 +110,8 @@ void switch_ktc_on()
 }
 void switch_ktc_off()
 {
+	//HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
+
 	HAL_GPIO_WritePin(GPIOB, disch_out_Pin, GPIO_PIN_RESET);
 	set_discharge_flag(0);
 	battery_state_set(CHARGING_STATE);
@@ -91,6 +119,7 @@ void switch_ktc_off()
 
 void switch_ktc_discharge_on()
 {
+	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_RESET);    //       ZAPLATKA!!!
 
 	HAL_GPIO_WritePin(GPIOB, disch_out_Pin, GPIO_PIN_SET);
 	set_discharge_flag(1);
