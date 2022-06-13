@@ -38,10 +38,12 @@
 
 /* Private define ------------------------------------------------------------*/
 
-#define vdc1_adc_in0_Pin GPIO_PIN_0
-#define vdc1_adc_in0_GPIO_Port GPIOA
-#define vdc1_adc_in1_Pin GPIO_PIN_1
-#define vdc1_adc_in1_GPIO_Port GPIOA
+#define SVD123_anodes_Pin GPIO_PIN_0
+#define SVD123_anodes_Port GPIOA
+#define SVD456_anodes_Pin GPIO_PIN_1
+#define SVD456_anodes_Port GPIOA
+//***********************************
+
 #define vdc1_adc_in2_Pin GPIO_PIN_2
 #define vdc1_adc_in2_GPIO_Port GPIOA
 #define power_led_red_out_Pin GPIO_PIN_3
@@ -50,10 +52,16 @@
 #define power_led_green_out_GPIO_Port GPIOA
 #define charge_led_red_out_Pin GPIO_PIN_5
 #define charge_led_red_out_GPIO_Port GPIOA
-#define chargeOK_led_green_out_Pin GPIO_PIN_6
-#define chargeOK_led_green_out_GPIO_Port GPIOA
-#define ctc_led_red_out_Pin GPIO_PIN_7
-#define ctc_led_red_out_GPIO_Port GPIOA
+
+//************************************
+#define SVD1_4_catode_Pin GPIO_PIN_6
+#define SVD1_4_catode_Port GPIOA
+#define SVD2_5_catode_Pin GPIO_PIN_7
+#define SVD2_5_catode_Port GPIOA
+#define SVD3_6_catode_Pin GPIO_PIN_8
+#define SVD3_6_catode_Port GPIOA
+//************************************
+
 #define chipsel1_out_Pin GPIO_PIN_0
 #define chipsel1_out_GPIO_Port GPIOB
 #define chipsel2_out_Pin GPIO_PIN_1
@@ -62,10 +70,6 @@
 #define chipsel3_out_GPIO_Port GPIOB
 #define ext_watchdog_out_Pin GPIO_PIN_12
 #define ext_watchdog_out_GPIO_Port GPIOB
-#define ctc_led_green_out_Pin GPIO_PIN_8
-#define ctc_led_green_out_GPIO_Port GPIOA
-#define charge100_led_green_out_Pin GPIO_PIN_9
-#define charge100_led_green_out_GPIO_Port GPIOA
 #define charge75_led_green_out_Pin GPIO_PIN_10
 #define charge75_led_green_out_GPIO_Port GPIOA
 #define charge50_led_green_out_Pin GPIO_PIN_11

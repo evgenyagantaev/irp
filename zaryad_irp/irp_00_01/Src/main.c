@@ -17,19 +17,13 @@
 
 
 
-// here code to test
-//#include "ProductionCode.h"
-
 /* Private variables ---------------------------------------------------------*/
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-int ctc_on_flag = 0;
-int ctc_button_press_counter = 0;
-
-//int onbat2_on_off = 0;
+#define VERSION "0.0.0"
 
 extern ADC_HandleTypeDef hadc;
 
@@ -65,15 +59,15 @@ int main(void)
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
-    MX_LPUART1_UART_Init();
-    MX_USART1_UART_Init();
-    MX_SPI2_Init();
+    //MX_LPUART1_UART_Init();
+    //MX_USART1_UART_Init();
+    //MX_SPI2_Init();
     // enable spi2
-    SPI2->CR1 |= SPI_CR1_SPE;
-    MX_ADC_Init();
-    MX_TIM2_Init();
-    MX_TIM21_Init();
-    MX_TIM22_Init();
+    //SPI2->CR1 |= SPI_CR1_SPE;
+    //MX_ADC_Init();
+    //MX_TIM2_Init();
+    //MX_TIM21_Init();
+    //MX_TIM22_Init();
 
 
 
@@ -85,6 +79,8 @@ int main(void)
     HAL_Delay(1000);
     //HAL_GPIO_WritePin(GPIOB, relei_control_out_Pin, GPIO_PIN_SET); // relei on
     test_leds();
+
+    /*
     // check if button is pressed
     if(HAL_GPIO_ReadPin(ctc_onoff_button_exti15_GPIO_Port, ctc_onoff_button_exti15_Pin) == GPIO_PIN_RESET)
     {
@@ -136,7 +132,7 @@ int main(void)
     // main scheduler loop
     while(1)
     {
-		//*
+
     	ext_pow_control_task();
 		time_management_task();
 		button_polling_task();
@@ -144,11 +140,11 @@ int main(void)
 		charge_check_task();
 		battery_control_task();
 		ctc_controller_task();
-		//*/
 
         //int_adc_measure_task();
 
     }
+	*/
 
 }
 /** System Clock Configuration
@@ -197,46 +193,48 @@ void SystemClock_Config(void)
 
 void test_leds(void)
 {
-	HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_SET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_RESET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_SET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_RESET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_SET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_RESET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, chargeOK_led_green_out_Pin, GPIO_PIN_SET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, chargeOK_led_green_out_Pin, GPIO_PIN_RESET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, ctc_led_red_out_Pin, GPIO_PIN_SET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, ctc_led_red_out_Pin, GPIO_PIN_RESET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, ctc_led_green_out_Pin, GPIO_PIN_SET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, ctc_led_green_out_Pin, GPIO_PIN_RESET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, charge100_led_green_out_Pin, GPIO_PIN_SET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, charge100_led_green_out_Pin, GPIO_PIN_RESET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, charge75_led_green_out_Pin, GPIO_PIN_SET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, charge75_led_green_out_Pin, GPIO_PIN_RESET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, charge50_led_green_out_Pin, GPIO_PIN_SET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, charge50_led_green_out_Pin, GPIO_PIN_RESET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, charge25_led_green_out_Pin, GPIO_PIN_SET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOA, charge25_led_green_out_Pin, GPIO_PIN_RESET);
-	HAL_Delay(100);
+	while(1)
+	{
+		HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
+		//***********
+		HAL_GPIO_WritePin(GPIOA, SVD1_4_catode_Pin, GPIO_PIN_SET);
+		HAL_Delay(100);
+		HAL_GPIO_WritePin(GPIOA, SVD1_4_catode_Pin, GPIO_PIN_RESET);
+		HAL_Delay(100);
+		HAL_GPIO_WritePin(GPIOA, SVD2_5_catode_Pin, GPIO_PIN_SET);
+		HAL_Delay(100);
+		HAL_GPIO_WritePin(GPIOA, SVD2_5_catode_Pin, GPIO_PIN_RESET);
+		HAL_Delay(100);
+		HAL_GPIO_WritePin(GPIOA, SVD3_6_catode_Pin, GPIO_PIN_SET);
+		HAL_Delay(100);
+		HAL_GPIO_WritePin(GPIOA, SVD3_6_catode_Pin, GPIO_PIN_RESET);
+		HAL_Delay(100);
+		//***********
+		HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_RESET);
+
+
+
+		HAL_Delay(100);
+		HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_SET);
+		//***********
+		HAL_GPIO_WritePin(GPIOA, SVD1_4_catode_Pin, GPIO_PIN_SET);
+		HAL_Delay(100);
+		HAL_GPIO_WritePin(GPIOA, SVD1_4_catode_Pin, GPIO_PIN_RESET);
+		HAL_Delay(100);
+		HAL_GPIO_WritePin(GPIOA, SVD2_5_catode_Pin, GPIO_PIN_SET);
+		HAL_Delay(100);
+		HAL_GPIO_WritePin(GPIOA, SVD2_5_catode_Pin, GPIO_PIN_RESET);
+		HAL_Delay(100);
+		HAL_GPIO_WritePin(GPIOA, SVD3_6_catode_Pin, GPIO_PIN_SET);
+		HAL_Delay(100);
+		HAL_GPIO_WritePin(GPIOA, SVD3_6_catode_Pin, GPIO_PIN_RESET);
+		HAL_Delay(100);
+		//***********
+		HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_RESET);
+		HAL_Delay(100);
+	}
+
+
 }
 
 
@@ -255,16 +253,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
         while(HAL_GPIO_ReadPin(GPIOA, ctc_onoff_button_exti15_Pin) == GPIO_PIN_RESET)
         {
-        	HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin|power_led_green_out_Pin|charge_led_red_out_Pin|chargeOK_led_green_out_Pin
-        	                          |ctc_led_red_out_Pin|ctc_led_green_out_Pin|charge100_led_green_out_Pin|charge75_led_green_out_Pin
-        	                          |charge50_led_green_out_Pin|charge25_led_green_out_Pin, GPIO_PIN_RESET);
-        	long i, j;
-        	for(i=0;i<500000;i++)
-        		j = i;
-        	HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_SET);
-        	for(i=0;i<500000;i++)
-        		j = i;
-        	i = j;
+        	//...
         }
 
         HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);

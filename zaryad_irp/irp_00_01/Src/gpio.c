@@ -55,54 +55,42 @@
 void MX_GPIO_Init(void)
 {
 
-  GPIO_InitTypeDef GPIO_InitStruct;
+	GPIO_InitTypeDef GPIO_InitStruct;
 
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
+	/* GPIO Ports Clock Enable */
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_GPIOB_CLK_ENABLE();
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin|power_led_green_out_Pin|charge_led_red_out_Pin|chargeOK_led_green_out_Pin 
-                          |ctc_led_red_out_Pin|ctc_led_green_out_Pin|charge100_led_green_out_Pin|charge75_led_green_out_Pin 
-                          |charge50_led_green_out_Pin|charge25_led_green_out_Pin, GPIO_PIN_RESET);
+	/*Configure GPIO pin Output Level */
+	HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin|SVD456_anodes_Pin|SVD1_4_catode_Pin|SVD2_5_catode_Pin
+						  |SVD3_6_catode_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, chipsel1_out_Pin|chipsel2_out_Pin|chipsel3_out_Pin|ext_watchdog_out_Pin 
-                          |chipsel4_out_Pin|relei_control_out_Pin|rst_out_Pin, GPIO_PIN_RESET);
+	/*Configure GPIO pin Output Level */
+	HAL_GPIO_WritePin(GPIOB, chipsel1_out_Pin|chipsel2_out_Pin|chipsel3_out_Pin|ext_watchdog_out_Pin
+						  |chipsel4_out_Pin|relei_control_out_Pin|rst_out_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : PAPin PAPin PAPin PAPin 
-                           PAPin PAPin PAPin PAPin 
-                           PAPin PAPin */
-  GPIO_InitStruct.Pin = power_led_red_out_Pin|power_led_green_out_Pin|charge_led_red_out_Pin|chargeOK_led_green_out_Pin 
-                          |ctc_led_red_out_Pin|ctc_led_green_out_Pin|charge100_led_green_out_Pin|charge75_led_green_out_Pin 
-                          |charge50_led_green_out_Pin|charge25_led_green_out_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	GPIO_InitStruct.Pin = SVD123_anodes_Pin|SVD456_anodes_Pin|SVD1_4_catode_Pin|SVD2_5_catode_Pin|SVD3_6_catode_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PBPin PBPin PBPin PBPin 
-                           PBPin PBPin PBPin */
-  GPIO_InitStruct.Pin = chipsel1_out_Pin|chipsel2_out_Pin|chipsel3_out_Pin|ext_watchdog_out_Pin 
-                          |chipsel4_out_Pin|relei_control_out_Pin|rst_out_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	/*Configure GPIO pins : PBPin PBPin PBPin PBPin
+						   PBPin PBPin PBPin */
+	GPIO_InitStruct.Pin = chipsel1_out_Pin|chipsel2_out_Pin|chipsel3_out_Pin|ext_watchdog_out_Pin
+						  |chipsel4_out_Pin|relei_control_out_Pin|rst_out_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
-  /*
-  GPIO_InitStruct.Pin = ctc_onoff_button_exti15_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(ctc_onoff_button_exti15_GPIO_Port, &GPIO_InitStruct);
-  //*/
-
+	/*
     GPIO_InitStruct.Pin = ctc_onoff_button_exti15_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
 	HAL_GPIO_Init(ctc_onoff_button_exti15_GPIO_Port, &GPIO_InitStruct);
+	*/
 
 	// configure debug mode protection jumper pin (pb4)
 	GPIO_InitStruct.Pin = GPIO_PIN_4;
