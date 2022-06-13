@@ -23,7 +23,7 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION "0.0.0"
+#define VERSION "0.0.1"
 
 extern ADC_HandleTypeDef hadc;
 
