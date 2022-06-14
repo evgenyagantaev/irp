@@ -10,7 +10,7 @@
 
 #include "time_management_task.h"
 #include "int_adc_measure_task.h"
-#include "ext_pow_control_task.h"
+//#include "ext_pow_control_task.h"
 //#include "battery_control_task.h"
 #include "button_polling_task.h"
 //#include "button_interpreter_task.h"

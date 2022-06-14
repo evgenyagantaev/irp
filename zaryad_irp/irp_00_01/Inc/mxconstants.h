@@ -44,14 +44,14 @@
 #define SVD456_anodes_Port GPIOA
 //***********************************
 
-#define vdc1_adc_in2_Pin GPIO_PIN_2
-#define vdc1_adc_in2_GPIO_Port GPIOA
-#define power_led_red_out_Pin GPIO_PIN_3
-#define power_led_red_out_GPIO_Port GPIOA
-#define power_led_green_out_Pin GPIO_PIN_4
-#define power_led_green_out_GPIO_Port GPIOA
-#define charge_led_red_out_Pin GPIO_PIN_5
-#define charge_led_red_out_GPIO_Port GPIOA
+#define ind_7_seg_1_Pin GPIO_PIN_2
+#define ind_7_seg_1_Port GPIOA
+#define ind_7_seg_2_Pin GPIO_PIN_3
+#define ind_7_seg_2_Port GPIOA
+#define ind_7_seg_4_Pin GPIO_PIN_4
+#define ind_7_seg_4_Port GPIOA
+#define ind_7_seg_8_Pin GPIO_PIN_5
+#define ind_7_seg_8_Port GPIOA
 
 //************************************
 #define SVD1_4_catode_Pin GPIO_PIN_6

@@ -7,7 +7,6 @@ C_SRCS += \
 ../Src/battery.c \
 ../Src/button.c \
 ../Src/button_polling_task.c \
-../Src/ext_pow_control_task.c \
 ../Src/ext_power_obj.c \
 ../Src/gpio.c \
 ../Src/int_adc_measure_task.c \
@@ -26,7 +25,6 @@ OBJS += \
 ./Src/battery.o \
 ./Src/button.o \
 ./Src/button_polling_task.o \
-./Src/ext_pow_control_task.o \
 ./Src/ext_power_obj.o \
 ./Src/gpio.o \
 ./Src/int_adc_measure_task.o \
@@ -45,7 +43,6 @@ C_DEPS += \
 ./Src/battery.d \
 ./Src/button.d \
 ./Src/button_polling_task.d \
-./Src/ext_pow_control_task.d \
 ./Src/ext_power_obj.d \
 ./Src/gpio.d \
 ./Src/int_adc_measure_task.d \
@@ -68,8 +65,6 @@ Src/button.o: ../Src/button.c
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m0plus -std=gnu11 -g3 '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -c -I../Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -O0 -ffunction-sections -Wall -fstack-usage -MMD -MP -MF"Src/button.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 Src/button_polling_task.o: ../Src/button_polling_task.c
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m0plus -std=gnu11 -g3 '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -c -I../Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -O0 -ffunction-sections -Wall -fstack-usage -MMD -MP -MF"Src/button_polling_task.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
-Src/ext_pow_control_task.o: ../Src/ext_pow_control_task.c
-	arm-none-eabi-gcc "$<" -mcpu=cortex-m0plus -std=gnu11 -g3 '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -c -I../Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -O0 -ffunction-sections -Wall -fstack-usage -MMD -MP -MF"Src/ext_pow_control_task.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 Src/ext_power_obj.o: ../Src/ext_power_obj.c
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m0plus -std=gnu11 -g3 '-D__weak=__attribute__((weak))' '-D__packed="__attribute__((__packed__))"' -DUSE_HAL_DRIVER -DSTM32L051xx -c -I../Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Include -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -O0 -ffunction-sections -Wall -fstack-usage -MMD -MP -MF"Src/ext_power_obj.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 Src/gpio.o: ../Src/gpio.c
