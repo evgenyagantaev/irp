@@ -14,6 +14,7 @@
 
 #include "spi_pipe.h"
 #include "ext_power_obj.h"
+#include "seven_segment_display.h"
 
 
 
@@ -23,7 +24,7 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION "0.0.3"
+#define VERSION "0.0.4"
 
 extern ADC_HandleTypeDef hadc;
 
@@ -128,23 +129,27 @@ int main(void)
     	extpow_measure_voltage();
     	ext_pow_get_voltage();
     }
+    */
+
+    uint voltage = 4;
 
     // main scheduler loop
     while(1)
     {
 
-    	ext_pow_control_task();
+    	//ext_pow_control_task();
 		time_management_task();
-		button_polling_task();
-		button_interpreter_task();
-		charge_check_task();
-		battery_control_task();
-		ctc_controller_task();
+		//button_polling_task();
+		//button_interpreter_task();
+		//charge_check_task();
+		//battery_control_task();
+		//ctc_controller_task();
+		seven_segment_display(voltage);
 
         //int_adc_measure_task();
 
     }
-	*/
+
 
 }
 /** System Clock Configuration
@@ -194,7 +199,7 @@ void SystemClock_Config(void)
 void test_leds(void)
 {
 	const int DELAY = 150;
-	while(1)
+	//while(1)
 	{
 
 
@@ -346,6 +351,16 @@ void test_leds(void)
 
 		HAL_GPIO_WritePin(GPIOA, SVD1_4_catode_Pin, GPIO_PIN_RESET);
 		//*/
+
+		HAL_GPIO_WritePin(GPIOA, SVD3_6_catode_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, SVD2_5_catode_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, SVD1_4_catode_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOA, ind_7_seg_8_Pin, GPIO_PIN_SET);
 
 	}
 
