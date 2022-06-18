@@ -24,14 +24,13 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION "0.0.4"
+#define VERSION "0.0.5"
 
 extern ADC_HandleTypeDef hadc;
 
-#define GET_CHARGE 0x0021
-#define STOP_CHARGING 0x0022
-#define GET_STATE 0x0023
-#define START_CHARGING 0x0025
+uint32_t counter = 0;
+uint voltage = 0;
+
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -66,7 +65,7 @@ int main(void)
     // enable spi2
     //SPI2->CR1 |= SPI_CR1_SPE;
     //MX_ADC_Init();
-    //MX_TIM2_Init();
+    MX_TIM2_Init();
     //MX_TIM21_Init();
     //MX_TIM22_Init();
 
@@ -131,14 +130,21 @@ int main(void)
     }
     */
 
-    uint voltage = 4;
+    /* Disable SysTick Interrupt */
+	SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
+
+	// Enable tim2 interrupt
+	TIM2->DIER |= TIM_DIER_UIE;
+	// start tim2
+	HAL_TIM_Base_Start(&htim2);
+
 
     // main scheduler loop
     while(1)
     {
 
     	//ext_pow_control_task();
-		time_management_task();
+		//time_management_task();
 		//button_polling_task();
 		//button_interpreter_task();
 		//charge_check_task();
