@@ -7,8 +7,10 @@
 
 extern TIM_HandleTypeDef htim2;
 
-extern uint32_t counter;
+extern uint32_t global_debug_counter;
 extern uint voltage;
+
+extern uint64_t usec10tick;
 
 /******************************************************************************/
 /*            Cortex-M0+ Processor Interruption and Exception Handlers         */ 
@@ -72,6 +74,9 @@ void TIM2_IRQHandler(void)
 	// clear it
 	(&htim2)->Instance->SR = ~TIM_IT_UPDATE;
 
+	usec10tick++;
+
+	/*
 	HAL_IncTick();
 	HAL_SYSTICK_IRQHandler();
 
@@ -81,4 +86,5 @@ void TIM2_IRQHandler(void)
 	{
 		voltage++;
 	}
+	*/
 }

@@ -24,12 +24,14 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION "0.0.5"
+#define VERSION "0.0.6"
 
 extern ADC_HandleTypeDef hadc;
 
-uint32_t counter = 0;
+uint32_t global_debug_counter = 0;
 uint voltage = 0;
+
+uint64_t usec10tick = 0;
 
 
 /* Private variables ---------------------------------------------------------*/
@@ -71,72 +73,17 @@ int main(void)
 
 
 
-    //power_led_red_out_Pin|power_led_green_out_Pin|charge_led_red_out_Pin|chargeOK_led_green_out_Pin
-    //                          |ctc_led_red_out_Pin|ctc_led_green_out_Pin|charge100_led_green_out_Pin|charge75_led_green_out_Pin
-    //                          |charge50_led_green_out_Pin|charge25_led_green_out_Pin
-
-	// vkluchenie **********************************
     HAL_Delay(1000);
-    //HAL_GPIO_WritePin(GPIOB, relei_control_out_Pin, GPIO_PIN_SET); // relei on
     test_leds();
 
-    /*
-    // check if button is pressed
-    if(HAL_GPIO_ReadPin(ctc_onoff_button_exti15_GPIO_Port, ctc_onoff_button_exti15_Pin) == GPIO_PIN_RESET)
-    {
-    	HAL_UART_Transmit(&huart1, (uint8_t *)"Button pressed!\r\n", strlen("Button pressed!\r\n"), 500);
-    	HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, chargeOK_led_green_out_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ctc_led_red_out_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ctc_led_green_out_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, charge100_led_green_out_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, charge75_led_green_out_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, charge50_led_green_out_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, charge25_led_green_out_Pin, GPIO_PIN_SET);
-		HAL_Delay(5000);
-    	// clean eeprom
-    	spi_pipe_send_command(COMMAND_CLEAN_EEPROM, 0);
-		spi_pipe_send_command(COMMAND_CLEAN_EEPROM, 1);
-		spi_pipe_send_command(COMMAND_CLEAN_EEPROM, 2);
-		spi_pipe_send_command(COMMAND_CLEAN_EEPROM, 3);
-		HAL_UART_Transmit(&huart1, (uint8_t *)"EEPROM clean!\r\n", strlen("EEPROM clean!\r\n"), 500);
-
-		HAL_GPIO_WritePin(GPIOA, power_led_red_out_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, power_led_green_out_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, charge_led_red_out_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, chargeOK_led_green_out_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ctc_led_red_out_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ctc_led_green_out_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, charge100_led_green_out_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, charge75_led_green_out_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, charge50_led_green_out_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, charge25_led_green_out_Pin, GPIO_PIN_RESET);
-
-
-    }
-    HAL_Delay(2000);
-
-    HAL_UART_Transmit(&huart1, (uint8_t *)"Hello!\r\n", strlen("Hello!\r\n"), 500);
-    HAL_Delay(1000);
-
-    //ADC_ChannelConfTypeDef sConfig;
-    int i;
-    for(i=0; i<10; i++)
-    {
-    	extpow_measure_voltage();
-    	ext_pow_get_voltage();
-    }
-    */
 
     /* Disable SysTick Interrupt */
-	SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
+	//SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
 
 	// Enable tim2 interrupt
-	TIM2->DIER |= TIM_DIER_UIE;
+	//TIM2->DIER |= TIM_DIER_UIE;
 	// start tim2
-	HAL_TIM_Base_Start(&htim2);
+	//HAL_TIM_Base_Start(&htim2);
 
 
     // main scheduler loop
@@ -144,11 +91,11 @@ int main(void)
     {
 
     	//ext_pow_control_task();
-		//time_management_task();
+		time_management_task();
 		//button_polling_task();
 		//button_interpreter_task();
 		//charge_check_task();
-		//battery_control_task();
+		battery_control_task();
 		//ctc_controller_task();
 		seven_segment_display(voltage);
 
