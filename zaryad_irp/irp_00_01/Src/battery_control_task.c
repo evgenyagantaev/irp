@@ -6,7 +6,7 @@
  */
 
 #include "battery_control_task.h"
-
+#include "main.h"
 #include "tim.h"
 
 extern TIM_HandleTypeDef htim2;
@@ -59,4 +59,26 @@ void battery_control_task()
 	}
 
 
+}
+
+int hdq_wait_for_brake()
+{
+	// wait for low level
+	while((GPIOB->IDR & bat_data_in_Pin) != (uint32_t)GPIO_PIN_RESET){};
+	uint64_t usec10tick_frozen = usec10tick;
+	//wait for high level
+	while((GPIOB->IDR & bat_data_in_Pin) == (uint32_t)GPIO_PIN_RESET){};
+	uint64_t duration = usec10tick - usec10tick_frozen;
+
+	if(duration >= 19)
+		return 0;
+	else
+		return -1;
+}
+
+uint8_t hdq_read_byte()
+{
+	while(!hdq_wait_for_brake()){};
+
+	
 }

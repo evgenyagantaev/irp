@@ -6,4 +6,11 @@ RemoteSystemsTempFiles/**/*
 **/*.bin
 **/*.list
 **/*.log
+**/*.xml
+**/*.log
+**/*.mk
+**/*makefile
+**/Debug
+
+
 
