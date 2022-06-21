@@ -20,7 +20,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
