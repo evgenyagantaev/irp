@@ -80,21 +80,10 @@ void send_byte(uint8_t data)
 
 uint16_t receive_word()
 {
-	GPIO_InitTypeDef GPIO_InitStruct;
-
-	//*
-	GPIO_InitStruct.Pin = bat_data_out_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-	//*/
-	//***********************************************
-
 	uint16_t aux = 1;
 	uint16_t data = 0;
 
-	for(int i=0; i<16; i++)
+	for(int i=0; i<8; i++)
 	{
 		// wait for low level
 		while((GPIOB->IDR & bat_data_in_Pin) != (uint32_t)GPIO_PIN_RESET){};
@@ -109,16 +98,6 @@ uint16_t receive_word()
 		}
 		aux = aux << 1;
 	}
-
-
-	//***********************************************
-	//*
-	GPIO_InitStruct.Pin = bat_data_out_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-	//*/
 
 	return data;
 }

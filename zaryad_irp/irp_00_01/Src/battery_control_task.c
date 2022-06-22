@@ -37,14 +37,33 @@ void battery_control_task()
 		send_restore();
 		send_byte(0x14);
 
-		uint16_t data = receive_word();
+		//uint16_t data = receive_word();
 
 
 		// rise bat_data_out_Pin
 		GPIOB->BSRR = bat_data_out_Pin;
+
 		uint64_t usec10tick_frozen = usec10tick;
 		// wait 400 usec
+		while((usec10tick - usec10tick_frozen) < 400){};
+
+
+		/*
+		send_brake();
+		send_restore();
+		send_byte(0x15);
+
+		uint16_t aux = receive_word();
+
+		data += (aux << 8);
+
+
+		// rise bat_data_out_Pin
+		GPIOB->BSRR = bat_data_out_Pin;
+		usec10tick_frozen = usec10tick;
+		// wait 400 usec
 		while((usec10tick - usec10tick_frozen) < 40){};
+		*/
 
 	}
 

@@ -23,8 +23,20 @@ void MX_GPIO_Init(void)
 
 	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin|SVD456_anodes_Pin|SVD1_4_catode_Pin|SVD2_5_catode_Pin
-						  |SVD3_6_catode_Pin, GPIO_PIN_RESET);
+							  |SVD3_6_catode_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOB, bat_data_out_Pin, GPIO_PIN_SET);
 
+	GPIO_InitStruct.Pin = bat_data_out_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	//*****
+	GPIO_InitStruct.Pin = bat_data_in_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = SVD123_anodes_Pin|SVD456_anodes_Pin|SVD1_4_catode_Pin|SVD2_5_catode_Pin|SVD3_6_catode_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -38,17 +50,6 @@ void MX_GPIO_Init(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = bat_data_out_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-	//*****
-	GPIO_InitStruct.Pin = bat_data_in_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 
 	/*
