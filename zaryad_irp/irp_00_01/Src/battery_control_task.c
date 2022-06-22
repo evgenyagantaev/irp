@@ -6,6 +6,7 @@
  */
 
 #include "battery_control_task.h"
+#include "hdq_pipe.h"
 #include "main.h"
 #include "tim.h"
 
@@ -20,6 +21,32 @@ extern uint64_t usec10tick;
 void battery_control_task()
 {
 	// ***** read battery state *****
+
+	// Disable SysTick Interrupt
+	SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
+
+	// Enable tim2 interrupt
+	TIM2->DIER |= TIM_DIER_UIE;
+	// start tim2
+	HAL_TIM_Base_Start(&htim2);
+
+
+	while(1)
+	{
+		send_brake();
+		send_restore();
+		send_byte(0x14);
+
+		uint16_t data = receive_word();
+
+
+		// rise bat_data_out_Pin
+		GPIOB->BSRR = bat_data_out_Pin;
+		uint64_t usec10tick_frozen = usec10tick;
+		// wait 400 usec
+		while((usec10tick - usec10tick_frozen) < 40){};
+
+	}
 
 
 	//DEBUG!!!
