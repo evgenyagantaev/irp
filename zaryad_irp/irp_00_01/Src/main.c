@@ -20,6 +20,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 
+uint8_t battery_address = 14;
+
 extern UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;

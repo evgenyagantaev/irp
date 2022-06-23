@@ -17,6 +17,8 @@ extern uint voltage;
 
 extern uint64_t usec10tick;
 
+uint8_t battery_address;
+
 
 void battery_control_task()
 {
@@ -30,15 +32,89 @@ void battery_control_task()
 	// start tim2
 	HAL_TIM_Base_Start(&htim2);
 
-
+	uint counter = 0;
 	while(1)
 	{
 		send_brake();
 		send_restore();
-		send_byte(0x14);
+		//send_byte(0x14);
+
+		uint8_t aux = battery_address;
+
+		for(int i=0; i<8; i++)
+			{
+				if((aux & (uint8_t)1) == 0)
+				{
+					GPIOB->BRR = bat_data_out_Pin;
+					uint64_t usec10tick_frozen = usec10tick;
+					while((usec10tick - usec10tick_frozen) < 13){};
+					GPIOB->BSRR = bat_data_out_Pin;
+					if(i<7)
+						while((usec10tick - usec10tick_frozen) < 20){};
+				}
+				else
+				{
+					GPIOB->BRR = bat_data_out_Pin;
+					uint64_t usec10tick_frozen = usec10tick;
+					while((usec10tick - usec10tick_frozen) < 3){};
+					GPIOB->BSRR = bat_data_out_Pin;
+					if(i<7)
+						while((usec10tick - usec10tick_frozen) < 20){};
+				}
+
+				aux =  aux >> 1;
+			}
 
 		//uint16_t data = receive_word();
 
+
+		aux = 1;
+		uint8_t data = 0;
+
+		//*
+		int index = 0;
+		int no_timeout = 1;
+		while((index < 8) && (no_timeout))
+		{
+			uint64_t usec10tick_frozen = usec10tick;
+			// wait for low level
+			while(((GPIOB->IDR & bat_data_out_Pin) != (uint32_t)GPIO_PIN_RESET) && (no_timeout))
+			{
+				if((usec10tick - usec10tick_frozen) > 23)
+					no_timeout = 0;
+			}
+
+
+			if (no_timeout)
+			{
+				usec10tick_frozen = usec10tick;
+				//wait for high level
+				while(((GPIOB->IDR & bat_data_out_Pin) == (uint32_t)GPIO_PIN_RESET) && (no_timeout))
+				{
+					if((usec10tick - usec10tick_frozen) > 23)
+						no_timeout = 0;
+				}
+
+
+				if (no_timeout)
+				{
+					uint64_t duration = usec10tick - usec10tick_frozen;
+
+					if(duration <= 8)  // received 1
+					{
+						data += aux;
+					}
+					aux = aux << 1;
+
+					index++;
+				}
+				else
+					data = 0xff;
+			}
+			else
+				data = 0xff;
+		}
+		//*/
 
 		// rise bat_data_out_Pin
 		GPIOB->BSRR = bat_data_out_Pin;
@@ -47,25 +123,9 @@ void battery_control_task()
 		// wait 400 usec
 		while((usec10tick - usec10tick_frozen) < 400){};
 
+		counter++;
 
-		/*
-		send_brake();
-		send_restore();
-		send_byte(0x15);
-
-		uint16_t aux = receive_word();
-
-		data += (aux << 8);
-
-
-		// rise bat_data_out_Pin
-		GPIOB->BSRR = bat_data_out_Pin;
-		usec10tick_frozen = usec10tick;
-		// wait 400 usec
-		while((usec10tick - usec10tick_frozen) < 40){};
-		*/
-
-	}
+	}// end while(1)
 
 
 	//DEBUG!!!

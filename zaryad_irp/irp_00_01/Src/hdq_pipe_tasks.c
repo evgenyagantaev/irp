@@ -16,7 +16,7 @@ void send_brake()
 	GPIOB->BRR = bat_data_out_Pin;
 	uint64_t usec10tick_frozen = usec10tick;
 	// wait 200 usec
-	while((usec10tick - usec10tick_frozen) < 20){};
+	while((usec10tick - usec10tick_frozen) < 30){};
 	// rise bat_data_out_Pin
 	GPIOB->BSRR = bat_data_out_Pin;
 }
@@ -62,7 +62,8 @@ void send_byte(uint8_t data)
 			uint64_t usec10tick_frozen = usec10tick;
 			while((usec10tick - usec10tick_frozen) < 13){};
 			GPIOB->BSRR = bat_data_out_Pin;
-			while((usec10tick - usec10tick_frozen) < 20){};
+			if(i<7)
+				while((usec10tick - usec10tick_frozen) < 20){};
 		}
 		else
 		{
@@ -70,7 +71,8 @@ void send_byte(uint8_t data)
 			uint64_t usec10tick_frozen = usec10tick;
 			while((usec10tick - usec10tick_frozen) < 3){};
 			GPIOB->BSRR = bat_data_out_Pin;
-			while((usec10tick - usec10tick_frozen) < 20){};
+			if(i<7)
+				while((usec10tick - usec10tick_frozen) < 20){};
 		}
 
 		aux =  aux >> 1;
