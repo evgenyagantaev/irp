@@ -80,30 +80,6 @@ void send_byte(uint8_t data)
 
 }
 
-uint16_t receive_word()
-{
-	uint16_t aux = 1;
-	uint16_t data = 0;
-
-	for(int i=0; i<8; i++)
-	{
-		// wait for low level
-		while((GPIOB->IDR & bat_data_in_Pin) != (uint32_t)GPIO_PIN_RESET){};
-		uint64_t usec10tick_frozen = usec10tick;
-		//wait for high level
-		while((GPIOB->IDR & bat_data_in_Pin) == (uint32_t)GPIO_PIN_RESET){};
-		uint64_t duration = usec10tick - usec10tick_frozen;
-
-		if(duration <= 8)  // received 1
-		{
-			data += aux;
-		}
-		aux = aux << 1;
-	}
-
-	return data;
-}
-
 
 
 

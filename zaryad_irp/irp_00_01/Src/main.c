@@ -20,7 +20,10 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-uint8_t battery_address = 14;
+uint8_t battery_address = 70;
+int read_battery_flag = 1;
+int new_battery_data_available = 0;
+uint16_t battery_value = 0xffff;
 
 extern UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
