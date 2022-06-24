@@ -48,11 +48,12 @@ void battery_control_task()
 			int not_read_battery_data_yet = 1;
 
 			uint8_t saved_lsb_value = 0xff;
-			uint lsb_read_aatempts_counter = 0;
+			uint lsb_read_attempts_counter = 0;
+
+			uint8_t dbg_vector[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 			while (not_read_battery_data_yet && ((usec10tick - usec10tick_gross_timeout_frozen) < 500000)) // 5 sec timeout
 			{
-				lsb_read_aatempts_counter++;
 
 				send_brake();
 				send_restore();
@@ -144,6 +145,10 @@ void battery_control_task()
 				}
 
 				saved_lsb_value = data;
+				if(lsb_read_attempts_counter < 10)
+					dbg_vector[lsb_read_attempts_counter] = data;
+				lsb_read_attempts_counter++;
+
 
 				// rise bat_data_out_Pin
 				GPIOB->BSRR = bat_data_out_Pin;
@@ -160,12 +165,16 @@ void battery_control_task()
 			}
 			else
 			{
-				/*
+				//*
 				///////////////////////// SECOND (MSB) BYTE read
 				uint64_t usec10tick_gross_timeout_frozen = usec10tick;
 				int not_read_battery_data_yet = 1;
 
 				uint8_t saved_msb_value = 0xff;
+				uint msb_read_attempts_counter = 0;
+
+				uint8_t msb_dbg_vector[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+
 
 				while (not_read_battery_data_yet && ((usec10tick - usec10tick_gross_timeout_frozen) < 500000)) // 5 sec timeout
 				{
@@ -258,6 +267,8 @@ void battery_control_task()
 					}
 
 					saved_msb_value = data;
+					msb_dbg_vector[msb_read_attempts_counter] = data;
+					msb_read_attempts_counter++;
 
 					// rise bat_data_out_Pin
 					GPIOB->BSRR = bat_data_out_Pin;
@@ -280,7 +291,7 @@ void battery_control_task()
 
 				///////////////////////// SECOND (MSB) BYTE read <<<<<
 
-			}// end (not_read_battery_data_yet) // timeout occur
+			}// end if(not_read_battery_data_yet) // timeout occur
 
 			new_battery_data_available = 1;
 

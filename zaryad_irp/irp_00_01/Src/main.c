@@ -20,7 +20,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-uint8_t battery_address = 70;
+uint8_t battery_address = 0x6e;
 int read_battery_flag = 1;
 int new_battery_data_available = 0;
 uint16_t battery_value = 0xffff;
@@ -29,7 +29,7 @@ extern UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION "0.0.6"
+#define VERSION "0.0.7"
 
 extern ADC_HandleTypeDef hadc;
 
