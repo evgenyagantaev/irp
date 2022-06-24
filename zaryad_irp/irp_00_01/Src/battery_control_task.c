@@ -48,14 +48,17 @@ void battery_control_task()
 			int not_read_battery_data_yet = 1;
 
 			uint8_t saved_lsb_value = 0xff;
+			uint lsb_read_aatempts_counter = 0;
 
 			while (not_read_battery_data_yet && ((usec10tick - usec10tick_gross_timeout_frozen) < 500000)) // 5 sec timeout
 			{
+				lsb_read_aatempts_counter++;
 
 				send_brake();
 				send_restore();
 				//send_byte(0x14);
 
+				//>>>>> send command
 				uint8_t aux = battery_address;
 
 				for(int i=0; i<8; i++)
@@ -81,6 +84,7 @@ void battery_control_task()
 
 					aux =  aux >> 1;
 				}
+				// command sent <<<<<
 
 				//uint16_t data = receive_word();
 
@@ -156,6 +160,7 @@ void battery_control_task()
 			}
 			else
 			{
+				/*
 				///////////////////////// SECOND (MSB) BYTE read
 				uint64_t usec10tick_gross_timeout_frozen = usec10tick;
 				int not_read_battery_data_yet = 1;
@@ -244,7 +249,7 @@ void battery_control_task()
 						else
 							data = 0xff;
 					}
-					//*/
+
 
 					if(saved_msb_value != 0xff)
 					{
@@ -271,8 +276,11 @@ void battery_control_task()
 				{
 					battery_value = (((uint16_t)saved_msb_value) << 8) + saved_lsb_value;
 				}
+				//*/
 
-			}
+				///////////////////////// SECOND (MSB) BYTE read <<<<<
+
+			}// end (not_read_battery_data_yet) // timeout occur
 
 			new_battery_data_available = 1;
 
