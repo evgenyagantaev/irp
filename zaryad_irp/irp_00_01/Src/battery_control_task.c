@@ -90,7 +90,7 @@ void battery_control_task()
 
 
 				aux = 1;
-				uint8_t data = 0;
+				uint8_t data = 0xff;
 
 				//*
 				int index = 0;
