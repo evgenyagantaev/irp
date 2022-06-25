@@ -4,7 +4,7 @@
  *  Created on: Aug 24, 2016
  *      Author: root
  */
-
+#include "main.h"
 #include "battery_control_task.h"
 #include "hdq_pipe.h"
 #include "main.h"
@@ -27,7 +27,7 @@ void battery_control_task()
 {
 
 	uint counter = 0;
-	while(1)
+	//while(1)
 	{
 		if (read_battery_flag)
 		{
@@ -52,7 +52,7 @@ void battery_control_task()
 
 			uint8_t dbg_vector[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
-			while (not_read_battery_data_yet && ((usec10tick - usec10tick_gross_timeout_frozen) < 500000)) // 5 sec timeout
+			while (not_read_battery_data_yet && ((usec10tick - usec10tick_gross_timeout_frozen) < 150000)) // 5 sec timeout
 			{
 
 				send_brake();
@@ -309,44 +309,6 @@ void battery_control_task()
 		}// end if (read_battery_flag)
 
 	}// end while(1)
-
-
-	//DEBUG!!!
-	static uint64_t usec10tick_frozen;
-	usec10tick_frozen = usec10tick;
-	static uint32_t frozen_systick;
-	uint32_t current_systick = HAL_GetTick();
-
-	if(current_systick >= (frozen_systick + 1000))
-	{
-		frozen_systick = current_systick;
-		//*
-		// Disable SysTick Interrupt
-		SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
-
-		// Enable tim2 interrupt
-		TIM2->DIER |= TIM_DIER_UIE;
-		// start tim2
-		HAL_TIM_Base_Start(&htim2);
-
-		while((usec10tick - usec10tick_frozen) < 100){};
-
-		// stop tim2
-		HAL_TIM_Base_Stop(&htim2);
-		// disable tim2 interrupt
-		TIM2->DIER &= ~TIM_DIER_UIE;
-
-		// Enable SysTick Interrupt
-		SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;
-
-		global_debug_counter++;
-
-		if(global_debug_counter % 2 == 0)
-			voltage++;
-
-		//*/
-	}
-
 
 }
 

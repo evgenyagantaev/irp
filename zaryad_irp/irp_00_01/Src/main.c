@@ -20,6 +20,11 @@
 
 /* Private variables ---------------------------------------------------------*/
 
+int turn_off_display = 0;
+
+uint32_t seconds_tick = 0;
+
+uint8_t addresses[] = {0x14, 0x16, 0x18, 0x1a, 0x1c, 0x1e, 0x20, 0x26, 0x70, 0x72, 0x74, 0x6e};
 uint8_t battery_address = 0x6e;
 int read_battery_flag = 1;
 int new_battery_data_available = 0;
@@ -29,7 +34,8 @@ extern UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION "0.0.7"
+#define VERSION   "0.0.8"
+int D_VERSION = 8;
 
 extern ADC_HandleTypeDef hadc;
 
@@ -82,29 +88,21 @@ int main(void)
     test_leds();
 
 
-    /* Disable SysTick Interrupt */
-	//SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
-
-	// Enable tim2 interrupt
-	//TIM2->DIER |= TIM_DIER_UIE;
-	// start tim2
-	//HAL_TIM_Base_Start(&htim2);
-
 
     // main scheduler loop
     while(1)
     {
 
+    	time_management_task();
+    	int_adc_measure_task();
+    	seven_segment_display(voltage);
+
     	//ext_pow_control_task();
-		time_management_task();
 		//button_polling_task();
 		//button_interpreter_task();
 		//charge_check_task();
-		battery_control_task();
+		//battery_control_task();
 		//ctc_controller_task();
-		seven_segment_display(voltage);
-
-        //int_adc_measure_task();
 
     }
 
@@ -320,6 +318,8 @@ void test_leds(void)
 		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(GPIOA, ind_7_seg_8_Pin, GPIO_PIN_SET);
 
+		//turn off display
+		turn_off_display = 1;
 	}
 
 

@@ -18,7 +18,7 @@ void time_management_task()
         frozen_systick = current_tick;
         seconds_tick++;
         // toggle led
-        HAL_GPIO_TogglePin(GPIOA, SVD123_anodes_Pin);
+        //HAL_GPIO_TogglePin(GPIOA, SVD123_anodes_Pin);
     }
 
 }

@@ -11,7 +11,7 @@
 #include "stdint.h"
 
 static uint32_t frozen_systick;
-static uint32_t seconds_tick;
+extern uint32_t seconds_tick;
 
 
 void time_management_task();
