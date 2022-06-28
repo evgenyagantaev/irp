@@ -11,6 +11,14 @@
 
 extern int turn_off_display;
 
+extern int svd1_light;
+extern int svd2_light;
+extern int svd3_light;
+extern int svd4_light;
+extern int svd5_light;
+extern int svd6_light;
+
+
 void seven_segment_display(uint number)
 {
 	static uint lightened_digit = 0;
@@ -26,7 +34,7 @@ void seven_segment_display(uint number)
 	}
 	else
 	{
-		if(current_systick >= (frozen_systick + 7)) // 2 ms on every digit
+		if(current_systick >= (frozen_systick + 7)) // 7 ms on every digit
 		{
 			frozen_systick = current_systick;
 			lightened_digit = (lightened_digit + 1) % 3;
@@ -70,17 +78,32 @@ void seven_segment_display(uint number)
 		if((((uint)1 << 3) & aux) > 0)
 			GPIOA->BRR = ind_7_seg_8_Pin;
 
+		HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_RESET);
+
 		if(lightened_digit == 0)
 		{
 			GPIOA->BSRR = SVD3_6_catode_Pin;
+			if(svd3_light)
+				HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
+			else if(svd6_light)
+				HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_SET);
 		}
 		else if(lightened_digit == 1)
 		{
 			GPIOA->BSRR = SVD2_5_catode_Pin;
+			if(svd2_light)
+				HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
+			else if(svd5_light)
+				HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_SET);
 		}
 		else if(lightened_digit == 2)
 		{
 			GPIOA->BSRR = SVD1_4_catode_Pin;
+			if(svd1_light)
+				HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
+			else if(svd4_light)
+				HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_SET);
 		}
 
 	}

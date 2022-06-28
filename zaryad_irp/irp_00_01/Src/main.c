@@ -25,7 +25,10 @@ int turn_off_display = 0;
 uint32_t seconds_tick = 0;
 
 uint8_t addresses[] = {0x14, 0x16, 0x18, 0x1a, 0x1c, 0x1e, 0x20, 0x26, 0x70, 0x72, 0x74, 0x6e};
-uint8_t battery_address = 0x6e;
+uint8_t battery_address = 0x14;
+
+uint16_t values[12];
+
 int read_battery_flag = 1;
 int new_battery_data_available = 0;
 uint16_t battery_value = 0xffff;
@@ -34,7 +37,7 @@ extern UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION   "0.0.8"
+#define VERSION   "0.0.9"
 int D_VERSION = 8;
 
 extern ADC_HandleTypeDef hadc;
@@ -43,6 +46,13 @@ uint32_t global_debug_counter = 0;
 uint voltage = 0;
 
 uint64_t usec10tick = 0;
+
+int svd1_light = 0;
+int svd2_light = 0;
+int svd3_light = 0;
+int svd4_light = 0;
+int svd5_light = 0;
+int svd6_light = 0;
 
 
 /* Private variables ---------------------------------------------------------*/
@@ -94,7 +104,7 @@ int main(void)
     {
 
     	time_management_task();
-    	int_adc_measure_task();
+    	presentation_adc_measure_task();
     	seven_segment_display(voltage);
 
     	//ext_pow_control_task();
