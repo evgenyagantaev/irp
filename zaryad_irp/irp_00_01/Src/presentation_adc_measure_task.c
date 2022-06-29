@@ -5,7 +5,7 @@
  *      Author: root
  */
 
-#include <presentation_adc_measure_task.h>
+#include "presentation_adc_measure_task.h"
 #include "stm32l0xx_hal.h"
 #include "adc.h"
 #include "usart.h"
@@ -36,9 +36,10 @@ extern int svd4_light;
 extern int svd5_light;
 extern int svd6_light;
 
+extern int presentation_complete;
+
 void presentation_adc_measure_task()
 {
-	static int complete = 0;
 
 	static int address_index = 0;
 	static uint32_t frozen_seconds_tick = 0;
@@ -47,7 +48,7 @@ void presentation_adc_measure_task()
 	static int step = 0;
 
 
-	if (!complete)
+	if (!presentation_complete)
 	{
 		if(seconds_tick > frozen_seconds_tick)
 		{
@@ -78,7 +79,7 @@ void presentation_adc_measure_task()
 				{
 					if(address_index > 11)
 					{
-						complete = 1;
+						presentation_complete = 1;
 
 						if(values[10] == 0) // TS3 == 0K
 						{

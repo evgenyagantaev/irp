@@ -15,10 +15,14 @@
 #include "spi_pipe.h"
 #include "ext_power_obj.h"
 #include "seven_segment_display.h"
+#include "presentation_adc_measure_task.h"
+#include "constant_adc_measure_task.h"
 
 
 
 /* Private variables ---------------------------------------------------------*/
+
+int presentation_complete = 0;
 
 int turn_off_display = 0;
 
@@ -37,8 +41,8 @@ extern UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION   "0.0.9"
-int D_VERSION = 8;
+#define VERSION   "0.1.0"
+int D_VERSION = 9;
 
 extern ADC_HandleTypeDef hadc;
 
@@ -105,6 +109,7 @@ int main(void)
 
     	time_management_task();
     	presentation_adc_measure_task();
+    	constant_adc_measure_task();
     	seven_segment_display(voltage);
 
     	//ext_pow_control_task();
