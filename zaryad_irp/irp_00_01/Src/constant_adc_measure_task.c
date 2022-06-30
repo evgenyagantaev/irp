@@ -43,31 +43,35 @@ void constant_adc_measure_task()
 
 	static uint32_t frozen_seconds_tick = 0;
 
+	static int i = 0;
+	static uint battery_voltage = 0;
+
 	if (presentation_complete)
 	{
-		if(seconds_tick > frozen_seconds_tick)
+		if(seconds_tick > frozen_seconds_tick +4)
 		{
 			frozen_seconds_tick = seconds_tick;
 
-			uint battery_voltage = 0;
+			battery_address = addresses[i];
 
-			for(int i=0; i<8; i++)
+			battery_control_task();
+			uint aux;
+			if(battery_value != 0xffff)
+				aux = battery_value;
+			else
+				aux = 0;
+
+			aux /= 100;
+			values[i] = aux;
+			battery_voltage += aux;
+
+			if(i >= 8)
 			{
-				battery_address = addresses[i];
+				i = 0;
+				voltage = battery_voltage;
+				battery_voltage = 0;
+			}
 
-				battery_control_task();
-				if(battery_value != 0xffff)
-					voltage = battery_value;
-				else
-					voltage = 0;
-
-				voltage /= 100;
-				values[i] = voltage;
-				battery_voltage += voltage;
-
-			}// end for(int i=0; i<8; i++)
-
-			voltage = battery_voltage;
 
 		}// end if(seconds_tick > frozen_seconds_tick)
 

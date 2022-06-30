@@ -41,8 +41,8 @@ extern UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION   "0.1.0"
-int D_VERSION = 9;
+#define VERSION   "0.1.1"
+int D_VERSION = 11;
 
 extern ADC_HandleTypeDef hadc;
 
@@ -58,6 +58,8 @@ int svd4_light = 0;
 int svd5_light = 0;
 int svd6_light = 0;
 
+int alarm = 0;
+
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -65,6 +67,8 @@ int svd6_light = 0;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void test_leds(void);
+
+void alarm_task();
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -111,6 +115,7 @@ int main(void)
     	presentation_adc_measure_task();
     	constant_adc_measure_task();
     	seven_segment_display(voltage);
+    	alarm_task();
 
     	//ext_pow_control_task();
 		//button_polling_task();
