@@ -22,6 +22,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 
+uint battery_type = 0;
+
 int presentation_complete = 0;
 
 int turn_off_display = 0;
@@ -41,8 +43,8 @@ extern UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION   "0.1.1"
-int D_VERSION = 11;
+#define VERSION   "0.1.2"
+int D_VERSION = 12;
 
 extern ADC_HandleTypeDef hadc;
 

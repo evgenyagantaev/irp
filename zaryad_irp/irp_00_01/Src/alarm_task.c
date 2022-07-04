@@ -8,6 +8,7 @@
 #include "gpio.h"
 
 extern int alarm;
+extern uint battery_type;
 extern int turn_off_display;
 extern uint16_t values[];
 extern int presentation_complete;
@@ -20,9 +21,18 @@ void alarm_task()
 	{
 		if(seconds_tick > frozen_seconds_tick)
 		{
+			uint max_index = (battery_type == 42) ? 12 : 10;
+
 			for(int i=0; i<8; i++)
 			{
 				if(values[i] <= 29)
+					alarm = 1;
+			}
+
+			for(int i=8; i<max_index; i++)
+			{
+				int temperature = values[i] / 10 - 273;
+				if((temperature < -30) || (temperature > 50))
 					alarm = 1;
 			}
 		}

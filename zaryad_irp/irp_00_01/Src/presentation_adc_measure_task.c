@@ -37,6 +37,7 @@ extern int svd5_light;
 extern int svd6_light;
 
 extern int presentation_complete;
+extern uint battery_type;
 
 void presentation_adc_measure_task()
 {
@@ -85,11 +86,13 @@ void presentation_adc_measure_task()
 						{
 							//8lia21
 							svd2_light = 1;
+							battery_type = 21;
 						}
 						else
 						{
 							//8lia42
 							svd1_light = 1;
+							battery_type = 42;
 						}
 
 						voltage = 0;
@@ -122,10 +125,9 @@ void presentation_adc_measure_task()
 
 					if(address_index > 7)
 					{
+						values[address_index] = voltage;
 						if(voltage > 0)
 							voltage = (voltage/10 -273) * 10;
-
-						values[address_index] = voltage;
 					}
 					else
 					{

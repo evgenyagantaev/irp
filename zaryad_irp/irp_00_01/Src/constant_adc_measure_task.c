@@ -37,6 +37,7 @@ extern int svd5_light;
 extern int svd6_light;
 
 extern int presentation_complete;
+extern uint battery_type;
 
 void constant_adc_measure_task()
 {
@@ -52,6 +53,8 @@ void constant_adc_measure_task()
 		{
 			frozen_seconds_tick = seconds_tick;
 
+			uint max_index = (battery_type == 42) ? 12 : 10;
+
 			battery_address = addresses[i];
 
 			battery_control_task();
@@ -61,15 +64,24 @@ void constant_adc_measure_task()
 			else
 				aux = 0;
 
-			aux /= 100;
-			values[i] = aux;
-			battery_voltage += aux;
-
-			if(i >= 8)
+			if(i < 8)
 			{
-				i = 0;
+				aux /= 100;
+				values[i] = aux;
+				battery_voltage += aux;
+
+			}
+			else
+			{
+				values[i] = aux;
+			}
+
+			i++;
+			if(i >= max_index)
+			{
 				voltage = battery_voltage;
 				battery_voltage = 0;
+				i = 0;
 			}
 
 
