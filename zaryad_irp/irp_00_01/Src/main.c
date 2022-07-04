@@ -17,6 +17,7 @@
 #include "seven_segment_display.h"
 #include "presentation_adc_measure_task.h"
 #include "constant_adc_measure_task.h"
+#include "button_polling_task.h"
 
 
 
@@ -43,8 +44,8 @@ extern UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION   "0.1.2"
-int D_VERSION = 12;
+#define VERSION   "0.1.3"
+int D_VERSION = 13;
 
 extern ADC_HandleTypeDef hadc;
 
@@ -118,9 +119,9 @@ int main(void)
     	constant_adc_measure_task();
     	seven_segment_display(voltage);
     	alarm_task();
+    	button_polling_task();
 
     	//ext_pow_control_task();
-		//button_polling_task();
 		//button_interpreter_task();
 		//charge_check_task();
 		//battery_control_task();

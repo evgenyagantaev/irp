@@ -86,7 +86,7 @@ void seven_segment_display(uint number)
 			GPIOA->BSRR = SVD3_6_catode_Pin;
 			if(svd3_light)
 				HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
-			else if(svd6_light)
+			if(svd6_light)
 				HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_SET);
 		}
 		else if(lightened_digit == 1)
@@ -94,7 +94,7 @@ void seven_segment_display(uint number)
 			GPIOA->BSRR = SVD2_5_catode_Pin;
 			if(svd2_light)
 				HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
-			else if(svd5_light)
+			if(svd5_light)
 				HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_SET);
 		}
 		else if(lightened_digit == 2)
@@ -102,7 +102,7 @@ void seven_segment_display(uint number)
 			GPIOA->BSRR = SVD1_4_catode_Pin;
 			if(svd1_light)
 				HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
-			else if(svd4_light)
+			if(svd4_light)
 				HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_SET);
 		}
 

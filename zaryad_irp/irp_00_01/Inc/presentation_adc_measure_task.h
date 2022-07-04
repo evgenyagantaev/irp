@@ -8,6 +8,6 @@
 #ifndef INC_PRESENTATION_ADC_MEASURE_TASK_H_
 #define INC_PRESENTATION_ADC_MEASURE_TASK_H_
 
-void int_adc_measure_task();
+void presentation_adc_measure_task();
 
 #endif /* INC_PRESENTATION_ADC_MEASURE_TASK_H_ */

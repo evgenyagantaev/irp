@@ -9,44 +9,47 @@
 #include "button.h"
 #include "gpio.h"
 
+extern int presentation_complete;
+
+extern int svd1_light;
+extern int svd2_light;
+extern int svd3_light;
+extern int svd4_light;
+extern int svd5_light;
+extern int svd6_light;
+
+extern uint32_t seconds_tick;
+
 
 void button_polling_task()
 {
-	if(HAL_GPIO_ReadPin(ctc_onoff_button_exti15_GPIO_Port, ctc_onoff_button_exti15_Pin) == GPIO_PIN_RESET)
+	static uint32_t frozen_seconds_tick = 0;
+
+	if(seconds_tick > frozen_seconds_tick)
 	{
-		//button pressed
-		button_set_state(1);
-		if(!button_press_timer_on)
+		if (presentation_complete)
 		{
-			//remember the moment when we firstly detected button pressed
-			button_press_start = HAL_GetTick();
-			button_press_timer_on = 1;
-		}
-		else //button_press_timer_on == 1
-		{
-			// check how long is button pressed
-			if((HAL_GetTick() - button_press_start) >= 2000)
+			if((GPIOA->IDR & SVD2_5_catode_Pin) == (uint32_t)GPIO_PIN_RESET)
 			{
-				// long press detected
-				if(button_get_long_status() == 0)
+				GPIOA->BSRR = SVD2_5_catode_Pin;
+
+				if((GPIOB->IDR & batton_input_Pin) == (uint32_t)GPIO_PIN_RESET)
 				{
-					button_set_long_status(1);
+					// turn on led
+					svd5_light = 1;
 				}
+				GPIOA->BRR = SVD2_5_catode_Pin;
 			}
-			else if((HAL_GetTick() - button_press_start) >= 300)
+			else
 			{
-				// short press detected
-				if(button_get_long_status() == 0)
+				if((GPIOB->IDR & batton_input_Pin) == (uint32_t)GPIO_PIN_RESET)
 				{
-					button_set_short_status(1);
+					// turn on led
+					svd5_light = 1;
 				}
 			}
 		}
+
 	}
-	else
-	{
-		// button is not pressed
-		button_set_state(0);
-		button_press_timer_on = 0;
-	}
+
 }

@@ -10,8 +10,6 @@
 
 #include "stdint.h"
 
-static button_press_timer_on;
-static uint32_t button_press_start;
 
 void button_polling_task();
 

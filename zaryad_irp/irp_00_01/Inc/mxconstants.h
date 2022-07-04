@@ -30,7 +30,10 @@
 #define bat_data_out_Port GPIOB
 #define bat_data_in_Pin GPIO_PIN_6
 #define bat_data_in_Port GPIOB
+//************************************
 
+#define batton_input_Pin GPIO_PIN_1
+#define batton_input_Port GPIOB
 
 #define chipsel3_out_GPIO_Port GPIOB
 #define ext_watchdog_out_Pin GPIO_PIN_12
