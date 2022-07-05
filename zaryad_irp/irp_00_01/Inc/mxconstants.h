@@ -35,11 +35,13 @@
 #define batton_input_Pin GPIO_PIN_1
 #define batton_input_Port GPIOB
 
-#define chipsel3_out_GPIO_Port GPIOB
-#define ext_watchdog_out_Pin GPIO_PIN_12
-#define ext_watchdog_out_GPIO_Port GPIOB
-#define charge75_led_green_out_Pin GPIO_PIN_10
-#define charge75_led_green_out_GPIO_Port GPIOA
+#define express_charge1_Pin GPIO_PIN_3
+#define express_charge1_Port GPIOB
+#define express_charge2_Pin GPIO_PIN_4
+#define express_charge2_Port GPIOB
+#define express_charge_finish_Pin GPIO_PIN_5
+#define express_charge_finish_Port GPIOB
+
 #define charge50_led_green_out_Pin GPIO_PIN_11
 #define charge50_led_green_out_GPIO_Port GPIOA
 #define charge25_led_green_out_Pin GPIO_PIN_12

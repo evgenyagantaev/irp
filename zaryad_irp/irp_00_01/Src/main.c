@@ -18,6 +18,7 @@
 #include "presentation_adc_measure_task.h"
 #include "constant_adc_measure_task.h"
 #include "button_polling_task.h"
+#include "charge_check_task.h"
 
 
 
@@ -62,6 +63,8 @@ int svd5_light = 0;
 int svd6_light = 0;
 
 int alarm = 0;
+
+int express_charging = 0;
 
 
 /* Private variables ---------------------------------------------------------*/
@@ -120,10 +123,10 @@ int main(void)
     	seven_segment_display(voltage);
     	alarm_task();
     	button_polling_task();
+    	charge_check_task();
 
     	//ext_pow_control_task();
 		//button_interpreter_task();
-		//charge_check_task();
 		//battery_control_task();
 		//ctc_controller_task();
 

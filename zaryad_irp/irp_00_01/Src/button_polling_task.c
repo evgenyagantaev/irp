@@ -20,6 +20,8 @@ extern int svd6_light;
 
 extern uint32_t seconds_tick;
 
+extern int express_charging;
+
 
 void button_polling_task()
 {
@@ -46,6 +48,8 @@ void button_polling_task()
 				{
 					// turn on led
 					svd5_light = 1;
+
+					express_charging = 1;
 				}
 			}
 		}
