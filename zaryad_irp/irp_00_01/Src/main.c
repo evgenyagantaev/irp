@@ -45,8 +45,8 @@ extern UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION   "0.1.3"
-int D_VERSION = 13;
+#define VERSION   "0.1.4"
+int D_VERSION = 14;
 
 extern ADC_HandleTypeDef hadc;
 
@@ -65,6 +65,7 @@ int svd6_light = 0;
 int alarm = 0;
 
 int express_charging = 0;
+
 
 
 /* Private variables ---------------------------------------------------------*/

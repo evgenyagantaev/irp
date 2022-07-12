@@ -13,9 +13,18 @@ extern int turn_off_display;
 extern uint16_t values[];
 extern int presentation_complete;
 
+extern int express_charging;
+extern uint32_t express_charging_start_moment;
+
+static uint32_t alarm_suspect_moment = 0;
+
+#define EXPRESS_CHARGING_TIMEOUT 45
+#define ALARM_DROP_TIMEOUT 120
+
 void alarm_task()
 {
 	static uint32_t frozen_seconds_tick = 0;
+	static int cumulative_alarm = 0;
 
 	if (presentation_complete)
 	{
@@ -23,18 +32,42 @@ void alarm_task()
 		{
 			uint max_index = (battery_type == 42) ? 12 : 10;
 
+			int aux = 0;
+
 			for(int i=0; i<8; i++)
 			{
 				if(values[i] <= 29)
-					alarm = 1;
+					aux = 1;
 			}
 
 			for(int i=8; i<max_index; i++)
 			{
 				int temperature = values[i] / 10 - 273;
 				if((temperature < -30) || (temperature > 50))
-					alarm = 1;
+					aux = 1;
 			}
+
+			cumulative_alarm += aux;
+			if(aux)
+			{
+				alarm_suspect_moment = seconds_tick;
+			}
+			if((seconds_tick - alarm_suspect_moment) > ALARM_DROP_TIMEOUT)
+			{
+				cumulative_alarm = 0;
+			}
+			if(cumulative_alarm > 2)
+			{
+				alarm = 1;
+			}
+
+
+			// check express charging timeout
+			if(((seconds_tick - express_charging_start_moment) > EXPRESS_CHARGING_TIMEOUT) && express_charging)
+			{
+				alarm = 1;
+			}
+
 		}
 
 		if(alarm)
@@ -54,6 +87,9 @@ void alarm_task()
 
 			HAL_GPIO_WritePin(GPIOA, SVD3_6_catode_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
+
+			//turn off express charge
+			HAL_GPIO_WritePin(GPIOB, express_charge1_Pin | express_charge2_Pin, GPIO_PIN_RESET);
 
 			while(1)
 			{
