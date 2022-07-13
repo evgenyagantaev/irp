@@ -15,6 +15,8 @@ extern int presentation_complete;
 
 extern int express_charging;
 extern uint32_t express_charging_start_moment;
+extern int norm_charging;
+extern uint32_t norm_charging_start_moment;
 
 static uint32_t alarm_suspect_moment = 0;
 
@@ -68,6 +70,12 @@ void alarm_task()
 				alarm = 1;
 			}
 
+			if(((seconds_tick - norm_charging_start_moment) > EXPRESS_CHARGING_TIMEOUT) && norm_charging)
+			{
+				alarm = 1;
+			}
+
+
 		}
 
 		if(alarm)
@@ -88,8 +96,21 @@ void alarm_task()
 			HAL_GPIO_WritePin(GPIOA, SVD3_6_catode_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
 
-			//turn off express charge
-			HAL_GPIO_WritePin(GPIOB, express_charge1_Pin | express_charge2_Pin, GPIO_PIN_RESET);
+			//turn off charging		>>>>>>>>>>>>
+			HAL_GPIO_WritePin(GPIOB, express_charge2_Pin, GPIO_PIN_SET);
+			HAL_Delay(500);
+			HAL_GPIO_WritePin(GPIOC, norm_charge1_Pin, GPIO_PIN_SET);
+			HAL_Delay(500);
+			HAL_GPIO_WritePin(GPIOC, norm_charge2_Pin, GPIO_PIN_SET);
+			HAL_Delay(500);
+			//*****
+			HAL_GPIO_WritePin(GPIOB, express_charge1_Pin, GPIO_PIN_RESET);
+			HAL_Delay(500);
+			//*****
+			HAL_GPIO_WritePin(GPIOB, express_charge2_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOC, norm_charge1_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOC, norm_charge2_Pin, GPIO_PIN_RESET);
+			//turn off charging		<<<<<<<<<<<<<
 
 			while(1)
 			{

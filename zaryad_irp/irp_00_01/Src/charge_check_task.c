@@ -8,23 +8,39 @@
 #include <stdint.h>
 #include "gpio.h"
 
+extern int svd1_light;
+extern int svd2_light;
+extern int svd3_light;
+extern int svd4_light;
+extern int svd5_light;
+extern int svd6_light;
+
+
 extern int express_charging;
+extern int norm_charging;
 extern uint32_t seconds_tick;
 extern uint32_t battery_type;
 
 volatile int express_charging_start_moment = 0;
+volatile int norm_charging_start_moment = 0;
 
 void charge_check_task()
 {
 	static int expr_charging_started = 0;
-
-	static express_charging_start_moment = 0;
+	static int norm_charging_started = 0;
 
 	if(express_charging)
 	{
 		if(!expr_charging_started)
 		{
 			expr_charging_started = 1;
+
+			// turn off display
+			GPIOA->BRR = ind_7_seg_1_Pin;
+			GPIOA->BRR = ind_7_seg_2_Pin;
+			GPIOA->BRR = ind_7_seg_4_Pin;
+			GPIOA->BRR = ind_7_seg_8_Pin;
+
 
 			// start express charging
 			if(battery_type == 42)
@@ -33,31 +49,93 @@ void charge_check_task()
 			}
 			else if(battery_type == 21)
 			{
-				HAL_GPIO_WritePin(GPIOB, express_charge1_Pin | express_charge2_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOB, express_charge2_Pin, GPIO_PIN_SET);
+				HAL_Delay(500);
+				HAL_GPIO_WritePin(GPIOB, express_charge1_Pin, GPIO_PIN_SET);
 			}
 
 			express_charging_start_moment = seconds_tick;
 		}
 		else // started yet
 		{
+			if((GPIOB->IDR & express_charge_finish_Pin) == (uint32_t)GPIO_PIN_RESET)
+			{
+				express_charging = 0;
+			}
 
 		}
 	}
-	else // express charging is turned off
+	else if(norm_charging)
 	{
-		if(expr_charging_started)
+		if(!norm_charging_started)
 		{
-			expr_charging_started = 0;
+			norm_charging_started = 1;
 
-			// start express charging
-			if(battery_type == 21)
+			// turn off display
+			GPIOA->BRR = ind_7_seg_1_Pin;
+			GPIOA->BRR = ind_7_seg_2_Pin;
+			GPIOA->BRR = ind_7_seg_4_Pin;
+			GPIOA->BRR = ind_7_seg_8_Pin;
+
+
+			// start norm charging
+			if(battery_type == 42)
 			{
+				HAL_GPIO_WritePin(GPIOC, norm_charge1_Pin, GPIO_PIN_SET);
+				HAL_Delay(500);
 				HAL_GPIO_WritePin(GPIOB, express_charge1_Pin, GPIO_PIN_RESET);
 			}
-			else if(battery_type == 42)
+			else if(battery_type == 21)
 			{
-				HAL_GPIO_WritePin(GPIOB, express_charge1_Pin | express_charge2_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(GPIOC, norm_charge2_Pin, GPIO_PIN_SET);
+				HAL_Delay(500);
+				HAL_GPIO_WritePin(GPIOB, express_charge1_Pin, GPIO_PIN_RESET);
 			}
+
+			norm_charging_start_moment = seconds_tick;
+		}
+		else // started yet
+		{
+			if((GPIOB->IDR & express_charge_finish_Pin) == (uint32_t)GPIO_PIN_RESET)
+			{
+				norm_charging = 0;
+			}
+
+		}
+	}
+	else // express/norm charging is turned off
+	{
+		if(expr_charging_started || norm_charging_started)
+		{
+			expr_charging_started = 0;
+			norm_charging_started = 0;
+
+			// turn off leds
+			svd5_light = 0;
+			svd4_light = 0;
+
+			// turn off display
+			GPIOA->BRR = ind_7_seg_1_Pin;
+			GPIOA->BRR = ind_7_seg_2_Pin;
+			GPIOA->BRR = ind_7_seg_4_Pin;
+			GPIOA->BRR = ind_7_seg_8_Pin;
+
+
+			//turn off charging		>>>>>>>>>>>>
+			HAL_GPIO_WritePin(GPIOB, express_charge2_Pin, GPIO_PIN_SET);
+			HAL_Delay(500);
+			HAL_GPIO_WritePin(GPIOC, norm_charge1_Pin, GPIO_PIN_SET);
+			HAL_Delay(500);
+			HAL_GPIO_WritePin(GPIOC, norm_charge2_Pin, GPIO_PIN_SET);
+			HAL_Delay(500);
+			//*****
+			HAL_GPIO_WritePin(GPIOB, express_charge1_Pin, GPIO_PIN_RESET);
+			HAL_Delay(500);
+			//*****
+			HAL_GPIO_WritePin(GPIOB, express_charge2_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOC, norm_charge1_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOC, norm_charge2_Pin, GPIO_PIN_RESET);
+			//turn off charging		<<<<<<<<<<<<<
 
 		}
 		else // finished yet

@@ -65,7 +65,7 @@ void SysTick_Handler(void)
 
 void EXTI4_15_IRQHandler(void)
 {
-	HAL_GPIO_EXTI_Callback(ctc_onoff_button_exti15_Pin);
+	//HAL_GPIO_EXTI_Callback(ctc_onoff_button_exti15_Pin);
 }
 
 

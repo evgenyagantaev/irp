@@ -45,8 +45,8 @@ extern UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION   "0.1.4"
-int D_VERSION = 14;
+#define VERSION   "0.1.5"
+int D_VERSION = 15;
 
 extern ADC_HandleTypeDef hadc;
 
@@ -65,6 +65,7 @@ int svd6_light = 0;
 int alarm = 0;
 
 int express_charging = 0;
+int norm_charging = 0;
 
 
 
@@ -362,6 +363,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     //static int odd_even = 0;
 
+	/*
     if(GPIO_Pin == ctc_onoff_button_exti15_Pin)
     {
         HAL_NVIC_DisableIRQ(EXTI4_15_IRQn);
@@ -374,5 +376,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
         HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
 
     }
+    */
 
 }

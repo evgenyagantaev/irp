@@ -22,6 +22,8 @@ extern uint32_t seconds_tick;
 
 extern int express_charging;
 extern uint32_t express_charging_start_moment;
+extern int norm_charging;
+extern uint32_t norm_charging_start_moment;
 
 
 void button_polling_task()
@@ -35,16 +37,6 @@ void button_polling_task()
 			//*********** express charge button *********************************
 			if((GPIOA->IDR & SVD2_5_catode_Pin) == (uint32_t)GPIO_PIN_RESET)
 			{
-				GPIOA->BSRR = SVD2_5_catode_Pin;
-
-				if((GPIOB->IDR & batton_input_Pin) == (uint32_t)GPIO_PIN_RESET)
-				{
-					// turn on led
-					svd5_light = 1;
-					// turn on express charging
-					express_charging = 1;
-				}
-				GPIOA->BRR = SVD2_5_catode_Pin;
 			}
 			else
 			{
@@ -60,13 +52,35 @@ void button_polling_task()
 			//********************************************************************
 
 
+			//*********** norm charge button *********************************
+			if((GPIOA->IDR & SVD1_4_catode_Pin) == (uint32_t)GPIO_PIN_RESET)
+			{
+			}
+			else
+			{
+				if((GPIOB->IDR & batton_input_Pin) == (uint32_t)GPIO_PIN_RESET)
+				{
+					// turn on led
+					svd4_light = 1;
+					// turn on express charging
+					norm_charging = 1;
+					norm_charging_start_moment = seconds_tick;
+				}
+			}
+			//********************************************************************
+
+
+
 			//*********** stop button ********************************************
 			if((GPIOB->IDR & stop_button_Pin) == (uint32_t)GPIO_PIN_RESET)
 			{
 				// turn off led
 				svd5_light = 0;
+				svd4_light = 0;
+				svd6_light = 0;
 				// turn off express charging
 				express_charging = 0;
+				norm_charging = 0;
 
 			}
 

@@ -45,19 +45,19 @@
 #define stop_button_Pin GPIO_PIN_0
 #define stop_button_Pin_Port GPIOB
 
+#define norm_charge1_Pin GPIO_PIN_14
+#define norm_charge1_Port GPIOC
+#define norm_charge2_Pin GPIO_PIN_15
+#define norm_charge2_Port GPIOC
 
-#define charge50_led_green_out_Pin GPIO_PIN_11
-#define charge50_led_green_out_GPIO_Port GPIOA
-#define charge25_led_green_out_Pin GPIO_PIN_12
-#define charge25_led_green_out_GPIO_Port GPIOA
-#define ctc_onoff_button_exti15_Pin GPIO_PIN_15
-#define ctc_onoff_button_exti15_GPIO_Port GPIOA
-#define chipsel4_out_Pin GPIO_PIN_3
-#define chipsel4_out_GPIO_Port GPIOB
-#define relei_control_out_Pin GPIO_PIN_8
-#define relei_control_out_GPIO_Port GPIOB
-#define rst_out_Pin GPIO_PIN_9
-#define rst_out_GPIO_Port GPIOB
+#define fans_Pin GPIO_PIN_15
+#define fans_Port GPIOA
+#define discharge1_Pin GPIO_PIN_11
+#define discharge1_Port GPIOA
+#define discharge2_Pin GPIO_PIN_12
+#define discharge2_Port GPIOA
+
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
