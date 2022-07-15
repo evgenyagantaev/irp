@@ -7,6 +7,8 @@
 #include "main.h"
 #include "gpio.h"
 
+#include "seven_segment_display.h"
+
 extern int alarm;
 extern uint battery_type;
 extern int turn_off_display;
@@ -20,13 +22,22 @@ extern uint32_t norm_charging_start_moment;
 
 static uint32_t alarm_suspect_moment = 0;
 
-#define EXPRESS_CHARGING_TIMEOUT 45
+extern int svd1_light;
+extern int svd2_light;
+extern int svd3_light;
+extern int svd4_light;
+extern int svd5_light;
+extern int svd6_light;
+
+
+#define EXPRESS_CHARGING_TIMEOUT 10800
 #define ALARM_DROP_TIMEOUT 120
 
 void alarm_task()
 {
 	static uint32_t frozen_seconds_tick = 0;
 	static int cumulative_alarm = 0;
+	int alarm_index = 0;
 
 	if (presentation_complete)
 	{
@@ -39,15 +50,23 @@ void alarm_task()
 			for(int i=0; i<8; i++)
 			{
 				if(values[i] <= 29)
+				{
 					aux = 1;
+					alarm_index = i+1;
+				}
 			}
+
 
 			for(int i=8; i<max_index; i++)
 			{
 				int temperature = values[i] / 10 - 273;
 				if((temperature < -30) || (temperature > 50))
+				{
 					aux = 1;
+					alarm_index = i+1;
+				}
 			}
+
 
 			cumulative_alarm += aux;
 			if(aux)
@@ -68,11 +87,13 @@ void alarm_task()
 			if(((seconds_tick - express_charging_start_moment) > EXPRESS_CHARGING_TIMEOUT) && express_charging)
 			{
 				alarm = 1;
+				alarm_index = 888;
 			}
 
 			if(((seconds_tick - norm_charging_start_moment) > EXPRESS_CHARGING_TIMEOUT) && norm_charging)
 			{
 				alarm = 1;
+				alarm_index = 777;
 			}
 
 
@@ -112,9 +133,20 @@ void alarm_task()
 			HAL_GPIO_WritePin(GPIOC, norm_charge2_Pin, GPIO_PIN_RESET);
 			//turn off charging		<<<<<<<<<<<<<
 
+			svd1_light = 0;
+			svd2_light = 0;
+			svd3_light = 1;
+			svd4_light = 0;
+			svd5_light = 0;
+			svd6_light = 0;
+
+
 			while(1)
 			{
-				HAL_Delay(500);
+				if(alarm_index > 0)
+				{
+					seven_segment_display(alarm_index);
+				}
 			}
 		}
 	}

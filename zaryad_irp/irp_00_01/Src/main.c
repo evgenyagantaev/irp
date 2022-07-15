@@ -1,4 +1,8 @@
 /* Includes ------------------------------------------------------------------*/
+#define VERSION   "1.0.2"
+int D_VERSION = 102;
+
+
 #include "stm32l0xx_hal.h"
 #include "adc.h"
 #include "usart.h"
@@ -45,9 +49,6 @@ extern UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 
-#define VERSION   "0.1.5"
-int D_VERSION = 15;
-
 extern ADC_HandleTypeDef hadc;
 
 uint32_t global_debug_counter = 0;
@@ -66,6 +67,7 @@ int alarm = 0;
 
 int express_charging = 0;
 int norm_charging = 0;
+int discharging = 0;
 
 
 
