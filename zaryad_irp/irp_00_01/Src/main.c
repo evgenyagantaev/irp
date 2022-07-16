@@ -1,6 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
-#define VERSION   "1.0.2"
-int D_VERSION = 102;
+#define VERSION   "1.0.4"
+int D_VERSION = 104;
 
 
 #include "stm32l0xx_hal.h"
@@ -62,6 +62,13 @@ int svd3_light = 0;
 int svd4_light = 0;
 int svd5_light = 0;
 int svd6_light = 0;
+
+int svd1_blink;
+int svd2_blink;
+int svd3_blink;
+int svd4_blink;
+int svd5_blink;
+int svd6_blink;
 
 int alarm = 0;
 

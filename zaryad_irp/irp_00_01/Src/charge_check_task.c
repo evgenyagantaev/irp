@@ -15,6 +15,13 @@ extern int svd4_light;
 extern int svd5_light;
 extern int svd6_light;
 
+extern int svd1_blink;
+extern int svd2_blink;
+extern int svd3_blink;
+extern int svd4_blink;
+extern int svd5_blink;
+extern int svd6_blink;
+
 
 extern int express_charging;
 extern int norm_charging;
@@ -64,6 +71,8 @@ void charge_check_task()
 			if((GPIOB->IDR & express_charge_finish_Pin) == (uint32_t)GPIO_PIN_RESET)
 			{
 				express_charging = 0;
+				svd5_blink = 0;
+				svd5_light = 1;
 			}
 
 		}
@@ -86,13 +95,13 @@ void charge_check_task()
 			{
 				HAL_GPIO_WritePin(GPIOC, norm_charge1_Pin, GPIO_PIN_SET);
 				HAL_Delay(500);
-				HAL_GPIO_WritePin(GPIOB, express_charge1_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(GPIOB, express_charge1_Pin, GPIO_PIN_SET);
 			}
 			else if(battery_type == 21)
 			{
 				HAL_GPIO_WritePin(GPIOC, norm_charge2_Pin, GPIO_PIN_SET);
 				HAL_Delay(500);
-				HAL_GPIO_WritePin(GPIOB, express_charge1_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(GPIOB, express_charge1_Pin, GPIO_PIN_SET);
 			}
 
 			norm_charging_start_moment = seconds_tick;
@@ -103,6 +112,8 @@ void charge_check_task()
 			if((GPIOB->IDR & express_charge_finish_Pin) == (uint32_t)GPIO_PIN_RESET)
 			{
 				norm_charging = 0;
+				svd4_blink = 0;
+				svd4_light = 1;
 			}
 
 		}
@@ -130,7 +141,6 @@ void charge_check_task()
 			else if(battery_type == 21)
 			{
 				HAL_GPIO_WritePin(GPIOA, discharge1_Pin, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOA, discharge2_Pin, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(GPIOA, fans_Pin, GPIO_PIN_SET);
 			}
 
@@ -148,8 +158,10 @@ void charge_check_task()
 			norm_charging_started = 0;
 
 			// turn off leds
-			svd5_light = 0;
-			svd4_light = 0;
+			//svd5_light = 0;
+			//svd5_blink = 0;
+			//svd4_light = 0;
+			//svd4_blink = 0;
 
 			// turn off display
 			GPIOA->BRR = ind_7_seg_1_Pin;

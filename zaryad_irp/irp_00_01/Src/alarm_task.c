@@ -29,6 +29,13 @@ extern int svd4_light;
 extern int svd5_light;
 extern int svd6_light;
 
+extern int svd1_blink;
+extern int svd2_blink;
+extern int svd3_blink;
+extern int svd4_blink;
+extern int svd5_blink;
+extern int svd6_blink;
+
 
 #define EXPRESS_CHARGING_TIMEOUT 10800
 #define ALARM_DROP_TIMEOUT 120
@@ -136,8 +143,10 @@ void alarm_task()
 			svd1_light = 0;
 			svd2_light = 0;
 			svd3_light = 1;
-			svd4_light = 0;
 			svd5_light = 0;
+			svd5_blink = 0;
+			svd4_light = 0;
+			svd4_blink = 0;
 			svd6_light = 0;
 
 

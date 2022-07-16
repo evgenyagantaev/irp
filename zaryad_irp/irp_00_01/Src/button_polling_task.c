@@ -18,6 +18,13 @@ extern int svd4_light;
 extern int svd5_light;
 extern int svd6_light;
 
+extern int svd1_blink;
+extern int svd2_blink;
+extern int svd3_blink;
+extern int svd4_blink;
+extern int svd5_blink;
+extern int svd6_blink;
+
 extern uint32_t seconds_tick;
 
 extern int express_charging;
@@ -44,7 +51,8 @@ void button_polling_task()
 				if((GPIOB->IDR & batton_input_Pin) == (uint32_t)GPIO_PIN_RESET)
 				{
 					// turn on led
-					svd5_light = 1;
+					//svd5_light = 1;
+					svd5_blink = 1;
 					// turn on express charging
 					express_charging = 1;
 					express_charging_start_moment = seconds_tick;
@@ -62,7 +70,8 @@ void button_polling_task()
 				if((GPIOB->IDR & batton_input_Pin) == (uint32_t)GPIO_PIN_RESET)
 				{
 					// turn on led
-					svd4_light = 1;
+					//svd4_light = 1;
+					svd4_blink = 1;
 					// turn on express charging
 					norm_charging = 1;
 					norm_charging_start_moment = seconds_tick;
@@ -81,7 +90,9 @@ void button_polling_task()
 				{
 					// turn on led
 					svd5_light = 0;
+					svd5_blink = 0;
 					svd4_light = 0;
+					svd4_blink = 0;
 					svd6_light = 1;
 					// turn on discharging
 					if(express_charging || norm_charging)
@@ -104,7 +115,9 @@ void button_polling_task()
 			{
 				// turn off led
 				svd5_light = 0;
+				svd5_blink = 0;
 				svd4_light = 0;
+				svd4_blink = 0;
 				svd6_light = 0;
 				// turn off express charging
 				express_charging = 0;

@@ -18,6 +18,14 @@ extern int svd4_light;
 extern int svd5_light;
 extern int svd6_light;
 
+extern int svd1_blink;
+extern int svd2_blink;
+extern int svd3_blink;
+extern int svd4_blink;
+extern int svd5_blink;
+extern int svd6_blink;
+
+extern uint32_t seconds_tick;
 
 void seven_segment_display(uint number)
 {
@@ -94,7 +102,7 @@ void seven_segment_display(uint number)
 			GPIOA->BSRR = SVD2_5_catode_Pin;
 			if(svd2_light)
 				HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
-			if(svd5_light)
+			if(svd5_light || (svd5_blink && seconds_tick%2 == 0))
 				HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_SET);
 		}
 		else if(lightened_digit == 2)
@@ -102,7 +110,7 @@ void seven_segment_display(uint number)
 			GPIOA->BSRR = SVD1_4_catode_Pin;
 			if(svd1_light)
 				HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
-			if(svd4_light)
+			if(svd4_light || (svd4_blink && seconds_tick%2 == 0))
 				HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_SET);
 		}
 
