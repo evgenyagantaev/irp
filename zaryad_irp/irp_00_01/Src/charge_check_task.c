@@ -65,6 +65,7 @@ void charge_check_task()
 			}
 
 			express_charging_start_moment = seconds_tick;
+			HAL_Delay(1000);
 		}
 		else // started yet
 		{
@@ -105,6 +106,7 @@ void charge_check_task()
 			}
 
 			norm_charging_start_moment = seconds_tick;
+			HAL_Delay(1000);
 		}
 
 		else // started yet
