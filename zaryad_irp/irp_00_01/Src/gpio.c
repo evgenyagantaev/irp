@@ -20,11 +20,13 @@ void MX_GPIO_Init(void)
 	/* GPIO Ports Clock Enable */
 	__HAL_RCC_GPIOA_CLK_ENABLE();
 	__HAL_RCC_GPIOB_CLK_ENABLE();
+	__HAL_RCC_GPIOC_CLK_ENABLE();
 
 	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin|SVD456_anodes_Pin|SVD1_4_catode_Pin|SVD2_5_catode_Pin
 							  |SVD3_6_catode_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOB, bat_data_out_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOC, norm_charge1_Pin|norm_charge2_Pin, GPIO_PIN_RESET);
 
 	GPIO_InitStruct.Pin = bat_data_out_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
