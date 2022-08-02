@@ -94,7 +94,7 @@ void seven_segment_display(uint number)
 			GPIOA->BSRR = SVD3_6_catode_Pin;
 			if(svd3_light)
 				HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
-			if(svd6_light)
+			if(svd6_light || (svd6_blink && seconds_tick%2 == 0))
 				HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_SET);
 		}
 		else if(lightened_digit == 1)

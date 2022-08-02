@@ -39,6 +39,8 @@ extern int svd6_light;
 extern int presentation_complete;
 extern uint battery_type;
 
+extern UART_HandleTypeDef huart1;
+
 void constant_adc_measure_task()
 {
 
@@ -64,24 +66,41 @@ void constant_adc_measure_task()
 			else
 				aux = 0;
 
+			char message[64];
+
+
 			if(i < 8)
 			{
-				aux /= 100;
-				values[i] = aux;
 				battery_voltage += aux;
+
+				sprintf((char *)message, "%5d; ", aux);
+				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+
+				values[i] = aux;
+
 
 			}
 			else
 			{
+				if(aux > 0)
+					aux = (aux/10 -273);
+
+				sprintf((char *)message, "%5d; ", aux);
+				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+
 				values[i] = aux;
 			}
 
 			i++;
 			if(i >= max_index)
 			{
-				voltage = battery_voltage;
-				battery_voltage = 0;
+				voltage = battery_voltage/100;
+
 				i = 0;
+				sprintf((char *)message, "%5d;\r\n", battery_voltage);
+				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+
+				battery_voltage = 0;
 			}
 
 

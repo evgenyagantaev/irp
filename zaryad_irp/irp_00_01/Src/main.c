@@ -1,6 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
-#define VERSION   "1.0.6"
-int D_VERSION = 106;
+#define VERSION   "Version = 1.0.9"
+int D_VERSION = 109;
 
 
 #include "stm32l0xx_hal.h"
@@ -108,7 +108,7 @@ int main(void)
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     //MX_LPUART1_UART_Init();
-    //MX_USART1_UART_Init();
+    MX_USART1_UART_Init();
     //MX_SPI2_Init();
     // enable spi2
     //SPI2->CR1 |= SPI_CR1_SPE;
@@ -120,6 +120,17 @@ int main(void)
 
 
     HAL_Delay(1000);
+
+    char message[64];
+
+    sprintf((char *)message, "Hello! This is ZRU Eureca;\r\n");
+    HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+	sprintf((char *)message, VERSION);
+	HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+	sprintf((char *)message, ";\r\n");
+	HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+
+
     test_leds();
 
 

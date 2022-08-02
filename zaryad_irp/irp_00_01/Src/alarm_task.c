@@ -36,6 +36,11 @@ extern int svd4_blink;
 extern int svd5_blink;
 extern int svd6_blink;
 
+extern int express_charging;
+extern int norm_charging;
+extern int discharging;
+
+
 
 #define EXPRESS_CHARGING_TIMEOUT 10800
 #define ALARM_DROP_TIMEOUT 120
@@ -56,17 +61,30 @@ void alarm_task()
 
 			for(int i=0; i<8; i++)
 			{
-				if(values[i] <= 29)
+				if(discharging)
 				{
-					aux = 1;
-					alarm_index = i+1;
+					if(values[i]/100 <= 29)
+					{
+						aux = 1;
+						alarm_index = i+1;
+					}
+
+				}
+				else
+				{
+					if(values[i]/100 <= 28)
+					{
+						aux = 1;
+						alarm_index = i+1;
+					}
+
 				}
 			}
 
 
 			for(int i=8; i<max_index; i++)
 			{
-				int temperature = values[i] / 10 - 273;
+				int temperature = values[i];
 				if((temperature < -30) || (temperature > 50))
 				{
 					aux = 1;

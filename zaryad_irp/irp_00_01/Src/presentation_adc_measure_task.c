@@ -82,7 +82,7 @@ void presentation_adc_measure_task()
 					{
 						presentation_complete = 1;
 
-						if(values[10] == 0) // TS3 == 0K
+						if(values[10] == 0) // TS3 != 0K
 						{
 							//8lia21
 							svd2_light = 1;
@@ -98,7 +98,7 @@ void presentation_adc_measure_task()
 						voltage = 0;
 						for(int i=0; i<8; i++)
 							voltage += values[i];
-
+						voltage /= 100;
 					}
 					else
 					{
@@ -125,14 +125,21 @@ void presentation_adc_measure_task()
 
 					if(address_index > 7)
 					{
-						values[address_index] = voltage;
+
 						if(voltage > 0)
+						{
+							values[address_index] = voltage/10 -273;
 							voltage = (voltage/10 -273) * 10;
+						}
+						else
+						{
+							values[address_index] = 0;
+						}
 					}
 					else
 					{
-						voltage /= 100;
 						values[address_index] = voltage;
+						voltage /= 100;
 					}
 
 					address_index++;

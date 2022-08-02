@@ -93,7 +93,8 @@ void button_polling_task()
 					svd5_blink = 0;
 					svd4_light = 0;
 					svd4_blink = 0;
-					svd6_light = 1;
+					//svd6_light = 1;
+					svd6_blink = 1;
 					// turn on discharging
 					if(express_charging || norm_charging)
 					{
