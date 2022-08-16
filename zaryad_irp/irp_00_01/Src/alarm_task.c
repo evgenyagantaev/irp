@@ -42,7 +42,8 @@ extern int discharging;
 
 
 
-#define EXPRESS_CHARGING_TIMEOUT 10800
+#define EXPRESS_CHARGING_TIMEOUT 12600
+#define NORM_CHARGING_TIMEOUT 25200
 #define ALARM_DROP_TIMEOUT 120
 
 void alarm_task()
@@ -63,7 +64,7 @@ void alarm_task()
 			{
 				if(discharging)
 				{
-					if(values[i]/100 <= 29)
+					if((values[i]/100 <= 29) && (values[i] != 0))
 					{
 						aux = 1;
 						alarm_index = i+1;
@@ -72,7 +73,7 @@ void alarm_task()
 				}
 				else
 				{
-					if(values[i]/100 <= 28)
+					if((values[i]/100 <= 28) && (values[i] != 0))
 					{
 						aux = 1;
 						alarm_index = i+1;
@@ -115,7 +116,7 @@ void alarm_task()
 				alarm_index = 888;
 			}
 
-			if(((seconds_tick - norm_charging_start_moment) > EXPRESS_CHARGING_TIMEOUT) && norm_charging)
+			if(((seconds_tick - norm_charging_start_moment) > NORM_CHARGING_TIMEOUT) && norm_charging)
 			{
 				alarm = 1;
 				alarm_index = 777;

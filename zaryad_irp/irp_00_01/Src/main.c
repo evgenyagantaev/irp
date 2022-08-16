@@ -1,6 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
-#define VERSION   "Version = 1.0.9"
-int D_VERSION = 109;
+#define VERSION   "Version = 1.1.2"
+int D_VERSION = 112;
 
 
 #include "stm32l0xx_hal.h"

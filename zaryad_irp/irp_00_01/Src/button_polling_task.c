@@ -120,6 +120,7 @@ void button_polling_task()
 				svd4_light = 0;
 				svd4_blink = 0;
 				svd6_light = 0;
+				svd6_blink = 0;
 				// turn off express charging
 				express_charging = 0;
 				norm_charging = 0;

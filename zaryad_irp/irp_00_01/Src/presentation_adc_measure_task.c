@@ -139,6 +139,7 @@ void presentation_adc_measure_task()
 					else
 					{
 						values[address_index] = voltage;
+						voltage += 50;
 						voltage /= 100;
 					}
 
