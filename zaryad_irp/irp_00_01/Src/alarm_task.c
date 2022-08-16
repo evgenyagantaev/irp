@@ -60,6 +60,10 @@ void alarm_task()
 
 			int aux = 0;
 
+
+			// commented out for change the alarm logic:
+			// alarm, when voltage on the whole battery less then 24V
+			/*
 			for(int i=0; i<8; i++)
 			{
 				if(discharging)
@@ -81,6 +85,7 @@ void alarm_task()
 
 				}
 			}
+			*/
 
 
 			for(int i=8; i<max_index; i++)
@@ -120,6 +125,25 @@ void alarm_task()
 			{
 				alarm = 1;
 				alarm_index = 777;
+			}
+
+			int no_bad_cell_voltage = 1;
+			int battery_voltage = 0;
+			for(int i=0; i<8; i++)
+			{
+				if(values[i] != 0)
+				{
+					battery_voltage += values[i];
+				}
+				else
+				{
+					no_bad_cell_voltage = 0;
+				}
+			}
+
+			if(discharging && no_bad_cell_voltage && (battery_voltage < 24000))
+			{
+				alarm = 1;
 			}
 
 
