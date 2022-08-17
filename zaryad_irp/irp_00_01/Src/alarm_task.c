@@ -183,6 +183,17 @@ void alarm_task()
 			HAL_GPIO_WritePin(GPIOC, norm_charge2_Pin, GPIO_PIN_RESET);
 			//turn off charging		<<<<<<<<<<<<<
 
+			//turn off discharging		>>>>>>>>>>>>
+
+			HAL_GPIO_WritePin(GPIOA, discharge1_Pin, GPIO_PIN_RESET);
+			HAL_Delay(500);
+			HAL_GPIO_WritePin(GPIOA, discharge2_Pin, GPIO_PIN_RESET);
+			HAL_Delay(500);
+			HAL_GPIO_WritePin(GPIOA, fans_Pin, GPIO_PIN_RESET);
+
+			//turn off discharging		<<<<<<<<<<<<<
+
+
 			svd1_light = 0;
 			svd2_light = 0;
 			svd3_light = 1;
