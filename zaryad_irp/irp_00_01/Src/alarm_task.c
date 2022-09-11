@@ -63,7 +63,7 @@ void alarm_task()
 
 			// commented out for change the alarm logic:
 			// alarm, when voltage on the whole battery less then 24V
-			//*
+			/*
 			for(int i=0; i<8; i++)
 			{
 				if(discharging)
@@ -91,7 +91,7 @@ void alarm_task()
 			for(int i=8; i<max_index; i++)
 			{
 				int temperature = values[i];
-				if((temperature < -30) || (temperature > 50))
+				if((temperature < 3) || (temperature > 60))
 				{
 					aux = 1;
 					alarm_index = i+1;
