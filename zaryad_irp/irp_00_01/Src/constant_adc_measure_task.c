@@ -47,6 +47,8 @@ extern int express_charging;
 extern int norm_charging;
 extern int discharging;
 
+extern int recycling_mode;
+
 void constant_adc_measure_task()
 {
 
@@ -79,36 +81,42 @@ void constant_adc_measure_task()
 			{
 				if(i == 0)
 				{
-					sprintf((char *)message, "%7d; ", seconds_tick);
-					HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+					if (recycling_mode == 0)
+					{
+						sprintf((char *)message, "%7d; ", seconds_tick);
+						HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 
-					if(express_charging)
-					{
-						sprintf((char *)message, "express charging;");
-						HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
-					}
-					else if(norm_charging)
-					{
-						sprintf((char *)message, " normal charging;");
-						HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
-					}
-					else if(discharging)
-					{
-						sprintf((char *)message, "     discharging;");
-						HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
-					}
-					else
-					{
-						sprintf((char *)message, "            idle;");
-						HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+						if(express_charging)
+						{
+							sprintf((char *)message, "express charging;");
+							HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+						}
+						else if(norm_charging)
+						{
+							sprintf((char *)message, " normal charging;");
+							HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+						}
+						else if(discharging)
+						{
+							sprintf((char *)message, "     discharging;");
+							HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+						}
+						else
+						{
+							sprintf((char *)message, "            idle;");
+							HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+						}
 					}
 
 				}
 
 				battery_voltage += aux;
 
-				sprintf((char *)message, "%5d; ", aux);
-				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				if (recycling_mode == 0)
+				{
+					sprintf((char *)message, "%5d; ", aux);
+					HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				}
 
 				values[i] = aux;
 
@@ -119,8 +127,11 @@ void constant_adc_measure_task()
 				if(aux > 0)
 					aux = (aux/10 -273);
 
-				sprintf((char *)message, "%5d; ", aux);
-				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				if (recycling_mode == 0)
+				{
+					sprintf((char *)message, "%5d; ", aux);
+					HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				}
 
 				values[i] = aux;
 			}
@@ -131,8 +142,11 @@ void constant_adc_measure_task()
 				voltage = (battery_voltage + 50) / 100;
 
 				i = 0;
-				sprintf((char *)message, "%5d;\r\n", battery_voltage);
-				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				if (recycling_mode == 0)
+				{
+					sprintf((char *)message, "%5d;\r\n", battery_voltage);
+					HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				}
 
 				battery_voltage = 0;
 			}

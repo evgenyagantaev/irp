@@ -1,9 +1,3 @@
-/**
-  ******************************************************************************
-  * File Name          : TIM.h
-  * Description        : This file provides code for the configuration
-  *                      of the TIM instances.
-  ******************************************************************************
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __tim_H
 #define __tim_H

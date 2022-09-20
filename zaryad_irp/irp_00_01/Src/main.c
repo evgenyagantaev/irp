@@ -1,6 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
-#define VERSION   "Version = 1.1.6"
-int D_VERSION = 116;
+#define VERSION   "Version = 1.1.7"
+int D_VERSION = 117;
 
 
 #include "stm32l0xx_hal.h"
@@ -17,7 +17,6 @@ int D_VERSION = 116;
 #include "main.h"
 
 #include "spi_pipe.h"
-#include "ext_power_obj.h"
 #include "seven_segment_display.h"
 #include "presentation_adc_measure_task.h"
 #include "constant_adc_measure_task.h"
@@ -87,7 +86,7 @@ void test_leds(void);
 
 void alarm_task();
 
-
+void recycling_task();
 /* Private function prototypes -----------------------------------------------*/
 
 
@@ -146,6 +145,7 @@ int main(void)
     	alarm_task();
     	button_polling_task();
     	charge_check_task();
+    	recycling_task();
 
     	//ext_pow_control_task();
 		//button_interpreter_task();

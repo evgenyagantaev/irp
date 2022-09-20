@@ -126,9 +126,10 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 	GPIO_InitStruct.Alternate = GPIO_AF4_USART1;
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /* USER CODE BEGIN USART1_MspInit 1 */
-
-  /* USER CODE END USART1_MspInit 1 */
+	/* USART1 interrupt Init */
+	HAL_NVIC_SetPriority(USART1_IRQn, 13, 0);
+	HAL_NVIC_EnableIRQ(USART1_IRQn);
+	huart->Instance->CR1 |= USART_CR1_RXNEIE;
   }
 }
 

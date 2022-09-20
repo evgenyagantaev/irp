@@ -22,6 +22,8 @@ extern int read_battery_flag;
 extern int new_battery_data_available;
 extern uint16_t battery_value;
 
+extern int recycling_mode;
+
 
 void battery_control_task()
 {
@@ -327,9 +329,4 @@ int hdq_wait_for_brake()
 		return -1;
 }
 
-uint8_t hdq_read_byte()
-{
-	while(!hdq_wait_for_brake()){};
 
-	
-}
