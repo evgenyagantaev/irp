@@ -94,7 +94,7 @@ void recycling_task()
 			else if(recycling_mode == 2)
 			{
 				//recycling_discharge_duration = 17100;
-				recycling_discharge_duration = 60;
+				recycling_discharge_duration = 120;
 			}
 			else if(recycling_mode == 0)
 			{
