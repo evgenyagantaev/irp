@@ -40,6 +40,9 @@ extern int express_charging;
 extern int norm_charging;
 extern int discharging;
 
+int no_bad_cell_voltage = 1;
+int battery_voltage = 0;
+
 
 
 #define EXPRESS_CHARGING_TIMEOUT 12600
@@ -127,8 +130,8 @@ void alarm_task()
 				alarm_index = 777;
 			}
 
-			int no_bad_cell_voltage = 1;
-			int battery_voltage = 0;
+			no_bad_cell_voltage = 1;
+			battery_voltage = 0;
 			for(int i=0; i<8; i++)
 			{
 				if(values[i] != 0)

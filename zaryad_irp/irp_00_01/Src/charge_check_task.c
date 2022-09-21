@@ -33,6 +33,9 @@ volatile int express_charging_start_moment = 0;
 volatile int norm_charging_start_moment = 0;
 volatile int discharging_start_moment = 0;
 
+extern int recycling_charging;
+extern int recycling_discharging;
+
 void charge_check_task()
 {
 	static int expr_charging_started = 0;
@@ -158,6 +161,8 @@ void charge_check_task()
 		{
 			expr_charging_started = 0;
 			norm_charging_started = 0;
+			recycling_charging = 0;
+			recycling_discharging = 0;
 
 			// turn off leds
 			//svd5_light = 0;

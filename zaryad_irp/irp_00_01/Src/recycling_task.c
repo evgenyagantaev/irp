@@ -12,8 +12,17 @@ int recycling_hint = 0;
 
 extern uint battery_type;
 
+extern int norm_charging;
+extern int discharging;
 
 extern uint32_t seconds_tick;
+
+extern int no_bad_cell_voltage;
+extern int battery_voltage;
+
+int recycling_charging = 0;
+int recycling_discharging = 0;
+int stop_button_imitation = 0;
 
 
 void recycling_task()
@@ -94,7 +103,7 @@ void recycling_task()
 
 
 			// here turn on discharging
-
+			recycling_discharging = 1;
 
 
 		}
@@ -127,10 +136,11 @@ void recycling_task()
 	else if(state == 3)   // discharging
 	{
 		// here check the conditions of the discharge
-		if(seconds_tick - recycling_discharging_start_moment > recycling_discharge_duration)
+		if(   (seconds_tick - recycling_discharging_start_moment > recycling_discharge_duration) ||
+			  (no_bad_cell_voltage && (battery_voltage < 24500))   )
 		{
 			// here turn off discharge
-
+			stop_button_imitation = 1;
 
 			one_minute_pause_start_moment = seconds_tick;
 
@@ -152,6 +162,7 @@ void recycling_task()
 			// here turn on charging
 			//DEBUG
 			recycling_charging_debug_start_moment = seconds_tick;
+			recycling_charging = 1;
 
 			state = 5; // charging
 		}
@@ -161,9 +172,13 @@ void recycling_task()
 	{
 		// here check the conditions of charging completion
 		//DEBUG >>>>>>>>>>
-		if(seconds_tick - recycling_charging_debug_start_moment > 60)
+		//if(seconds_tick - recycling_charging_debug_start_moment > 60)
+		if((norm_charging == 0) && (recycling_charging == 0))
 		{
-			// here turn off discharge
+			// charging is turned off automatically
+			// but imitate stop button, just in case
+			stop_button_imitation = 1;
+
 
 			// if satisfy, go to 1 minute pause
 			one_minute_pause_start_moment = seconds_tick;

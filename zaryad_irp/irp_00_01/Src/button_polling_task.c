@@ -33,6 +33,10 @@ extern int norm_charging;
 extern uint32_t norm_charging_start_moment;
 extern int discharging;
 
+extern int recycling_charging;
+extern int recycling_discharging;
+extern int stop_button_imitation;
+
 
 void button_polling_task()
 {
@@ -67,13 +71,14 @@ void button_polling_task()
 			}
 			else
 			{
-				if((GPIOB->IDR & batton_input_Pin) == (uint32_t)GPIO_PIN_RESET)
+				if(   ((GPIOB->IDR & batton_input_Pin) == (uint32_t)GPIO_PIN_RESET)  || (recycling_charging)   )
 				{
 					// turn on led
 					//svd4_light = 1;
 					svd4_blink = 1;
 					// turn on express charging
 					norm_charging = 1;
+					recycling_charging = 0;
 					norm_charging_start_moment = seconds_tick;
 				}
 			}
@@ -86,7 +91,7 @@ void button_polling_task()
 			}
 			else
 			{
-				if((GPIOB->IDR & batton_input_Pin) == (uint32_t)GPIO_PIN_RESET)
+				if(   ((GPIOB->IDR & batton_input_Pin) == (uint32_t)GPIO_PIN_RESET)  || (recycling_discharging)   )
 				{
 					// turn on led
 					svd5_light = 0;
@@ -104,6 +109,7 @@ void button_polling_task()
 					else
 					{
 						discharging = 1;
+						recycling_discharging = 0;
 					}
 				}
 			}
@@ -112,7 +118,7 @@ void button_polling_task()
 
 
 			//*********** stop button ********************************************
-			if((GPIOB->IDR & stop_button_Pin) == (uint32_t)GPIO_PIN_RESET)
+			if(   ((GPIOB->IDR & stop_button_Pin) == (uint32_t)GPIO_PIN_RESET) || (stop_button_imitation)   )
 			{
 				// turn off led
 				svd5_light = 0;
@@ -125,6 +131,8 @@ void button_polling_task()
 				express_charging = 0;
 				norm_charging = 0;
 				discharging = 0;
+
+				stop_button_imitation = 0;
 
 			}
 
