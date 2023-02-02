@@ -144,7 +144,7 @@ void alarm_task()
 				}
 			}
 
-			if(discharging && no_bad_cell_voltage && (battery_voltage < 24000))
+			if(discharging && no_bad_cell_voltage && (battery_voltage < 23800))
 			{
 				alarm = 1;
 			}

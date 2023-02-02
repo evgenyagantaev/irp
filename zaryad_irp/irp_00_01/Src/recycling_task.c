@@ -88,13 +88,13 @@ void recycling_task()
 			recycling_discharging_start_moment = seconds_tick;
 			if(recycling_mode == 1)
 			{
-				//recycling_discharge_duration = 9000;
-				recycling_discharge_duration = 60;
+				recycling_discharge_duration = 9000;
+				//recycling_discharge_duration = 60;
 			}
 			else if(recycling_mode == 2)
 			{
-				//recycling_discharge_duration = 17100;
-				recycling_discharge_duration = 120;
+				recycling_discharge_duration = 17100;
+				//recycling_discharge_duration = 120;
 			}
 			else if(recycling_mode == 0)
 			{
@@ -137,7 +137,7 @@ void recycling_task()
 	{
 		// here check the conditions of the discharge
 		if(   (seconds_tick - recycling_discharging_start_moment > recycling_discharge_duration) ||
-			  (no_bad_cell_voltage && (battery_voltage < 24500))   )
+			  (no_bad_cell_voltage && (battery_voltage < 24000))   )
 		{
 			// here turn off discharge
 			stop_button_imitation = 1;
