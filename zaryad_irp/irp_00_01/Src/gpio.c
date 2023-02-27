@@ -23,8 +23,7 @@ void MX_GPIO_Init(void)
 	__HAL_RCC_GPIOC_CLK_ENABLE();
 
 	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin|SVD456_anodes_Pin|SVD1_4_catode_Pin|SVD2_5_catode_Pin
-							  |SVD3_6_catode_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOA, program_led_Pin|ok_led_Pin|error_led_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOB, bat_data_out_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOC, norm_charge1_Pin|norm_charge2_Pin, GPIO_PIN_RESET);
 
@@ -53,13 +52,8 @@ void MX_GPIO_Init(void)
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 
-	GPIO_InitStruct.Pin = SVD123_anodes_Pin|SVD456_anodes_Pin|SVD1_4_catode_Pin|SVD2_5_catode_Pin|SVD3_6_catode_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = ind_7_seg_1_Pin|ind_7_seg_2_Pin|ind_7_seg_4_Pin|ind_7_seg_8_Pin;
+	// led pins configuration
+	GPIO_InitStruct.Pin = program_led_Pin|ok_led_Pin|error_led_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;

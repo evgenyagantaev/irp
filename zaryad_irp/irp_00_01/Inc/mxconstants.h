@@ -2,14 +2,15 @@
 
 /* Private define ------------------------------------------------------------*/
 
-#define SVD123_anodes_Pin GPIO_PIN_0
-#define SVD123_anodes_Port GPIOA
-#define SVD456_anodes_Pin GPIO_PIN_1
-#define SVD456_anodes_Port GPIOA
+#define program_led_Pin GPIO_PIN_0
+#define program_led_Port GPIOA
+#define ok_led_Pin GPIO_PIN_1
+#define ok_led_Port GPIOA
+#define error_led_Pin GPIO_PIN_2
+#define error_led_Port GPIOA
 //***********************************
 
-#define ind_7_seg_1_Pin GPIO_PIN_2
-#define ind_7_seg_1_Port GPIOA
+
 #define ind_7_seg_2_Pin GPIO_PIN_3
 #define ind_7_seg_2_Port GPIOA
 #define ind_7_seg_4_Pin GPIO_PIN_4

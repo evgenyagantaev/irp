@@ -83,7 +83,7 @@ void TIM2_IRQHandler(void)
 	// clear it
 	(&htim2)->Instance->SR = ~TIM_IT_UPDATE;
 
-	usec10tick++;
+	//usec10tick++;
 
 	/*
 	HAL_IncTick();
@@ -128,10 +128,10 @@ void USART1_IRQHandler(void)
 				buffer[index + 1] = 0;
 				index = 0;
 
-				recycling_mode = 0;
-				recycling_length = 0;
-				recycling_hint = 0;
-				sscanf(buffer, "%d %d %d\r\n", &recycling_mode, &recycling_length, &recycling_hint);
+				//recycling_mode = 0;
+				//recycling_length = 0;
+				//recycling_hint = 0;
+				//sscanf(buffer, "%d %d %d\r\n", &recycling_mode, &recycling_length, &recycling_hint);
 			}
 			else
 			{

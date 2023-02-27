@@ -1,10 +1,9 @@
 /* Includes ------------------------------------------------------------------*/
-#define VERSION   "Version = 1.1.7"
-int D_VERSION = 117;
+#define VERSION   "Version = 0.0.1"
+int D_VERSION = 1;
 
 
 #include "stm32l0xx_hal.h"
-#include "adc.h"
 #include "usart.h"
 #include "spi.h"
 #include "tim.h"
@@ -16,65 +15,6 @@ int D_VERSION = 117;
 
 #include "main.h"
 
-#include "spi_pipe.h"
-#include "seven_segment_display.h"
-#include "presentation_adc_measure_task.h"
-#include "constant_adc_measure_task.h"
-#include "button_polling_task.h"
-#include "charge_check_task.h"
-
-
-
-/* Private variables ---------------------------------------------------------*/
-
-uint battery_type = 0;
-
-int presentation_complete = 0;
-
-int turn_off_display = 0;
-
-uint32_t seconds_tick = 0;
-
-uint8_t addresses[] = {0x14, 0x16, 0x18, 0x1a, 0x1c, 0x1e, 0x20, 0x26, 0x70, 0x72, 0x74, 0x6e};
-uint8_t battery_address = 0x14;
-
-uint16_t values[12];
-
-int read_battery_flag = 1;
-int new_battery_data_available = 0;
-uint16_t battery_value = 0xffff;
-
-extern UART_HandleTypeDef huart1;
-UART_HandleTypeDef huart2;
-SPI_HandleTypeDef hspi1;
-
-extern ADC_HandleTypeDef hadc;
-
-uint32_t global_debug_counter = 0;
-uint voltage = 0;
-
-uint64_t usec10tick = 0;
-
-int svd1_light = 0;
-int svd2_light = 0;
-int svd3_light = 0;
-int svd4_light = 0;
-int svd5_light = 0;
-int svd6_light = 0;
-
-int svd1_blink;
-int svd2_blink;
-int svd3_blink;
-int svd4_blink;
-int svd5_blink;
-int svd6_blink;
-
-int alarm = 0;
-
-int express_charging = 0;
-int norm_charging = 0;
-int discharging = 0;
-
 
 
 /* Private variables ---------------------------------------------------------*/
@@ -82,19 +22,9 @@ int discharging = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-void test_leds(void);
-
-void alarm_task();
-
-void recycling_task();
-/* Private function prototypes -----------------------------------------------*/
-
 
 int main(void)
 {
-    //const uint16_t cs_pin[] = {GPIO_PIN_0, GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3};
-
-    //char message[128];
 
     /* MCU Configuration----------------------------------------------------------*/
 
@@ -122,7 +52,7 @@ int main(void)
 
     char message[64];
 
-    sprintf((char *)message, "Hello! This is ZRU Eureca;\r\n");
+    sprintf((char *)message, "Hello! This is MKU Eureca;\r\n");
     HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 	sprintf((char *)message, VERSION);
 	HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
@@ -130,27 +60,14 @@ int main(void)
 	HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 
 
-    test_leds();
-
-
 
     // main scheduler loop
     while(1)
     {
-
-    	time_management_task();
-    	presentation_adc_measure_task();
-    	constant_adc_measure_task();
-    	seven_segment_display(voltage);
-    	alarm_task();
-    	button_polling_task();
-    	charge_check_task();
-    	recycling_task();
-
-    	//ext_pow_control_task();
-		//button_interpreter_task();
-		//battery_control_task();
-		//ctc_controller_task();
+    	HAL_GPIO_WritePin(GPIOA, program_led_Pin|ok_led_Pin|error_led_Pin, GPIO_PIN_RESET);
+    	HAL_Delay(500);
+    	HAL_GPIO_WritePin(GPIOA, program_led_Pin|ok_led_Pin|error_led_Pin, GPIO_PIN_SET);
+    	HAL_Delay(500);
 
     }
 
@@ -200,178 +117,7 @@ void SystemClock_Config(void)
 }
 
 
-void test_leds(void)
-{
-	const int DELAY = 150;
-	//while(1)
-	{
 
-
-		//*
-		HAL_GPIO_WritePin(GPIOA, SVD3_6_catode_Pin, GPIO_PIN_SET);
-
-		HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin|ind_7_seg_2_Pin|ind_7_seg_4_Pin|ind_7_seg_8_Pin, GPIO_PIN_SET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_RESET);
-
-		HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_8_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_8_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin|ind_7_seg_2_Pin|ind_7_seg_4_Pin|ind_7_seg_8_Pin, GPIO_PIN_SET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_RESET);
-
-		HAL_GPIO_WritePin(GPIOA, SVD3_6_catode_Pin, GPIO_PIN_RESET);
-
-
-
-		HAL_GPIO_WritePin(GPIOA, SVD2_5_catode_Pin, GPIO_PIN_SET);
-
-		HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin|ind_7_seg_2_Pin|ind_7_seg_4_Pin|ind_7_seg_8_Pin, GPIO_PIN_SET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_RESET);
-
-		HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_8_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_8_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin|ind_7_seg_2_Pin|ind_7_seg_4_Pin|ind_7_seg_8_Pin, GPIO_PIN_SET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_RESET);
-
-		HAL_GPIO_WritePin(GPIOA, SVD2_5_catode_Pin, GPIO_PIN_RESET);
-
-
-		HAL_GPIO_WritePin(GPIOA, SVD1_4_catode_Pin, GPIO_PIN_SET);
-
-		HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin|ind_7_seg_2_Pin|ind_7_seg_4_Pin|ind_7_seg_8_Pin, GPIO_PIN_SET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_RESET);
-
-		HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_8_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_8_Pin, GPIO_PIN_RESET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin|ind_7_seg_2_Pin|ind_7_seg_4_Pin|ind_7_seg_8_Pin, GPIO_PIN_SET);
-		HAL_Delay(DELAY);
-		HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_RESET);
-
-		HAL_GPIO_WritePin(GPIOA, SVD1_4_catode_Pin, GPIO_PIN_RESET);
-		//*/
-
-		HAL_GPIO_WritePin(GPIOA, SVD3_6_catode_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, SVD2_5_catode_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, SVD1_4_catode_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, SVD123_anodes_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, SVD456_anodes_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_1_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_2_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_4_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOA, ind_7_seg_8_Pin, GPIO_PIN_SET);
-
-		//turn off display
-		turn_off_display = 1;
-	}
-
-
-}
 
 
 /**
