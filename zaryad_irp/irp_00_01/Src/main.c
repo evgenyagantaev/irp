@@ -8,6 +8,8 @@ int D_VERSION = 1;
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
+#include "i2c.h"
+#include "i2c_lowlevel.h"
 
 #include <setjmp.h>
 #include <stdio.h>
@@ -15,13 +17,41 @@ int D_VERSION = 1;
 
 #include "main.h"
 
+#define CONTROL_CMD 0x00
+#define SEALED_CMD 0x20
+#define UNLOCK_CMD 0x22
+#define WRITE_EXT_DATA_CMD 0x4A
+#define DATA_BLOCK_CMD 0x40
+#define LOCK_CMD 0x21
+#define EXIT_CMD 0x02
 
+extern I2C_HandleTypeDef hi2c1;
 
 /* Private variables ---------------------------------------------------------*/
 
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+
+// Send an I2C command to the bq27541
+void bq27541_send_i2c_cmd(uint8_t cmd)
+{
+    // Wait for the I2C bus to be ready
+    while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY);
+
+    // Send the command over the I2C interface
+    HAL_I2C_Master_Transmit(&hi2c1, 0x55, &cmd, 1, HAL_MAX_DELAY);
+}
+
+// Write data bytes to the EDB using the DataBlock() command
+void bq27541_write_edb_data(uint8_t *data, uint8_t length)
+{
+    // Send the DataBlock() command with the appropriate length
+    bq27541_send_i2c_cmd(DATA_BLOCK_CMD | length);
+
+    // Write the data bytes to the EDB
+    HAL_I2C_Master_Transmit(&hi2c1, 0x55, data, length, HAL_MAX_DELAY);
+}
 
 int main(void)
 {
@@ -45,6 +75,7 @@ int main(void)
     MX_TIM2_Init();
     //MX_TIM21_Init();
     //MX_TIM22_Init();
+    MX_I2C1_Init();
 
 
 
@@ -59,7 +90,46 @@ int main(void)
 	sprintf((char *)message, ";\r\n");
 	HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 
+	// Put the bq27541 into Configuration mode
+	bq27541_send_i2c_cmd(CONTROL_CMD);
 
+	// Enter the Sealed state
+	bq27541_send_i2c_cmd(SEALED_CMD);
+
+	// Unlock the device
+	bq27541_send_i2c_cmd(UNLOCK_CMD);
+
+	// Write the HDQ configuration data to the EDB
+	uint8_t hdq_data[] = {
+	    0x00, 0x1C, 0x04, 0x0C, 0x00, 0x06, 0x00, 0x02,
+	    0x3C, 0x40, 0x64, 0x07, 0x40, 0x07, 0x60, 0x05,
+	    0x1E, 0x08, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00,
+	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	};
+	bq27541_write_edb_data(hdq_data, sizeof(hdq_data));
+
+	// Lock the device
+	bq27541_send_i2c_cmd(LOCK_CMD);
+
+	// Exit the Configuration mode
+	bq27541_send_i2c_cmd(EXIT_CMD);
+
+	// Switch the bq27541 to HDQ mode
+	bq27541_send_i2c_cmd(WRITE_EXT_DATA_CMD);
+	uint8_t hdq_mode[] = {0x02};  // HDQ mode enabled
+	bq27541_write_edb_data(hdq_mode, sizeof(hdq_mode));
+
+	// Put the bq27541 into Configuration mode again
+	bq27541_send_i2c_cmd(CONTROL_CMD);
+
+	// Enter the Sealed state
+	bq27541_send_i2c_cmd(SEALED_CMD);
+
+	// Lock the device
+	bq27541_send_i2c_cmd(LOCK_CMD);
+
+	// Exit the Configuration mode
+	bq27541_send_i2c_cmd(EXIT_CMD);
 
     // main scheduler loop
     while(1)
