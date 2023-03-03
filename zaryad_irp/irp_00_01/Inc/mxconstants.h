@@ -32,6 +32,10 @@
 #define bat_data_in_Pin GPIO_PIN_6
 #define bat_data_in_Port GPIOB
 //************************************
+#define i2c_sda_Pin GPIO_PIN_7
+#define i2c_sda_Port GPIOB
+#define i2c_scl_Pin GPIO_PIN_6
+#define i2c_scl_Port GPIOB
 
 #define batton_input_Pin GPIO_PIN_1
 #define batton_input_Port GPIOB

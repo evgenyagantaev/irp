@@ -27,6 +27,7 @@ void MX_GPIO_Init(void)
 	HAL_GPIO_WritePin(GPIOB, bat_data_out_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOC, norm_charge1_Pin|norm_charge2_Pin, GPIO_PIN_RESET);
 
+	/*
 	GPIO_InitStruct.Pin = bat_data_out_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
@@ -38,6 +39,7 @@ void MX_GPIO_Init(void)
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	*/
 
 	GPIO_InitStruct.Pin = batton_input_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
@@ -59,7 +61,8 @@ void MX_GPIO_Init(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = express_charge1_Pin | express_charge2_Pin;
+	// i2c pins configuration
+	GPIO_InitStruct.Pin = i2c_sda_Pin | i2c_scl_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;

@@ -75,7 +75,7 @@ int main(void)
     MX_TIM2_Init();
     //MX_TIM21_Init();
     //MX_TIM22_Init();
-    MX_I2C1_Init();
+    //MX_I2C1_Init();
 
 
 
@@ -134,10 +134,14 @@ int main(void)
     // main scheduler loop
     while(1)
     {
-    	HAL_GPIO_WritePin(GPIOA, program_led_Pin|ok_led_Pin|error_led_Pin, GPIO_PIN_RESET);
-    	HAL_Delay(500);
-    	HAL_GPIO_WritePin(GPIOA, program_led_Pin|ok_led_Pin|error_led_Pin, GPIO_PIN_SET);
-    	HAL_Delay(500);
+    	//HAL_GPIO_WritePin(GPIOA, program_led_Pin|ok_led_Pin|error_led_Pin, GPIO_PIN_RESET);
+    	//HAL_Delay(500);
+    	//HAL_GPIO_WritePin(GPIOA, program_led_Pin|ok_led_Pin|error_led_Pin, GPIO_PIN_SET);
+    	//HAL_Delay(500);
+
+    	uint8_t data = 0x55;
+
+    	i2c_send_byte(data);
 
     }
 
