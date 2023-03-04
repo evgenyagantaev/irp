@@ -35,6 +35,8 @@ uint8_t i2c_send_byte(uint8_t byte_to_send);
 uint8_t i2c_receive_byte(uint8_t *byte_to_save_in, uint8_t ack_nack);
 
 uint16_t read_status();
+uint16_t read_device_type_bq27541();
+float read_temperature_bq27541();
 void test_slave_on_bus();
 
 #endif /* INC_I2C_LOWLEVEL_H_ */

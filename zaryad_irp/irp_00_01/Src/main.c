@@ -25,6 +25,9 @@ int D_VERSION = 1;
 #define LOCK_CMD 0x21
 #define EXIT_CMD 0x02
 
+#define BQ27541_ADDRESS_WRITE 0xaa
+#define BQ27541_ADDRESS_READ 0xab
+
 extern I2C_HandleTypeDef hi2c1;
 
 /* Private variables ---------------------------------------------------------*/
@@ -90,6 +93,7 @@ int main(void)
 	sprintf((char *)message, ";\r\n");
 	HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 
+	/*
 	// Put the bq27541 into Configuration mode
 	bq27541_send_i2c_cmd(CONTROL_CMD);
 
@@ -130,6 +134,7 @@ int main(void)
 
 	// Exit the Configuration mode
 	bq27541_send_i2c_cmd(EXIT_CMD);
+	*/
 
     // main scheduler loop
     while(1)
@@ -139,9 +144,14 @@ int main(void)
     	//HAL_GPIO_WritePin(GPIOA, program_led_Pin|ok_led_Pin|error_led_Pin, GPIO_PIN_SET);
     	//HAL_Delay(500);
 
-    	uint8_t data = 0x55;
+    	//uint8_t data = 0x55;
+    	//i2c_send_byte(data);
 
-    	i2c_send_byte(data);
+    	uint16_t status = read_device_type_bq27541();
+    	HAL_Delay(500);
+    	float temperature = read_temperature_bq27541();
+
+    	HAL_Delay(500);
 
     }
 

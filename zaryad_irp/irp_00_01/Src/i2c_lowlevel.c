@@ -4,6 +4,13 @@
 
 extern UART_HandleTypeDef huart1;
 
+#define BQ27541_ADDRESS_WRITE 0xaa
+#define BQ27541_ADDRESS_READ 0xab
+#define CONTROL_CMD_L 0x00
+#define CONTROL_CMD_H 0x01
+#define CMD_TEMPERATURE 0x06
+
+
 void pause_1250_usec(void)
 {
 	volatile int i;
@@ -256,6 +263,68 @@ uint16_t read_status()
 
 	return_value = (((uint16_t)data_h)<<8) + data_l;
 }
+
+uint16_t read_device_type_bq27541()
+{
+	uint16_t return_value = 0;
+	uint8_t data_l, data_h = 0;
+
+	//***
+	i2c_send_START();
+	i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
+	i2c_send_byte(CONTROL_CMD_L);						// register
+	i2c_send_byte(0x01);
+	i2c_send_STOP();
+	//***
+	i2c_send_START();
+	i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
+	i2c_send_byte(CONTROL_CMD_H);						// register
+	i2c_send_byte(0x00);
+	i2c_send_STOP();
+	//***
+	i2c_send_START();
+	i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
+	i2c_send_byte(CONTROL_CMD_L);						// register
+	i2c_send_STOP();
+	//***
+	pause_1000_usec();
+	//***
+	i2c_send_START();
+	i2c_send_byte(BQ27541_ADDRESS_READ);
+	i2c_receive_byte(&data_l, 1); // ack
+	i2c_receive_byte(&data_h, 0); // nack
+	i2c_send_STOP();
+
+	return_value = (((uint16_t)data_h)<<8) + data_l;
+
+	return return_value;
+}
+
+float read_temperature_bq27541()
+{
+	uint16_t temperature = 0;
+	uint8_t data_l, data_h = 0;
+	float return_value = 0.0;
+
+	i2c_send_START();
+	i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
+	i2c_send_byte(CMD_TEMPERATURE);						// register
+	i2c_send_STOP();
+	//***
+	pause_1000_usec();
+	//***
+	i2c_send_START();
+	i2c_send_byte(BQ27541_ADDRESS_READ);
+	i2c_receive_byte(&data_l, 1); // ack
+	i2c_receive_byte(&data_h, 0); // nack
+	i2c_send_STOP();
+
+	temperature = (((uint16_t)data_h)<<8) + data_l;
+	return_value = ((float)temperature) * 0.1 - 273.1;
+
+	return return_value;
+}
+
 
 void write_configuration(uint16_t configuration)
 {
