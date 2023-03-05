@@ -9,6 +9,8 @@ extern UART_HandleTypeDef huart1;
 #define CONTROL_CMD_L 0x00
 #define CONTROL_CMD_H 0x01
 #define CMD_TEMPERATURE 0x06
+#define HW_VERSION_L 0x00
+#define HW_VERSION_H 0x03
 
 
 void pause_1250_usec(void)
@@ -323,6 +325,128 @@ float read_temperature_bq27541()
 	return_value = ((float)temperature) * 0.1 - 273.1;
 
 	return return_value;
+}
+
+uint16_t get_hw_version_bq27541()
+{
+	uint16_t return_value = 0;
+		uint8_t data_l, data_h = 0;
+
+		//***
+		i2c_send_START();
+		i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
+		i2c_send_byte(CONTROL_CMD_L);						// register
+		i2c_send_byte(HW_VERSION_H);
+		i2c_send_STOP();
+		//***
+		i2c_send_START();
+		i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
+		i2c_send_byte(CONTROL_CMD_H);						// register
+		i2c_send_byte(HW_VERSION_L);
+		i2c_send_STOP();
+		//***
+		i2c_send_START();
+		i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
+		i2c_send_byte(CONTROL_CMD_L);						// register
+		i2c_send_STOP();
+		//***
+		pause_1000_usec();
+		//***
+		i2c_send_START();
+		i2c_send_byte(BQ27541_ADDRESS_READ);
+		i2c_receive_byte(&data_l, 1); // ack
+		i2c_receive_byte(&data_h, 0); // nack
+		i2c_send_STOP();
+
+		return_value = (((uint16_t)data_h)<<8) + data_l;
+
+		return return_value;
+}
+
+void set_hdq_mode()
+{
+	// Write Command 0x00 and Data 0x0F00
+	i2c_send_START();
+	i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
+	i2c_send_byte(CONTROL_CMD_L);						// register
+	i2c_send_byte(0x0f);
+	i2c_send_STOP();
+	//***
+	i2c_send_START();
+	i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
+	i2c_send_byte(CONTROL_CMD_H);						// register
+	i2c_send_byte(0x00);
+	i2c_send_STOP();
+	//***
+	pause_1000_usec();
+	//***
+
+	// I2C device address 0x16 is used for all remaining communication
+
+	// I2C Command 0x00: Byte 0x16
+	i2c_send_START();
+	i2c_send_byte(0x16);  				// special I2C device address
+	i2c_send_byte(CONTROL_CMD_L);		// register
+	i2c_send_byte(0x16);
+	i2c_send_STOP();
+	//***
+	pause_1000_usec();
+	//***
+	// I2C Command 0x04: Byte 0x05
+	i2c_send_START();
+	i2c_send_byte(0x16);  				// special I2C device address
+	i2c_send_byte(0x04);				// register
+	i2c_send_byte(0x05);
+	i2c_send_STOP();
+	//***
+	pause_1000_usec();
+	//***
+	// I2C Command 0x64: Byte 0x1B
+	i2c_send_START();
+	i2c_send_byte(0x16);  				// special I2C device address
+	i2c_send_byte(0x64);				// register
+	i2c_send_byte(0x1B);
+	i2c_send_STOP();
+	//***
+	pause_1000_usec();
+	//***
+	// I2C Command 0x65: Byte 0x00
+	i2c_send_START();
+	i2c_send_byte(0x16);  				// special I2C device address
+	i2c_send_byte(0x65);				// register
+	i2c_send_byte(0x00);
+	i2c_send_STOP();
+	//***
+	pause_1000_usec();
+	//***
+	// I2C Command 0x00: Byte 0x0F
+	i2c_send_START();
+	i2c_send_byte(0x16);  				// special I2C device address
+	i2c_send_byte(0x00);				// register
+	i2c_send_byte(0x0F);
+	i2c_send_STOP();
+	//***
+	pause_1000_usec();
+	//***
+	// I2C Command 0x64: Byte 0x0F
+	i2c_send_START();
+	i2c_send_byte(0x16);  				// special I2C device address
+	i2c_send_byte(0x64);				// register
+	i2c_send_byte(0x0F);
+	i2c_send_STOP();
+	//***
+	pause_1000_usec();
+	//***
+	// I2C Command 0x65: Byte 0x00
+	i2c_send_START();
+	i2c_send_byte(0x16);  				// special I2C device address
+	i2c_send_byte(0x65);				// register
+	i2c_send_byte(0x00);
+	i2c_send_STOP();
+	//***
+	pause_1000_usec();
+	//***
+
 }
 
 
