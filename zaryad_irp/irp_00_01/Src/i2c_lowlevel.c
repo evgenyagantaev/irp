@@ -365,87 +365,94 @@ uint16_t get_hw_version_bq27541()
 
 void set_hdq_mode()
 {
-	// Write Command 0x00 and Data 0x0F00
-	i2c_send_START();
-	i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
-	i2c_send_byte(CONTROL_CMD_L);						// register
-	i2c_send_byte(0x0f);
-	i2c_send_STOP();
-	//***
-	i2c_send_START();
-	i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
-	i2c_send_byte(CONTROL_CMD_H);						// register
-	i2c_send_byte(0x00);
-	i2c_send_STOP();
-	//***
-	pause_1000_usec();
-	//***
+	uint8_t ack_nack;
+	uint8_t read_byte;
 
-	// I2C device address 0x16 is used for all remaining communication
+	i2c_send_START();
+	ack_nack = i2c_send_byte(0x16);					// 0
+	i2c_send_STOP();
+	pause_1000_usec();
 
-	// I2C Command 0x00: Byte 0x16
 	i2c_send_START();
-	i2c_send_byte(0x16);  				// special I2C device address
-	i2c_send_byte(CONTROL_CMD_L);		// register
-	i2c_send_byte(0x16);
+	ack_nack = i2c_send_byte(0xaa);					// 1
+	ack_nack = i2c_send_byte(0x00);					// 1
+	i2c_send_START_REPEAT();
+	ack_nack = i2c_send_byte(0xab);					// 1
+	read_byte = i2c_receive_byte(&read_byte, 1);		// 0x94 ack
+	read_byte = i2c_receive_byte(&read_byte, 0);		// 0x00 nack
 	i2c_send_STOP();
-	//***
 	pause_1000_usec();
-	//***
-	// I2C Command 0x04: Byte 0x05
+
 	i2c_send_START();
-	i2c_send_byte(0x16);  				// special I2C device address
-	i2c_send_byte(0x04);				// register
-	i2c_send_byte(0x05);
+	ack_nack = i2c_send_byte(0x16);					// 0
 	i2c_send_STOP();
-	//***
 	pause_1000_usec();
-	//***
-	// I2C Command 0x64: Byte 0x1B
+
 	i2c_send_START();
-	i2c_send_byte(0x16);  				// special I2C device address
-	i2c_send_byte(0x64);				// register
-	i2c_send_byte(0x1B);
+	ack_nack = i2c_send_byte(0xaa);					// 1
+	ack_nack = i2c_send_byte(0x00);					// 1
+	ack_nack = i2c_send_byte(0x00);					// 1
+	ack_nack = i2c_send_byte(0x0f);					// 1
 	i2c_send_STOP();
-	//***
 	pause_1000_usec();
-	//***
-	// I2C Command 0x65: Byte 0x00
+
 	i2c_send_START();
-	i2c_send_byte(0x16);  				// special I2C device address
-	i2c_send_byte(0x65);				// register
-	i2c_send_byte(0x00);
+	ack_nack = i2c_send_byte(0x16);					// 1
+	ack_nack = i2c_send_byte(0x00);					// 1
+	ack_nack = i2c_send_byte(0x0d);					// 1
+	ack_nack = i2c_send_byte(0x00);					// 1
 	i2c_send_STOP();
-	//***
 	pause_1000_usec();
-	//***
-	// I2C Command 0x00: Byte 0x0F
+
 	i2c_send_START();
-	i2c_send_byte(0x16);  				// special I2C device address
-	i2c_send_byte(0x00);				// register
-	i2c_send_byte(0x0F);
+	ack_nack = i2c_send_byte(0x16);					// 1
+	ack_nack = i2c_send_byte(0x64);					// 1
+	ack_nack = i2c_send_byte(0x0d);					// 1
+	ack_nack = i2c_send_byte(0x00);					// 1
 	i2c_send_STOP();
-	//***
 	pause_1000_usec();
-	//***
-	// I2C Command 0x64: Byte 0x0F
+
 	i2c_send_START();
-	i2c_send_byte(0x16);  				// special I2C device address
-	i2c_send_byte(0x64);				// register
-	i2c_send_byte(0x0F);
+	ack_nack = i2c_send_byte(0x16);					// 1
+	ack_nack = i2c_send_byte(0x04);					// 1
+	i2c_send_START_REPEAT();
+	ack_nack = i2c_send_byte(0x17);					// 1
+	read_byte = i2c_receive_byte(&read_byte, 1);		// 0x04 ack
+	read_byte = i2c_receive_byte(&read_byte, 0);		// 0x04 nack
 	i2c_send_STOP();
-	//***
 	pause_1000_usec();
-	//***
-	// I2C Command 0x65: Byte 0x00
+
 	i2c_send_START();
-	i2c_send_byte(0x16);  				// special I2C device address
-	i2c_send_byte(0x65);				// register
-	i2c_send_byte(0x00);
+	ack_nack = i2c_send_byte(0x16);					// 1
+	ack_nack = i2c_send_byte(0x00);					// 1
+	ack_nack = i2c_send_byte(0x16);					// 1
 	i2c_send_STOP();
-	//***
 	pause_1000_usec();
-	//***
+
+	i2c_send_START();
+	ack_nack = i2c_send_byte(0x16);					// 1
+	ack_nack = i2c_send_byte(0x04);					// 1
+	ack_nack = i2c_send_byte(0x05);					// 1
+	i2c_send_STOP();
+	pause_1000_usec();
+
+	i2c_send_START();
+	ack_nack = i2c_send_byte(0x16);					// 1
+	ack_nack = i2c_send_byte(0x64);					// 1
+	ack_nack = i2c_send_byte(0x1b);					// 1
+	ack_nack = i2c_send_byte(0x00);					// 1
+	i2c_send_STOP();
+	pause_1000_usec();
+
+	i2c_send_START();
+	ack_nack = i2c_send_byte(0x16);					// 1
+	ack_nack = i2c_send_byte(0x00);					// 1
+	i2c_send_START_REPEAT();
+	ack_nack = i2c_send_byte(0x17);					// 1
+	read_byte = i2c_receive_byte(&read_byte, 1);		// 0x16 ack
+	read_byte = i2c_receive_byte(&read_byte, 0);		// 0x00 nack
+	i2c_send_STOP();
+	pause_1000_usec();
 
 }
 

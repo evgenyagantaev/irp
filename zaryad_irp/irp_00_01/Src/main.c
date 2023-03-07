@@ -150,6 +150,12 @@ int main(void)
     	uint16_t status = read_device_type_bq27541();
     	HAL_Delay(500);
     	float temperature = read_temperature_bq27541();
+    	HAL_Delay(500);
+    	uint16_t version = get_hw_version_bq27541();
+
+    	HAL_Delay(500);
+
+    	set_hdq_mode();
 
     	HAL_Delay(500);
 
