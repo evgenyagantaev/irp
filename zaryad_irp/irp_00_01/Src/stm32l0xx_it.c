@@ -12,14 +12,7 @@
 
 extern TIM_HandleTypeDef htim2;
 
-extern uint32_t global_debug_counter;
-extern uint voltage;
-
-extern uint64_t usec10tick;
-
-extern int recycling_mode;
-extern int recycling_length;
-extern int recycling_hint;
+extern int do_loop;
 
 /******************************************************************************/
 /*            Cortex-M0+ Processor Interruption and Exception Handlers         */ 
@@ -128,10 +121,7 @@ void USART1_IRQHandler(void)
 				buffer[index + 1] = 0;
 				index = 0;
 
-				//recycling_mode = 0;
-				//recycling_length = 0;
-				//recycling_hint = 0;
-				//sscanf(buffer, "%d %d %d\r\n", &recycling_mode, &recycling_length, &recycling_hint);
+				do_loop = 0;
 			}
 			else
 			{
