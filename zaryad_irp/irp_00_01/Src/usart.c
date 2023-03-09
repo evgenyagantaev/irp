@@ -127,9 +127,9 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 	/* USART1 interrupt Init */
-	//HAL_NVIC_SetPriority(USART1_IRQn, 13, 0);
-	//HAL_NVIC_EnableIRQ(USART1_IRQn);
-	//huart->Instance->CR1 |= USART_CR1_RXNEIE;
+	HAL_NVIC_SetPriority(USART1_IRQn, 13, 0);
+	HAL_NVIC_EnableIRQ(USART1_IRQn);
+	huart->Instance->CR1 |= USART_CR1_RXNEIE;
   }
 }
 

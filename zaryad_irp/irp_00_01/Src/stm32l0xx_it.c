@@ -13,6 +13,8 @@
 extern TIM_HandleTypeDef htim2;
 
 extern int do_loop;
+extern int usart_new_char_received;
+extern char new_char;
 
 /******************************************************************************/
 /*            Cortex-M0+ Processor Interruption and Exception Handlers         */ 
@@ -114,6 +116,8 @@ void USART1_IRQHandler(void)
 		{
 			usart_data = (uint16_t) USART1->RDR;
 			char last_received_simbol = (char)usart_data;
+			usart_new_char_received = 1;
+			new_char = last_received_simbol;
 			buffer[index] = last_received_simbol;
 
 			if(last_received_simbol == '\n' || last_received_simbol == '\r')

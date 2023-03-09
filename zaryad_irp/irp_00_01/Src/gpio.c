@@ -63,10 +63,12 @@ void MX_GPIO_Init(void)
 
 	// i2c pins configuration
 	GPIO_InitStruct.Pin = i2c_sda_Pin | i2c_scl_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+	HAL_GPIO_WritePin(GPIOB, i2c_sda_Pin | i2c_scl_Pin, GPIO_PIN_SET);
 
 	GPIO_InitStruct.Pin = express_charge_finish_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;

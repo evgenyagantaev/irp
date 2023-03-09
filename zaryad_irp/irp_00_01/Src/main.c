@@ -32,7 +32,8 @@ extern I2C_HandleTypeDef hi2c1;
 
 // global variables
 volatile int do_loop = 1;
-
+volatile int usart_new_char_received = 0;
+volatile char new_char;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -85,6 +86,12 @@ int main(void)
 			uint8_t channel_select_value = 0x04 + j;
 
 			uint8_t ack_nack;
+			// reset bus
+			i2c_send_STOP();
+			i2c_send_START();
+			ack_nack = i2c_send_byte(0xff);
+			i2c_send_STOP();
+			//**************
 			// select multiplexor and channel
 			i2c_send_START();
 			ack_nack = i2c_send_byte(mult_address);							// 1
@@ -93,12 +100,41 @@ int main(void)
 			//************************************************
 
 			do_loop = 1; // volatile
-			while(do_loop)
+			int counter = 0;
+			while(do_loop && counter < 3000)
 			{
-				i2c_send_byte(0x55);
+				uint16_t status = read_device_type_bq27541();
+				HAL_Delay(500);
+				float temperature = read_temperature_bq27541();
+				HAL_Delay(500);
+				uint16_t version = get_hw_version_bq27541();
+
+				HAL_Delay(500);
+
+				set_hdq_mode();
+
+				HAL_Delay(500);
+
 			}
 
+			// reset bus
+			i2c_send_STOP();
+			i2c_send_START();
+			ack_nack = i2c_send_byte(0xff);
+			i2c_send_STOP();
+			//**************
+			// deselect all channels
+			i2c_send_START();
+			ack_nack = i2c_send_byte(mult_address);							// 1
+			ack_nack = i2c_send_byte(0x00);					// 1
+			i2c_send_STOP();
+
 		}
+	}
+
+	while(1)
+	{
+
 	}
 
 
