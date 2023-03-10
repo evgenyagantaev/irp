@@ -1,6 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
-#define VERSION   "Version = 1.1.1"
-int D_VERSION = 111;
+#define VERSION   "Version = 1.1.2"
+int D_VERSION = 112;
 
 
 #include "stm32l0xx_hal.h"
@@ -64,7 +64,7 @@ int main(void)
 
 
 
-    HAL_Delay(1000);
+    HAL_Delay(100);
 
     char message[64];
 
@@ -80,7 +80,7 @@ int main(void)
 	uint8_t success[12];
 
 
-	for(int i=0; i<5; i++)
+	for(int i=0; i<2; i++)
 	{
 		HAL_GPIO_WritePin(GPIOA, program_led_Pin|ok_led_Pin|error_led_Pin, GPIO_PIN_SET);
 		HAL_Delay(500);
