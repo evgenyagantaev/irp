@@ -271,6 +271,12 @@ uint16_t read_device_type_bq27541()
 	uint16_t return_value = 0;
 	uint8_t data_l, data_h = 0;
 
+	// reset bus
+	i2c_send_STOP();
+	i2c_send_START();
+	i2c_send_byte(0xff);
+	i2c_send_STOP();
+
 	//***
 	i2c_send_START();
 	i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
@@ -308,6 +314,13 @@ float read_temperature_bq27541()
 	uint8_t data_l, data_h = 0;
 	float return_value = 0.0;
 
+	// reset bus
+	i2c_send_STOP();
+	i2c_send_START();
+	i2c_send_byte(0xff);
+	i2c_send_STOP();
+
+	//***
 	i2c_send_START();
 	i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
 	i2c_send_byte(CMD_TEMPERATURE);						// register
@@ -330,37 +343,43 @@ float read_temperature_bq27541()
 uint16_t get_hw_version_bq27541()
 {
 	uint16_t return_value = 0;
-		uint8_t data_l, data_h = 0;
+	uint8_t data_l, data_h = 0;
 
-		//***
-		i2c_send_START();
-		i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
-		i2c_send_byte(CONTROL_CMD_L);						// register
-		i2c_send_byte(HW_VERSION_H);
-		i2c_send_STOP();
-		//***
-		i2c_send_START();
-		i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
-		i2c_send_byte(CONTROL_CMD_H);						// register
-		i2c_send_byte(HW_VERSION_L);
-		i2c_send_STOP();
-		//***
-		i2c_send_START();
-		i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
-		i2c_send_byte(CONTROL_CMD_L);						// register
-		i2c_send_STOP();
-		//***
-		pause_1000_usec();
-		//***
-		i2c_send_START();
-		i2c_send_byte(BQ27541_ADDRESS_READ);
-		i2c_receive_byte(&data_l, 1); // ack
-		i2c_receive_byte(&data_h, 0); // nack
-		i2c_send_STOP();
+	// reset bus
+	i2c_send_STOP();
+	i2c_send_START();
+	i2c_send_byte(0xff);
+	i2c_send_STOP();
 
-		return_value = (((uint16_t)data_h)<<8) + data_l;
+	//***
+	i2c_send_START();
+	i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
+	i2c_send_byte(CONTROL_CMD_L);						// register
+	i2c_send_byte(HW_VERSION_H);
+	i2c_send_STOP();
+	//***
+	i2c_send_START();
+	i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
+	i2c_send_byte(CONTROL_CMD_H);						// register
+	i2c_send_byte(HW_VERSION_L);
+	i2c_send_STOP();
+	//***
+	i2c_send_START();
+	i2c_send_byte(BQ27541_ADDRESS_WRITE);  		// write command
+	i2c_send_byte(CONTROL_CMD_L);						// register
+	i2c_send_STOP();
+	//***
+	pause_1000_usec();
+	//***
+	i2c_send_START();
+	i2c_send_byte(BQ27541_ADDRESS_READ);
+	i2c_receive_byte(&data_l, 1); // ack
+	i2c_receive_byte(&data_h, 0); // nack
+	i2c_send_STOP();
 
-		return return_value;
+	return_value = (((uint16_t)data_h)<<8) + data_l;
+
+	return return_value;
 }
 
 void set_hdq_mode()
@@ -368,6 +387,13 @@ void set_hdq_mode()
 	uint8_t ack_nack;
 	uint8_t read_byte;
 
+	// reset bus
+	i2c_send_STOP();
+	i2c_send_START();
+	ack_nack = i2c_send_byte(0xff);
+	i2c_send_STOP();
+
+	//***
 	i2c_send_START();
 	ack_nack = i2c_send_byte(0x16);					// 0
 	i2c_send_STOP();
