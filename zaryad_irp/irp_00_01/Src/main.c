@@ -1,6 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
-#define VERSION   "Version = 1.1.2"
-int D_VERSION = 112;
+#define VERSION   "Version = 1.1.3"
+int D_VERSION = 113;
 
 
 #include "stm32l0xx_hal.h"
@@ -66,7 +66,7 @@ int main(void)
 
     HAL_Delay(100);
 
-    char message[64];
+    char message[256];
 
     sprintf((char *)message, "MKU\r\n");
     HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
@@ -79,7 +79,7 @@ int main(void)
 	uint8_t channel_indexes[] = {0x02, 0x03, 0x01, 0x00};
 	uint8_t success[12];
 
-
+	/*
 	for(int i=0; i<2; i++)
 	{
 		HAL_GPIO_WritePin(GPIOA, program_led_Pin|ok_led_Pin|error_led_Pin, GPIO_PIN_SET);
@@ -87,6 +87,8 @@ int main(void)
 		HAL_GPIO_WritePin(GPIOA, program_led_Pin|ok_led_Pin|error_led_Pin, GPIO_PIN_RESET);
 		HAL_Delay(500);
 	}
+	//*/
+
 	HAL_GPIO_WritePin(GPIOA, program_led_Pin|ok_led_Pin|error_led_Pin, GPIO_PIN_SET);
 
 	for(int i=0; i<4; i++)
@@ -110,56 +112,57 @@ int main(void)
  			ack_nack = i2c_send_byte(channel_select_value);					// 1
 			i2c_send_STOP();
 			//************************************************
-
-
-			sprintf((char *)message, "\r\n#%d--->\r\n", i * 3 + j + 1);
-			HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
-			sprintf((char *)message, "BEFORE...\r\n");
-			HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+			UNUSED(ack_nack);
 
 			success[i * 3 + j] = 1;
 			uint16_t dev_type = read_device_type_bq27541();
-			if(dev_type != 0x541) success[i * 3 + j] = 0;
-			sprintf((char *)message, "device type = 0x%x\r\n", dev_type);
-			HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
-			float temperature = read_temperature_bq27541();
-			sprintf((char *)message, "temperature = %d\r\n", (int)temperature);
-			HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
-			uint16_t version = get_hw_version_bq27541();
-			sprintf((char *)message, "hardware version = 0x%x\r\n", dev_type);
-			HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+			if(dev_type != 0x541)
+			{
+				success[i * 3 + j] = 0;
+
+				sprintf((char *)message, "\r\n#%d--->\r\n", i * 3 + j + 1);
+				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				sprintf((char *)message, "BEFORE...\r\n");
+				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				sprintf((char *)message, "device type = 0x%x\r\n", dev_type);
+				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				float temperature = read_temperature_bq27541();
+				sprintf((char *)message, "temperature = %d\r\n", (int)temperature);
+				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				uint16_t version = get_hw_version_bq27541();
+				sprintf((char *)message, "hardware version = 0x%x\r\n", version);
+				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+
+
+			}
 
 			HAL_GPIO_WritePin(GPIOA, program_led_Pin, GPIO_PIN_RESET);
-			sprintf((char *)message, "PROGRAMMING...\r\n", dev_type);
-			HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+			//sprintf((char *)message, "PROGRAMMING...\r\n", dev_type);
+			//HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+
 
 			set_hdq_mode();
 
-			/*
-			do_loop = 1; // volatile
-			int counter = 0;
-			while(do_loop && counter < 1000)
-			{
-				counter++;
-				ack_nack = i2c_send_byte(0x55);
-			}
-			//*/
-
-			HAL_GPIO_WritePin(GPIOA, program_led_Pin, GPIO_PIN_SET);
-			sprintf((char *)message, "AFTER...\r\n");
-			HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 
 			dev_type = read_device_type_bq27541();
-			if(dev_type == 0x541) success[i * 3 + j] = 0;
-			sprintf((char *)message, "device type = 0x%x\r\n", dev_type);
-			HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
-			temperature = read_temperature_bq27541();
-			sprintf((char *)message, "temperature = %d\r\n", (int)temperature);
-			HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
-			version = get_hw_version_bq27541();
-			sprintf((char *)message, "hardware version = 0x%x\r\n\r\n", dev_type);
-			HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+			if(dev_type == 0x541)
+			{
+				success[i * 3 + j] = 0;
+				sprintf((char *)message, "\r\n#%d--->\r\n", i * 3 + j + 1);
+				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				HAL_GPIO_WritePin(GPIOA, program_led_Pin, GPIO_PIN_SET);
+				sprintf((char *)message, "AFTER...\r\n");
+				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				sprintf((char *)message, "device type = 0x%x\r\n", dev_type);
+				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				float temperature = read_temperature_bq27541();
+				sprintf((char *)message, "temperature = %d\r\n", (int)temperature);
+				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
+				uint16_t version = get_hw_version_bq27541();
+				sprintf((char *)message, "hardware version = 0x%x\r\n\r\n", version);
+				HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 
+			}
 
 			// reset bus
 			i2c_send_STOP();
@@ -197,6 +200,9 @@ int main(void)
 		HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 
 	}
+
+	sprintf((char *)message, "\r\n\r\n*********************************************************************\r\n\r\n");
+	HAL_UART_Transmit(&huart1, (uint8_t *)message, strlen((const char *)message), 500);
 
 	// main scheduler loop
 	while(1)
