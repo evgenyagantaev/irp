@@ -34,8 +34,8 @@ void charge_check_task()
 	{
 		frozen_seconds = current_seconds;
 
-		uint32_t charge_overall_level = 0;
-	    uint32_t private_charge_level = 0;
+		int32_t charge_overall_level = 0;
+	    int32_t private_charge_level = 0;
 	    uint16_t quote = 0;
                                                                                    
 	    int i;
