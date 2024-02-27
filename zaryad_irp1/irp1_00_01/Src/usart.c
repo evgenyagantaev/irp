@@ -41,7 +41,7 @@
 
 /* USER CODE END 0 */
 
-UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart1;
 
 /* USART1 init function */
 

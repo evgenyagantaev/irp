@@ -193,6 +193,13 @@ void battery_measurement_task()
 
 
 	int32_t rem_cap_mah = coulombmeter_get();
+	//***** postproduction correction
+	//***** cut off negative remaining capacity
+	if(rem_cap_mah < 0)
+	{
+		rem_cap_mah = 0;
+	}
+	//***** postproduction correction
 
 	if (averaging_counter >= AVERAGING_PERIOD)
 	{
