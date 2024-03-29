@@ -12,6 +12,8 @@
 #include "coulombcounter_obj.h"
 #include "eeprom_storage_obj.h"
 
+#include "usart.h"
+static char switcher_message[64];
 
 void switch_charge_on()
 {
@@ -104,6 +106,9 @@ void switch_ktc_recharge_on()
 {
 	reset_voltage_local_max();
 	HAL_GPIO_WritePin(GPIOB, ch_out_Pin, GPIO_PIN_SET);
+	//debug
+	sprintf((char *)switcher_message, "ch_out_Pin set HIGH\r\n", temperature_buffer[2]);
+	HAL_UART_Transmit(&huart1, switcher_message, strlen((const char *)switcher_message), 500);
 	set_charge_flag(1);
 	battery_state_set(CTC_RECHARGING_STATE);
 	//reset coulombmeter
